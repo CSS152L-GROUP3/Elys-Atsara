@@ -126,7 +126,7 @@
   font-family: "Allura-Regular", Helvetica;
   font-weight: 400;
   color: #b3261e;
-  font-size: 95px;
+  font-size: 85px;
   letter-spacing: 6.00px;
   line-height: 64px;
   overflow: hidden;
@@ -194,8 +194,8 @@
   position: absolute;
   width: 190px;
   height: 78px;
-  top: 8px;
-  left: 39px;
+  top: 35px;
+  left: 45px;
   font-family: "Alef-Bold", Helvetica;
   font-weight: 700;
   color: #ffffff;
