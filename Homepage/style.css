@@ -57,11 +57,11 @@
   top: 0;
 }
 
-.homepage .overlap-group {
+.homepage .About {
   position: absolute;
   width: 60px;
   height: 58px;
-  top: 15px;
+  top: -21%;
   left: 123px;
   border-radius: 100px;
 }
@@ -86,11 +86,11 @@
   height: 43px;
 }
 
-.homepage .overlap-2 {
+.homepage .Cart {
   position: absolute;
   width: 60px;
   height: 58px;
-  top: 15px;
+  top: 12px;
   left: 529px;
   border-radius: 100px;
 }
@@ -101,11 +101,11 @@
   height: 40px;
 }
 
-.homepage .overlap-3 {
+.homepage .Account {
   position: absolute;
   width: 60px;
   height: 58px;
-  top: 15px;
+  top: 12px;
   left: 1342px;
   border-radius: 100px;
 }
@@ -136,7 +136,7 @@
   -webkit-box-orient: vertical;
 }
 
-.homepage .overlap-4 {
+.homepage .ShopNowButton {
   position: absolute;
   width: 287px;
   height: 96px;
@@ -223,7 +223,7 @@
   -webkit-box-orient: vertical;
 }
 
-.homepage .overlap-5 {
+.homepage .AboutText {
   position: absolute;
   width: 93px;
   height: 20px;
@@ -347,11 +347,11 @@
   object-fit: cover;
 }
 
-.homepage .overlap-8 {
+.homepage .Maps {
   position: absolute;
   width: 60px;
   height: 58px;
-  top: 15px;
+  top: 13px;
   left: 915px;
   border-radius: 30px / 29px;
 }
@@ -433,4 +433,11 @@
   height: 1px;
   left: 0;
   object-fit: cover;
+}
+
+.homepage .line {
+  width: 100%;
+  overflow: hidden;
+  margin-left: -10%;
+  margin-right: -10%;
 }
