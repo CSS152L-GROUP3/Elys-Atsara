@@ -7,6 +7,8 @@
   flex-direction: row;
   justify-content: center;
   width: 100%;
+  height: 100vh;
+  overflow: hidden;
 }
 
 .account-login .div {
@@ -16,12 +18,13 @@
   position: relative;
 }
 
-.account-login .overlap {
+.account-login .SignUp {
   position: absolute;
   width: 544px;
   height: 1024px;
-  top: 0;
-  left: 896px;
+  top: -100px;
+  right: 0;
+  left: 65%;
   background-color: #b7251d;
 }
 
@@ -172,7 +175,7 @@
   left: 20px;
 }
 
-.account-login .overlap-3 {
+.account-login .PassIcon {
   position: absolute;
   width: 541px;
   height: 70px;
@@ -270,9 +273,9 @@
   -webkit-box-orient: vertical;
 }
 
-.account-login .supporting-text-8 {
+.account-login .Login {
   top: 300px;
-  left: 175px;
+  left: 180px;
   height: 100px; 
   width: 600px;
   color: #1d1b20;
@@ -299,7 +302,7 @@
   left: 342px;
 }
 
-.account-login .overlap-group-2 {
+.account-login .Logo {
   position: relative;
   width: 196px;
   height: 111px;
@@ -343,5 +346,13 @@
   display: -webkit-box;
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
+}
+
+.account-login .LoginArea {
+  position: absolute;
+  width: 100%;
+  height: 1024px;
+  top: -65px;
+  left: 30px;
 }
 
