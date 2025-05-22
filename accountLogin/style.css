@@ -48,7 +48,7 @@
   -webkit-box-orient: vertical;
 }
 
-.account-login .overlap-group {
+.account-login .SignUpBtn {
   position: absolute;
   width: 219px;
   height: 76px;
@@ -58,6 +58,12 @@
   border-radius: 50px;
   border-color: transparent;
   border-color:transparent
+}
+.account-login .SignUpBtn:hover {
+  background-color: #991b17; 
+}
+.account-login .SignUpBtn:active {
+  background-color: #7f1513; 
 }
 
 .account-login .text-wrapper {
@@ -225,7 +231,7 @@
   left: 15px;
 }
 
-.account-login .div-wrapper {
+.account-login .SignInBtn {
   position: absolute;
   width: 281px;
   height: 74px;
@@ -237,10 +243,10 @@
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
-.account-login .div-wrapper:hover {
+.account-login .SignInBtn:hover {
   background-color: #991b17; 
 }
-.account-login .div-wrapper:active {
+.account-login .SignInBtn:active {
   background-color: #7f1513; 
 }
 
@@ -264,7 +270,7 @@
   -webkit-box-orient: vertical;
 }
 
-.account-login .overlap-4 {
+.account-login .BackBtn {
   position: absolute;
   width: 281px;
   height: 74px;
@@ -276,10 +282,10 @@
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
-.account-login .overlap-4:hover {
+.account-login .BackBtn:hover {
   background-color: #991b17; 
 }
-.account-login .overlap-4:active {
+.account-login .BackBtn:active {
   background-color: #7f1513; 
 }
 
