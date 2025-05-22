@@ -1,5 +1,10 @@
 {
   "dependencies": {
-    "@iconscout/react-unicons": "^2.2.4"
+    "@iconscout/react-unicons": "^2.2.4",
+    "@supabase/supabase-js": "^2.49.8",
+    "express": "^5.1.0"
+  },
+  "scripts": {
+    "start": "node index.js"
   }
 }
