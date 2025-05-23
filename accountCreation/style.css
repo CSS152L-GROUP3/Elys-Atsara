@@ -1,13 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Alef:wght@400;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Allura&display=swap');
 
-
 .account-creation {
   background-color: #ffffff;
   display: flex;
-  flex-direction: row;
   justify-content: center;
   width: 100%;
+  min-height: 1024px;
 }
 
 .account-creation .div {
@@ -18,227 +17,177 @@
   position: relative;
 }
 
-.account-creation .rectangle {
-  position: absolute;
-  width: 363px;
-  height: 1024px;
-  top: 0;
-  left: 0;
-  background-color: #b7251d;
-}
-
+.account-creation .rectangle,
 .account-creation .rectangle-2 {
   position: absolute;
   width: 363px;
   height: 1024px;
-  top: 2px;
-  left: 1076px;
+  top: 0;
   background-color: #b7251d;
 }
 
-.account-creation .overlap {
-  width: 541px;
-  height: 70px;
-  top: 509px;
-  left: 449px;
-  background-color: #eaeaea;
-  position: absolute;
-  border-radius: 50px;
+.account-creation .rectangle {
+  left: 0;
 }
 
-.account-creation .supporting-text {
+.account-creation .rectangle-2 {
+  left: 1076px;
+  top: 2px;
+}
+
+.account-creation form {
+  position: relative;
+  width: 541px;
+  margin: 0 auto;
+  top: 220px; /* Align form vertically under the heading */
+}
+
+.account-creation .overlap,
+.account-creation .overlap-2,
+.account-creation .overlap-3,
+.account-creation .overlap-4,
+.account-creation .overlap-5 {
+  width: 100%;
+  height: 70px;
+  background-color: #eaeaea;
+  border-radius: 50px;
+  position: relative;
+  margin-bottom: 35px;
+}
+
+.account-creation .supporting-text,
+.account-creation .supporting-text-5,
+.account-creation .text-wrapper {
   position: absolute;
-  width: 73px;
-  top: 25px;
   left: 35px;
-  text-shadow: 0px 4px 4px #00000040;
+  top: 25px;
   font-family: "Alef", sans-serif;
   font-weight: 700;
   color: #686869;
   font-size: 25px;
   letter-spacing: 0.25px;
   line-height: 20px;
+  text-shadow: 0 4px 4px #00000040;
   overflow: hidden;
   text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 1;
-  -webkit-box-orient: vertical;
+  white-space: nowrap;
+}
+
+.account-creation .supporting-text-5 {
+  width: auto;
+  line-height: 25px;
+}
+
+.account-creation .input-name,
+.account-creation .input-email,
+.account-creation .input-mobile,
+.account-creation .input-password,
+.account-creation .input-role {
+  width: calc(100% - 120px); /* leave space for the icon */
+  height: 70px;
+  border: none;
+  background: transparent;
+  font-family: "Alef", sans-serif;
+  font-size: 25px;
+  padding-left: 25px;
+  color: #1d1b20;
+  outline: none;
+  position: relative;
+  z-index: 2;
+  border-radius: 50px;
 }
 
 .account-creation .overlap-group {
   width: 70px;
   height: 70px;
-  top: 0;
-  left: 471px;
   background-color: #b7251d;
-  position: absolute;
   border-radius: 50px;
+  position: absolute;
+  right: 0;
+  top: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 3;
+}
+
+.account-creation .vector,
+.account-creation .vector-2,
+.account-creation .vector-3,
+.account-creation .img,
+.account-creation .name-card {
+  width: auto;
+  height: 40px;
+  max-width: 40px;
+  max-height: 40px;
 }
 
 .account-creation .vector {
-  position: absolute;
-  width: 30px;
-  height: 39px;
-  top: 15px;
-  left: 20px;
-}
-
-.account-creation .overlap-2 {
-  width: 541px;
-  height: 70px;
-  top: 607px;
-  left: 449px;
-  background-color: #eaeaea;
-  position: absolute;
-  border-radius: 50px;
-}
-
-.account-creation .text-wrapper {
-  width: 140px;
-  top: 27px;
-  left: 35px;
-  color: #686869;
-  font-size: 25px;
-  position: absolute;
-  text-shadow: 0px 4px 4px #00000040;
-  font-family: "Alef", sans-serif;
-  font-weight: 700;
-  letter-spacing: 0.25px;
-  line-height: 20px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 1;
-  -webkit-box-orient: vertical;
-}
-
-.account-creation .img {
-  position: absolute;
-  width: 27px;
-  height: 47px;
-  top: 12px;
-  left: 22px;
-}
-
-.account-creation .supporting-text-wrapper {
-  width: 281px;
-  height: 74px;
-  top: 804px;
-  left: 435px;
-  background-color: #b3261e;
-  position: absolute;
-  border-radius: 50px;
-}
-
-.account-creation .supporting-text-2 {
-  width: 94px;
-  top: 23px;
-  left: 94px;
-  color: #fef7ff;
-  font-size: 25px;
-  position: absolute;
-  text-shadow: 0px 4px 4px #00000040;
-  font-family: "Alef", sans-serif;
-  font-weight: 700;
-  letter-spacing: 0.25px;
-  line-height: 30px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 1;
-  -webkit-box-orient: vertical;
-}
-
-.account-creation .div-wrapper {
-  width: 281px;
-  height: 74px;
-  top: 804px;
-  left: 727px;
-  background-color: #b3261e;
-  position: absolute;
-  border-radius: 50px;
-}
-
-.account-creation .supporting-text-3 {
-  width: 109px;
-  top: 23px;
-  left: 94px;
-  color: #fef7ff;
-  font-size: 25px;
-  position: absolute;
-  text-shadow: 0px 4px 4px #00000040;
-  font-family: "Alef", sans-serif;
-  font-weight: 700;
-  letter-spacing: 0.25px;
-  line-height: 30px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 1;
-  -webkit-box-orient: vertical;
-}
-
-.account-creation .overlap-3 {
-  width: 541px;
-  height: 70px;
-  top: 705px;
-  left: 449px;
-  background-color: #eaeaea;
-  position: absolute;
-  border-radius: 50px;
+  margin-left: 5px;
 }
 
 .account-creation .vector-2 {
-  position: absolute;
-  width: 40px;
-  height: 45px;
-  top: 10px;
-  left: 15px;
-}
-
-.account-creation .overlap-4 {
-  width: 541px;
-  height: 70px;
-  top: 415px;
-  left: 449px;
-  background-color: #eaeaea;
-  position: absolute;
-  border-radius: 50px;
+  margin-left: 8px;
 }
 
 .account-creation .vector-3 {
-  position: absolute;
-  width: 41px;
-  height: 40px;
-  top: 16px;
-  left: 15px;
+  margin-left: 8px;
+}
+
+.account-creation .img {
+  margin-left: 7px;
+}
+
+.account-creation .name-card {
+  margin-left: 7px;
+  height: 68px;
+  width: 58px;
+}
+
+.account-creation .submit-button-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.account-creation .submit-button {
+  width: 250px;
+  height: 60px;
+  background-color: #b7251d;
+  border: none;
+  border-radius: 30px;
+  font-family: "Alef", sans-serif;
+  font-weight: 700;
+  font-size: 25px;
+  color: #ffffff;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.account-creation .submit-button:hover {
+  background-color: #9c1e17;
 }
 
 .account-creation .supporting-text-4 {
-  top: 220px;
-  left: 435px;
-  color: #1d1b20;
-  font-size: 54px;
-  white-space: nowrap;
   position: absolute;
-  text-shadow: 0px 4px 4px #00000040;
+  top: 140px;
+  left: 449px;
   font-family: "Alef", sans-serif;
   font-weight: 700;
+  font-size: 54px;
+  color: #1d1b20;
+  text-shadow: 0 4px 4px #00000040;
   letter-spacing: 0.25px;
   line-height: 50px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 1;
-  -webkit-box-orient: vertical;
+  white-space: nowrap;
 }
 
 .account-creation .group {
   position: absolute;
-  width: 198px;
-  height: 111px;
   top: 83px;
   left: 611px;
+  width: 198px;
+  height: 111px;
 }
 
 .account-creation .overlap-group-2 {
@@ -247,88 +196,72 @@
   height: 111px;
 }
 
-.account-creation .ellipse {
-  top: 1px;
-  left: 5px;
-  background-color: #c8f909;
+.account-creation .ellipse,
+.account-creation .ellipse-2 {
   position: absolute;
   width: 191px;
   height: 110px;
   border-radius: 95.5px / 55px;
+  top: 0;
+  left: 0;
+}
+
+.account-creation .ellipse {
+  background-color: #c8f909;
+  top: 1px;
+  left: 5px;
 }
 
 .account-creation .ellipse-2 {
-  top: 0;
-  left: 0;
   background-color: #b7251d;
-  position: absolute;
-  width: 191px;
-  height: 110px;
-  border-radius: 95.5px / 55px;
 }
 
 .account-creation .headline {
   position: absolute;
-  width: 152px;
-  height: 78px;
   top: 25px;
   left: 23px;
-  -webkit-text-stroke: 2px #ffffff;
-  font-family:  "Allura", cursive;
+  font-family: "Allura", cursive;
   font-weight: 400;
-  color: #ffffff;
   font-size: 64px;
-  letter-spacing: 6.00px;
+  color: #ffffff;
+  -webkit-text-stroke: 2px #ffffff;
+  letter-spacing: 6px;
   line-height: 64px;
   overflow: hidden;
+  white-space: nowrap;
   text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 1;
-  -webkit-box-orient: vertical;
-}
-
-.account-creation .overlap-5 {
-  width: 541px;
-  height: 70px;
-  top: 314px;
-  left: 452px;
-  background-color: #eaeaea;
-  position: absolute;
-  border-radius: 50px;
-}
-
-.account-creation .supporting-text-5 {
-  width: 266px;
-  top: 25px;
-  left: 35px;
-  color: #686869;
-  font-size: 25px;
-  position: absolute;
-  text-shadow: 0px 4px 4px #00000040;
-  font-family: "Alef", sans-serif;
-  font-weight: 700;
-  letter-spacing: 0.25px;
-  line-height: 25px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 1;
-  -webkit-box-orient: vertical;
-}
-
-.account-creation .name-card {
-  position: absolute;
-  width: 58px;
-  height: 68px;
-  top: 0;
-  left: 7px;
 }
 
 .account-creation .rectangle-3 {
   position: absolute;
+  top: 640px;
+  left: -120px; /* hidden offscreen */
   width: 100px;
   height: 100px;
-  top: 640px;
-  left: -2938px;
+  display: none; /* hide completely */
+}
+
+.account-creation .div-wrapper {
+  position: absolute;
+  top: 804px;
+  left: 727px;
+  width: 281px;
+  height: 74px;
+  background-color: #b3261e;
+  border-radius: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.account-creation .supporting-text-3 {
+  font-family: "Alef", sans-serif;
+  font-weight: 700;
+  font-size: 25px;
+  color: #fef7ff;
+  text-shadow: 0 4px 4px #00000040;
+  letter-spacing: 0.25px;
+  line-height: 30px;
+  white-space: nowrap;
 }
 
