@@ -57,13 +57,15 @@
   background-color: #ffffff;
   border-radius: 50px;
   border-color: transparent;
-  border-color:transparent
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  z-index: 1;
 }
 .account-login .SignUpBtn:hover {
-  background-color: #991b17; 
+  background-color: #bcb3b3; 
 }
 .account-login .SignUpBtn:active {
-  background-color: #7f1513; 
+  background-color: #bcb3b3; 
 }
 
 .account-login .text-wrapper {
@@ -86,7 +88,7 @@
   -webkit-box-orient: vertical;
 }
 
-.account-login .supporting-text-wrapper {
+.account-login .GuestBtn {
   position: absolute;
   width: 264px;
   height: 76px;
@@ -95,6 +97,15 @@
   background-color: #ffffff;
   border-radius: 50px;
   border-color: transparent;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  z-index: 1;
+}
+.account-login .GuestBtn:hover {
+  background-color: #bcb3b3;
+}
+.account-login .GuestBtn:active {
+  background-color: #bcb3b3; 
 }
 
 .account-login .supporting-text-2 {
