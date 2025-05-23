@@ -1,9 +1,8 @@
 // main.js
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
 
-// Replace with your actual Supabase project URL and anon key
 const supabaseUrl = 'https://qjokcvkcibztiibpwqsv.supabase.co'
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFqb2tjdmtjaWJ6dGlpYnB3cXN2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDc5MTk5MzgsImV4cCI6MjA2MzQ5NTkzOH0.zibSsjUbI96fcDCDcOpwnBjW__ep0kzsdCW7dSLVkMs' // <- Replace this with your anon key
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFqb2tjdmtjaWJ6dGlpYnB3cXN2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDc5MTk5MzgsImV4cCI6MjA2MzQ5NTkzOH0.zibSsjUbI96fcDCDcOpwnBjW__ep0kzsdCW7dSLVkMs' 
 const supabase = createClient(supabaseUrl, supabaseKey)
 
 const form = document.getElementById('signupForm')
@@ -18,14 +17,12 @@ form.addEventListener('submit', async (e) => {
   const role = form.role.value.trim()
 
   try {
-    // 1. Sign up the user using Supabase Auth
     const { data, error: signUpError } = await supabase.auth.signUp({
       email,
       password
     })
     if (signUpError) throw signUpError
 
-    // 2. Insert additional user info into user_accounts table
     const { error: insertError } = await supabase
       .from('user_accounts')
       .insert([{ name, email, password, mobile_no, role }])
