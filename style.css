@@ -23,6 +23,9 @@ html, body {
   align-items: center;      /* horizontally center items */
   gap: 20px;                /* optional: space between svg and heading */
   color: white;
+  font-size: 3em;
+  font-weight: bold;
+  font-family: 'Alef';
 }
 
 .main {
@@ -36,7 +39,8 @@ html, body {
 }
 
 .title {
-    font-size: 2rem;
+    font-size: 3rem;
+    font-family: 'Alef';
     margin-bottom: 30px;
     margin-top: 30px;
 }
@@ -65,6 +69,7 @@ html, body {
   color: #686869;
   font-weight: bold;
   font-family: 'Alef', sans-serif;
+  font-size: 1.2em;
 }
 
 .input-container input {
@@ -102,6 +107,7 @@ html, body {
 .button-row button {
     padding: 10px 20px;
     font-size: 14px;
+    font-weight: bold;
     width: 238px;
     height: 50px;
     border: none;
