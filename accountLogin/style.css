@@ -1,3 +1,4 @@
+
 @import url('https://fonts.googleapis.com/css2?family=Alef:wght@400;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Allura&display=swap');
 
@@ -47,7 +48,7 @@
   -webkit-box-orient: vertical;
 }
 
-.account-login .overlap-group {
+.account-login .SignUpBtn {
   position: absolute;
   width: 219px;
   height: 76px;
@@ -55,6 +56,14 @@
   left: 158px;
   background-color: #ffffff;
   border-radius: 50px;
+  border-color: transparent;
+  border-color:transparent
+}
+.account-login .SignUpBtn:hover {
+  background-color: #991b17; 
+}
+.account-login .SignUpBtn:active {
+  background-color: #7f1513; 
 }
 
 .account-login .text-wrapper {
@@ -79,12 +88,13 @@
 
 .account-login .supporting-text-wrapper {
   position: absolute;
-  width: 248px;
+  width: 264px;
   height: 76px;
   top: 578px;
   left: 144px;
   background-color: #ffffff;
   border-radius: 50px;
+  border-color: transparent;
 }
 
 .account-login .supporting-text-2 {
@@ -127,7 +137,7 @@
   -webkit-box-orient: vertical;
 }
 
-.account-login .overlap-2 {
+.account-login .EmailIcon {
   position: absolute;
   width: 541px;
   height: 70px;
@@ -137,12 +147,12 @@
   border-radius: 50px;
 }
 
-.account-login .supporting-text-4 {
-  width: 73px;
-  top: 25px;
-  left: 35px;
-  height: 100px;
-  color: #686869;
+.account-login .Email {
+  width: 541px;
+  top: 0px;
+  left: 0px;
+  height: 70px; 
+  color: #686769;
   font-size: 25px;
   position: absolute;
   text-shadow: 0px 4px 4px #00000040;
@@ -155,6 +165,10 @@
   display: -webkit-box;
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
+  border-radius: 50px;
+  background-color: transparent;
+  border-color: transparent;
+  text-align: center;
 }
 
 .account-login .vector-wrapper {
@@ -185,11 +199,11 @@
   border-radius: 50px;
 }
 
-.account-login .supporting-text-5 {
-  width: 140px;
-  top: 25px;
-  left: 35px;
-  height: 100px; 
+.account-login .Password {
+  width: 541px;
+  top: 0px;
+  left: 0px;
+  height: 70px; 
   color: #686769;
   font-size: 25px;
   position: absolute;
@@ -203,6 +217,10 @@
   display: -webkit-box;
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
+  border-radius: 50px;
+  background-color: transparent;
+  border-color: transparent;
+  text-align: center;
 }
 
 .account-login .img {
@@ -213,7 +231,7 @@
   left: 15px;
 }
 
-.account-login .div-wrapper {
+.account-login .SignInBtn {
   position: absolute;
   width: 281px;
   height: 74px;
@@ -221,6 +239,15 @@
   left: 175px;
   background-color: #b3261e;
   border-radius: 50px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.account-login .SignInBtn:hover {
+  background-color: #991b17; 
+}
+.account-login .SignInBtn:active {
+  background-color: #7f1513; 
 }
 
 .account-login .supporting-text-6 {
@@ -243,7 +270,7 @@
   -webkit-box-orient: vertical;
 }
 
-.account-login .overlap-4 {
+.account-login .BackBtn {
   position: absolute;
   width: 281px;
   height: 74px;
@@ -251,7 +278,17 @@
   left: 467px;
   background-color: #b3261e;
   border-radius: 50px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
+.account-login .BackBtn:hover {
+  background-color: #991b17; 
+}
+.account-login .BackBtn:active {
+  background-color: #7f1513; 
+}
+
 
 .account-login .supporting-text-7 {
   width: 109px;
@@ -329,7 +366,7 @@
 }
 
 .account-login .headline {
-  position: absolute;
+  position: relative;
   width: 152px;
   height: 78px;
   top: 27px;
@@ -349,10 +386,9 @@
 }
 
 .account-login .LoginArea {
-  position: absolute;
+  position: relative;
   width: 100%;
-  height: 1024px;
+  height: 100%;
   top: -65px;
   left: 30px;
 }
-
