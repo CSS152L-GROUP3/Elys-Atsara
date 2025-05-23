@@ -1,0 +1,139 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+    font-family: 'Alef', sans-serif;      
+}
+
+.wrapper {
+    display: flex;
+    height: 100vh;
+}
+
+.side {
+  background-color: #B7251D;
+  width: 50%;
+  display: flex;
+  flex-direction: column; /* stack svg and h1 vertically */
+  justify-content: center;  /* vertically center the column */
+  align-items: center;      /* horizontally center items */
+  gap: 20px;                /* optional: space between svg and heading */
+  color: white;
+}
+
+.main {
+    background-color: white;
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.title {
+    font-size: 2rem;
+    margin-bottom: 30px;
+    margin-top: 30px;
+}
+
+.form-column {
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 500px;
+    margin-bottom: 30px;
+}
+
+.input-container {
+  position: relative;
+  background-color: #EAEAEA;
+  border-radius: 25px;
+  padding: 10px 60px 10px 20px; /* leave space for the icon */
+  display: flex;
+  align-items: center;
+  height: 50px; /* optional: set fixed height */
+}
+
+.input-container input::placeholder {
+  color: #686869;
+  font-weight: bold;
+  font-family: 'Alef', sans-serif;
+}
+
+.input-container input {
+  border: none;
+  padding: 10px 50px 10px 15px; /* padding-right adjusted for icon space */
+  border-radius: 25px;
+  background: transparent;
+  width: 100%;
+  font-size: 14px;
+  outline: none;
+}
+
+.input-icon {
+  position: absolute;
+  right: -1px; /* moves icon slightly outside the container */
+  color: white;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+  background-color: #B7251D;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 0 4px rgba(0,0,0,0.1);
+}
+
+.button-row {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+}
+
+.button-row button {
+    padding: 10px 20px;
+    font-size: 14px;
+    width: 238px;
+    height: 50px;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.button-row .signup {
+    background-color: #B7251D;
+    color: white;
+}
+
+.button-row .goback {
+    background-color: #B7251D;
+    color: rgb(255, 255, 255);
+}
+
+@media (max-width: 768px) {
+    .wrapper {
+    flex-direction: column;
+    }
+
+    .side {
+    display: none;
+    }
+
+    .main {
+    width: 100%;
+    }
+
+    .form-column {
+    width: 90%;
+    }
+}
