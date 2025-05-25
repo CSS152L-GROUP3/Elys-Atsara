@@ -403,3 +403,10 @@
   top: -65px;
   left: 30px;
 }
+
+.SignUpBtn {
+  pointer-events: auto !important;
+  cursor: pointer;
+  position: relative; /* if not already */
+  z-index: 10; /* bring to front */
+}
