@@ -330,13 +330,14 @@ footer {
   margin-top: 45px;
   margin-bottom: 200px;
   position: relative;
+  height: 1024px;
 }
 
 .about-us-middle .vector {
   position: absolute;
   width: 73px;
   height: 73px;
-  top: 943px;
+  top: 940px;
   left: 690px;
 }
 
@@ -344,7 +345,7 @@ footer {
   position: relative;
   width: 73px;
   height: 73px;
-  top: 943px;
+  top: 940px;
   left: 830px;
 }
 
@@ -352,7 +353,7 @@ footer {
   position: absolute;
   width: 268px;
   height: 71px;
-  top: 945px;
+  top: 940px;
   left: 110px;
   background-color: #b3261e;
   border-radius: 4px;
