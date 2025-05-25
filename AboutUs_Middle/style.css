@@ -1,0 +1,378 @@
+.about-us-middle {
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+}
+
+.about-us-middle .div {
+  background-color: #ffffff;
+  width: 1440px;
+  height: 1024px;
+  position: relative;
+}
+
+.about-us-middle .overlap {
+  position: absolute;
+  width: 1440px;
+  height: 334px;
+  top: 596px;
+  left: 0;
+}
+
+.about-us-middle .overlap-group {
+  position: absolute;
+  width: 1440px;
+  height: 334px;
+  top: 1px;
+  left: 0;
+}
+
+.top-line {
+  position: absolute;
+  top: 86px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100vw;
+  height: 1.7px;
+  background-color: #b3261e;
+  border: none;
+  z-index: 10;
+}
+
+.bottom-line {
+  position: absolute;
+  top: 950px; /* Or use bottom: 0 if it's at the bottom */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100vw;
+  height: 1.7px;
+  background-color: #b3261e;
+  border: none;
+  z-index: 10;
+}
+
+.about-us-middle .rectangle {
+  height: 333px;
+  top: 0;
+  left: 763px;
+  position: absolute;
+  width: 558px;
+}
+
+.about-us-middle .label-text {
+  position: absolute;
+  width: 219px;
+  height: 68px;
+  top: 0;
+  left: 213px;
+  font-family: "Alef-Bold", Helvetica;
+  font-weight: 700;
+  color: #b3261e;
+  font-size: 50px;
+  text-align: center;
+  letter-spacing: 0.10px;
+  line-height: 20px;
+}
+
+.about-us-middle .supporting-text {
+  width: 676px;
+  top: 81px;
+  left: 33px;
+  color: #1d1b20;
+  font-size: 18px;
+  -webkit-line-clamp: 12;
+  position: absolute;
+  font-family: "Alef-Bold", Helvetica;
+  font-weight: 700;
+  letter-spacing: 0.25px;
+  line-height: 20px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+}
+
+.about-us-middle .text-wrapper {
+  position: absolute;
+  width: 341px;
+  height: 68px;
+  top: 159px;
+  left: 792px;
+  font-family: "Alef-Bold", Helvetica;
+  font-weight: 700;
+  color: #b3261e;
+  font-size: 50px;
+  text-align: center;
+  letter-spacing: 0.10px;
+  line-height: 20px;
+}
+
+.about-us-middle .overlap-2 {
+  position: absolute;
+  width: 60px;
+  height: 58px;
+  top: 15px;
+  left: 123px;
+  border-radius: 100px;
+}
+
+.about-us-middle .container {
+  display: flex;
+  width: 60px;
+  height: 58px;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: #b3261e;
+  border-radius: 100px;
+  overflow: hidden;
+}
+
+.about-us-middle .img {
+  position: relative;
+  width: 60px;
+  height: 55px;
+}
+
+.about-us-middle .overlap-3 {
+  position: absolute;
+  width: 60px;
+  height: 58px;
+  top: 15px;
+  left: 529px;
+  border-radius: 100px;
+}
+
+.about-us-middle .vector-2 {
+  position: relative;
+  width: 52px;
+  height: 52px;
+}
+
+.about-us-middle .overlap-4 {
+  position: absolute;
+  width: 60px;
+  height: 58px;
+  top: 15px;
+  left: 1342px;
+  border-radius: 100px;
+}
+
+.about-us-middle .vector-3 {
+  position: relative;
+  width: 58px;
+  height: 58px;
+}
+
+.about-us-middle .overlap-5 {
+  position: absolute;
+  width: 93px;
+  height: 20px;
+  top: 33px;
+  left: 21px;
+}
+
+.about-us-middle .supporting-text-2 {
+  position: absolute;
+  width: 93px;
+  top: 0;
+  left: 0;
+  font-family: "Alef-Bold", Helvetica;
+  font-weight: 700;
+  color: #1d1b20;
+  font-size: 20px;
+  letter-spacing: 0.25px;
+  line-height: 20px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 7;
+  -webkit-box-orient: vertical;
+}
+
+.about-us-middle .overlap-6 {
+  position: absolute;
+  width: 84px;
+  height: 20px;
+  top: 33px;
+  left: 1248px;
+}
+
+.about-us-middle .supporting-text-3 {
+  width: 84px;
+  top: 0;
+  left: 0;
+  color: #1d1b20;
+  font-size: 20px;
+  -webkit-line-clamp: 7;
+  position: absolute;
+  font-family: "Alef-Bold", Helvetica;
+  font-weight: 700;
+  letter-spacing: 0.25px;
+  line-height: 20px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+}
+
+.about-us-middle .overlap-group-2 {
+  position: absolute;
+  width: 48px;
+  height: 20px;
+  top: 33px;
+  left: 471px;
+}
+
+.about-us-middle .supporting-text-4 {
+  width: 48px;
+  top: 0;
+  left: 0;
+  color: #1d1b20;
+  font-size: 20px;
+  -webkit-line-clamp: 7;
+  position: absolute;
+  font-family: "Alef-Bold", Helvetica;
+  font-weight: 700;
+  letter-spacing: 0.25px;
+  line-height: 20px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+}
+
+.about-us-middle .overlap-7 {
+  position: absolute;
+  width: 64px;
+  height: 20px;
+  top: 33px;
+  left: 851px;
+}
+
+.about-us-middle .supporting-text-5 {
+  width: 64px;
+  top: 0;
+  left: 0;
+  color: #1d1b20;
+  font-size: 20px;
+  -webkit-line-clamp: 7;
+  position: absolute;
+  font-family: "Alef-Bold", Helvetica;
+  font-weight: 700;
+  letter-spacing: 0.25px;
+  line-height: 20px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+}
+
+.about-us-middle .overlap-8 {
+  position: absolute;
+  width: 60px;
+  height: 58px;
+  top: 15px;
+  left: 915px;
+  border-radius: 30px / 29px;
+}
+
+.about-us-middle .group {
+  position: absolute;
+  width: 60px;
+  height: 58px;
+  top: 0;
+  left: 0;
+  background-color: #b3261e;
+  border-radius: 30px / 29px;
+}
+
+.about-us-middle .vector-4 {
+  position: absolute;
+  width: 55px;
+  height: 55px;
+  top: 2px;
+  left: 2px;
+}
+
+.about-us-middle .p {
+  width: 676px;
+  top: 240px;
+  left: 656px;
+  color: #1d1b20;
+  font-size: 18px;
+  -webkit-line-clamp: 15;
+  position: absolute;
+  font-family: "Alef-Bold", Helvetica;
+  font-weight: 700;
+  letter-spacing: 0.25px;
+  line-height: 20px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+}
+
+.about-us-middle .rectangle-2 {
+  height: 382px;
+  top: 160px;
+  left: 44px;
+  object-fit: cover;
+  position: absolute;
+  width: 558px;
+}
+
+footer {
+  margin-top: 45px;
+  margin-bottom: 200px;
+  position: relative;
+}
+
+.about-us-middle .vector {
+  position: absolute;
+  width: 73px;
+  height: 73px;
+  top: 943px;
+  left: 690px;
+}
+
+.about-us-middle .tiktok {
+  position: relative;
+  width: 73px;
+  height: 73px;
+  top: 943px;
+  left: 830px;
+}
+
+.about-us-middle .supporting-text-wrapper {
+  position: absolute;
+  width: 268px;
+  height: 71px;
+  top: 945px;
+  left: 110px;
+  background-color: #b3261e;
+  border-radius: 4px;
+}
+
+.about-us-middle .supporting-text-6 {
+  width: 155px;
+  top: 23px;
+  left: 65px;
+  text-shadow: 0px 4px 4px #00000040;
+  color: #fef7ff;
+  font-size: 31px;
+  -webkit-line-clamp: 1;
+  position: absolute;
+  font-family: "Alef-Bold", Helvetica;
+  font-weight: 700;
+  letter-spacing: 0.25px;
+  line-height: 30px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+}
