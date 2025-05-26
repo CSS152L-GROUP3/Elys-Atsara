@@ -6,6 +6,8 @@
     <link rel="stylesheet" href="globals.css" />
     <link rel="stylesheet" href="styleguide.css" />
     <link rel="stylesheet" href="style.css" />
+    <!-- Add Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   </head>
   <body>
     <div class="account-login">
@@ -37,7 +39,7 @@
             </svg>
           </div>
 
-          <button class="SignInBtn"><span class="supporting-text-6">Sign in</span></button>
+          <button class="SignInBtn" onclick="handleLogin()"><span class="supporting-text-6">Sign in</span></button>
 
           <button class="BackBtn"><span class="supporting-text-7">Go back</span></button>
 
@@ -52,5 +54,56 @@
         </div>
       </div>
     </div>
+
+    <script>
+      
+      const supabaseUrl = 'https://qjokcvkcibztiibpwqsv.supabase.co'
+      const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFqb2tjdmtjaWJ6dGlpYnB3cXN2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDc5MTk5MzgsImV4cCI6MjA2MzQ5NTkzOH0.zibSsjUbI96fcDCDcOpwnBjW__ep0kzsdCW7dSLVkMs'
+      const { createClient } = supabase
+      const supabaseClient = createClient(supabaseUrl, supabaseKey)
+
+      async function handleLogin() {
+        const email = document.getElementById('email').value
+        const password = document.getElementById('password').value
+
+        try {
+          // Check if email exists in user_accounts table
+          const { data, error } = await supabaseClient
+            .from('user_accounts')
+            .select('email')
+            .eq('email', email)
+            .single()
+
+          if (error) {
+            alert('Error checking email: ' + error.message)
+            return
+          }
+
+          if (data) {
+            // Email exists in user_accounts, redirect to homepage
+            window.location.href ='../homepage/homepage.html'
+          } else {
+            alert('Email not found. Please sign up first.')
+          }
+        } catch (error) {
+          alert('An error occurred: ' + error.message)
+        }
+      }
+
+      // Handle "Go back" button click
+      document.querySelector('.BackBtn').addEventListener('click', function() {
+        window.history.back()
+      })
+
+      // Handle "Sign up" button click
+      document.querySelector('.SignUpBtn').addEventListener('click', function() {
+        window.location.href = '../accountCreation/account-creation.html'
+      })
+
+      // Handle "Continue as guest" button click
+      document.querySelector('.supporting-text-wrapper').addEventListener('click', function() {
+        window.location.href = '../homepage/homepage.html'
+      })
+    </script>
   </body>
 </html>
