@@ -4,9 +4,8 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="globals.css" />
-    <link rel="stylesheet" href="styleguide.css" />
     <link rel="stylesheet" href="style.css" />
-    <!-- Add Supabase -->
+   
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   </head>
   <body>
@@ -17,7 +16,7 @@
           <p class="supporting-text">Sign up and discover the taste of homemade Atsara!</p>
 
           <button class="SignUpBtn"><span class="text-wrapper">Sign up</span></button>
-          <button class="GuestBtn"><span class="supporting-text-2">Continue as guest</span></button>
+          <button class="supporting-text-wrapper"><span class="supporting-text-2">Continue as guest</span></button>
 
           <div class="supporting-text-3">New here?</div>
         </div>
@@ -67,43 +66,35 @@
         const password = document.getElementById('password').value
 
         try {
-          // Check if email exists in user_accounts table
+        
           const { data, error } = await supabaseClient
             .from('user_accounts')
-            .select('email')
+            .select('email, password')
             .eq('email', email)
             .single()
 
           if (error) {
-            alert('Error checking email: ' + error.message)
-            return
-          }
+              alert('Invalid email or password. Please try again.')
+              return
+            }
 
-          if (data) {
-            // Email exists in user_accounts, redirect to homepage
-            window.location.href ='../homepage/homepage.html'
-          } else {
-            alert('Email not found. Please sign up first.')
+            if (!data) {
+              alert('Email not found. Please sign up first.')
+              return
+            }
+
+            // Check if password matches
+            if (data.password === password) {
+              alert('Login successful!')
+              window.location.href = '../homepage/homepage.html'
+            } else {
+              alert('Incorrect password. Please try again.')
+            }
+          } catch (error) {
+            alert('An error occurred: ' + error.message)
           }
-        } catch (error) {
-          alert('An error occurred: ' + error.message)
         }
-      }
-
-      // Handle "Go back" button click
-      document.querySelector('.BackBtn').addEventListener('click', function() {
-        window.history.back()
-      })
-
-      // Handle "Sign up" button click
-      document.querySelector('.SignUpBtn').addEventListener('click', function() {
-        window.location.href = '../accountCreation/account-creation.html'
-      })
-
-      // Handle "Continue as guest" button click
-      document.querySelector('.supporting-text-wrapper').addEventListener('click', function() {
-        window.location.href = '../homepage/homepage.html'
-      })
+        
     </script>
   </body>
 </html>
