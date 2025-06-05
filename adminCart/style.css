@@ -1,8 +1,6 @@
-/* style.css */
-
 body {
   margin: 0;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   background-color: #f4f4f4;
   color: #000;
 }
@@ -15,7 +13,7 @@ body {
 
 .nav-underline {
   height: 65px;
-  background-color: #b3261e; /* Deep red */
+  background-color: #b3261e;
   width: 100%;
 }
 
@@ -35,18 +33,26 @@ nav ul {
   align-items: center;
   font-size: 12px;
   font-weight: 500;
+  transition: color 0.2s;
+}
+
+.nav-item:hover {
+  color: #b3261e;
 }
 
 .icon-container {
   width: 24px;
   height: 24px;
   margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .nav-icon {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
 }
 
 main {
@@ -74,6 +80,11 @@ main {
   font-size: 14px;
   cursor: pointer;
   color: #555;
+  transition: all 0.2s;
+}
+
+.filter-btn:hover {
+  background-color: #f0f0f0;
 }
 
 .filter-btn.active {
@@ -84,13 +95,11 @@ main {
 
 .order-table {
   width: 100%;
-
   border-collapse: collapse;
   background-color: #fff;
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 0 4px rgba(0,0,0,0.1);
-  
 }
 
 .order-table th, .order-table td {
@@ -98,6 +107,7 @@ main {
   text-align: left;
   font-size: 14px;
   vertical-align: middle;
+  border-bottom: 1px solid #f0f0f0;
 }
 
 .order-table thead {
@@ -105,16 +115,28 @@ main {
   font-weight: 600;
 }
 
+.order-table tbody tr:hover {
+  background-color: #fafafa;
+}
+
+.product-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
 .product-image {
   width: 40px;
   height: 40px;
-  object-fit: cover;
-  margin-right: 10px;
-  vertical-align: middle;
-}
-
-td span {
-  vertical-align: middle;
+  background: linear-gradient(135deg, #ff6b6b, #ffa500);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+  font-size: 12px;
+  flex-shrink: 0;
 }
 
 .status {
@@ -126,22 +148,32 @@ td span {
 
 .status.pending {
   background-color: #ffe1a8;
-  color: #000;
+  color: #b8860b;
 }
 
 .status.completed {
   background-color: #a8e6a3;
-  color: #000;
+  color: #2e7d32;
+}
+
+.actions-container {
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .action-btn {
   padding: 6px 12px;
-  margin-right: 6px;
   border: none;
   border-radius: 6px;
   font-size: 13px;
   cursor: pointer;
   color: #fff;
+  transition: opacity 0.2s;
+}
+
+.action-btn:hover {
+  opacity: 0.8;
 }
 
 .action-btn.view {
@@ -162,6 +194,13 @@ td span {
   border: none;
   font-size: 16px;
   cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.dropdown-toggle:hover {
+  background-color: #f0f0f0;
 }
 
 .dropdown-menu {
@@ -169,11 +208,12 @@ td span {
   position: absolute;
   background-color: #fff;
   top: 100%;
-  left: 0;
-  box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
+  right: 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   border-radius: 6px;
   z-index: 100;
   min-width: 100px;
+  border: 1px solid #e0e0e0;
 }
 
 .dropdown:hover .dropdown-menu {
@@ -188,8 +228,46 @@ td span {
   width: 100%;
   font-size: 14px;
   cursor: pointer;
+  transition: background-color 0.2s;
 }
 
 .dropdown-item:hover {
   background-color: #f0f0f0;
+}
+
+.dropdown-item:first-child {
+  border-radius: 6px 6px 0 0;
+}
+
+.dropdown-item:last-child {
+  border-radius: 0 0 6px 6px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  main {
+    padding: 16px;
+  }
+  
+  .order-table {
+    font-size: 12px;
+  }
+  
+  .order-table th, .order-table td {
+    padding: 12px 8px;
+  }
+  
+  .order-filters {
+    justify-content: center;
+  }
+
+  .actions-container {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .action-btn {
+    font-size: 11px;
+    padding: 4px 8px;
+  }
 }

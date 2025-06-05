@@ -4,7 +4,6 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Sign Up</title>
-  
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -13,51 +12,130 @@
       <div class="rectangle"></div>
       <div class="rectangle-2"></div>
 
-      <!-- Start of form -->
-      <form id="signupForm">
-        <div>
-          <label for="name">Name:</label>
-          <input type="text" id="name" name="name" required />
-        </div>
-
-        <div>
-          <label for="email">Email:</label>
-          <input type="email" id="email" name="email" required />
-        </div>
-
-        <div>
-          <label for="mobile_no">Mobile No.:</label>
-          <input type="tel" id="mobile_no" name="mobile_no" required />
-        </div>
-
-        <div>
-          <label for="password">Password:</label>
-          <input type="password" id="password" name="password" required />
-        </div>
-
-        <div>
-          <label for="role">Role:</label>
-          <input type="text" id="role" name="role" required />
-        </div>
-
-        <button type="submit">Create Account</button>
-      </form>
-      <!-- End of form -->
-
-      <div class="div-wrapper"><div class="supporting-text-3">Go back</div></div>
-      <div class="supporting-text-4">Create Your Account</div>
-
+      <!-- Logo Section -->
       <div class="group">
         <div class="overlap-group-2">
           <div class="ellipse"></div>
           <div class="ellipse-2"></div>
-          <div class="headline">Ely&#39;s</div>
+          <div class="headline">Ely's</div>
         </div>
       </div>
 
+      <!-- Title -->
+      <div class="supporting-text-4">Create Your Account</div>
+
+      <!-- Form -->
+      <form id="signupForm">
+        <div class="input-group">
+          <input type="text" id="name" name="name" class="input-field" placeholder="Full Name" required />
+          <div class="input-icon">
+            <svg class="icon" viewBox="0 0 24 24">
+              <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+            </svg>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <input type="email" id="email" name="email" class="input-field" placeholder="Email Address" required />
+          <div class="input-icon">
+            <svg class="icon" viewBox="0 0 24 24">
+              <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+            </svg>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <input type="tel" id="mobile_no" name="mobile_no" class="input-field" placeholder="Mobile Number" required />
+          <div class="input-icon">
+            <svg class="icon" viewBox="0 0 24 24">
+              <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+            </svg>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <input type="password" id="password" name="password" class="input-field" placeholder="Password" required />
+          <div class="input-icon">
+            <svg class="icon" viewBox="0 0 24 24">
+              <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>
+            </svg>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <input type="text" id="role" name="role" class="input-field" placeholder="Role" required />
+          <div class="input-icon">
+            <svg class="icon" viewBox="0 0 24 24">
+              <path d="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4 12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm10 12h-8v-2h2v-2h-2v-2h2v-2h-2V9h8v10zm-2-8h-2v2h2v-2zm0 4h-2v2h2v-2z"/>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Button Container -->
+        <div class="button-container">
+          <button type="submit" class="submit-button">Create Account</button>
+          <div class="go-back-button" onclick="goBack()">
+            <div class="supporting-text-3">Go back</div>
+          </div>
+        </div>
+      </form>
     </div>
   </div>
 
-  <script type="module" src="../supabaseClient/main.js"></script>
+  <script>
+    // Form submission handler
+    document.getElementById('signupForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      // Get form data
+      const formData = new FormData(this);
+      const userData = {
+        name: formData.get('name'),
+        email: formData.get('email'),
+        mobile_no: formData.get('mobile_no'),
+        password: formData.get('password'),
+        role: formData.get('role')
+      };
+      
+      // Here you can add your Supabase integration
+      console.log('User data:', userData);
+      
+      // Example: Call your Supabase function
+      // createUser(userData);
+    });
+
+    // Go back function
+    function goBack() {
+      window.history.back();
+    }
+
+    // You can integrate your Supabase client here
+    // import { createClient } from '@supabase/supabase-js'
+    // const supabase = createClient('your-url', 'your-anon-key')
+    
+    // async function createUser(userData) {
+    //   const { data, error } = await supabase.auth.signUp({
+    //     email: userData.email,
+    //     password: userData.password,
+    //     options: {
+    //       data: {
+    //         name: userData.name,
+    //         mobile_no: userData.mobile_no,
+    //         role: userData.role
+    //       }
+    //     }
+    //   });
+    //   
+    //   if (error) {
+    //     console.error('Error:', error);
+    //   } else {
+    //     console.log('User created:', data);
+    //   }
+    // }
+  </script>
+
+  <!-- You can also include your external JavaScript file here -->
+  <!-- <script type="module" src="../supabaseClient/main.js"></script> -->
 </body>
 </html>
+3.57.57.55

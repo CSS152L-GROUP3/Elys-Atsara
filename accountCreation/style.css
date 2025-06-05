@@ -1,26 +1,32 @@
 @import url('https://fonts.googleapis.com/css2?family=Alef:wght@400;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Allura&display=swap');
 
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 .account-creation {
   background-color: #ffffff;
   display: flex;
   justify-content: center;
   width: 100%;
-  min-height: 1024px;
+  min-height: 100vh;
 }
 
 .account-creation .div {
   background-color: #ffffff;
   overflow: hidden;
   width: 1440px;
-  height: 1024px;
+  height: 1038px;
   position: relative;
 }
 
 .account-creation .rectangle,
 .account-creation .rectangle-2 {
   position: absolute;
-  width: 363px;
+  width: 350px;
   height: 1024px;
   top: 0;
   background-color: #b7251d;
@@ -32,72 +38,48 @@
 
 .account-creation .rectangle-2 {
   left: 1076px;
-  top: 2px;
 }
 
 .account-creation form {
-  position: relative;
+  position: absolute;
   width: 541px;
-  margin: 0 auto;
-  top: 220px; /* Align form vertically under the heading */
+  left: 50%;
+  transform: translateX(-50%);
+  top: 260px;
 }
 
-.account-creation .overlap,
-.account-creation .overlap-2,
-.account-creation .overlap-3,
-.account-creation .overlap-4,
-.account-creation .overlap-5 {
+.account-creation .input-group {
   width: 100%;
   height: 70px;
   background-color: #eaeaea;
   border-radius: 50px;
   position: relative;
   margin-bottom: 35px;
+  display: flex;
+  align-items: center;
 }
 
-.account-creation .supporting-text,
-.account-creation .supporting-text-5,
-.account-creation .text-wrapper {
-  position: absolute;
-  left: 35px;
-  top: 25px;
-  font-family: "Alef", sans-serif;
-  font-weight: 700;
-  color: #686869;
-  font-size: 25px;
-  letter-spacing: 0.25px;
-  line-height: 20px;
-  text-shadow: 0 4px 4px #00000040;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.account-creation .supporting-text-5 {
-  width: auto;
-  line-height: 25px;
-}
-
-.account-creation .input-name,
-.account-creation .input-email,
-.account-creation .input-mobile,
-.account-creation .input-password,
-.account-creation .input-role {
-  width: calc(100% - 120px); /* leave space for the icon */
+.account-creation .input-field {
+  width: calc(100% - 90px);
   height: 70px;
   border: none;
   background: transparent;
   font-family: "Alef", sans-serif;
-  font-size: 25px;
-  padding-left: 25px;
+  font-size: 20px;
+  font-weight: 400;
+  padding-left: 35px;
   color: #1d1b20;
   outline: none;
-  position: relative;
-  z-index: 2;
   border-radius: 50px;
 }
 
-.account-creation .overlap-group {
+.account-creation .input-field::placeholder {
+  color: #686869;
+  font-weight: 700;
+  font-size: 20px;
+}
+
+.account-creation .input-icon {
   width: 70px;
   height: 70px;
   background-color: #b7251d;
@@ -111,48 +93,24 @@
   z-index: 3;
 }
 
-.account-creation .vector,
-.account-creation .vector-2,
-.account-creation .vector-3,
-.account-creation .img,
-.account-creation .name-card {
-  width: auto;
-  height: 40px;
-  max-width: 40px;
-  max-height: 40px;
+.account-creation .icon {
+  width: 30px;
+  height: 30px;
+  fill: white;
 }
 
-.account-creation .vector {
-  margin-left: 5px;
-}
-
-.account-creation .vector-2 {
-  margin-left: 8px;
-}
-
-.account-creation .vector-3 {
-  margin-left: 8px;
-}
-
-.account-creation .img {
-  margin-left: 7px;
-}
-
-.account-creation .name-card {
-  margin-left: 7px;
-  height: 68px;
-  width: 58px;
-}
-
-.account-creation .submit-button-wrapper {
+.account-creation .button-container {
   width: 100%;
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 30px;
+  gap: 20px;
 }
 
 .account-creation .submit-button {
-  width: 250px;
-  height: 60px;
+  width: 280px;
+  height: 74px;
   background-color: #b7251d;
   border: none;
   border-radius: 30px;
@@ -162,16 +120,35 @@
   color: #ffffff;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  white-space: nowrap;
+  overflow: visible;
 }
 
 .account-creation .submit-button:hover {
   background-color: #9c1e17;
 }
 
+.account-creation .go-back-button {
+  width: 241px;
+  height: 74px;
+  background-color: #b3261e;
+  border-radius: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.account-creation .go-back-button:hover {
+  background-color: #9c1e17;
+}
+
 .account-creation .supporting-text-4 {
   position: absolute;
-  top: 140px;
-  left: 449px;
+  top: 200px;
+  left: 50%;
+  transform: translateX(-50%);
   font-family: "Alef", sans-serif;
   font-weight: 700;
   font-size: 54px;
@@ -185,7 +162,8 @@
 .account-creation .group {
   position: absolute;
   top: 83px;
-  left: 611px;
+  left: 50%;
+  transform: translateX(-50%);
   width: 198px;
   height: 111px;
 }
@@ -232,28 +210,6 @@
   text-overflow: ellipsis;
 }
 
-.account-creation .rectangle-3 {
-  position: absolute;
-  top: 640px;
-  left: -120px; /* hidden offscreen */
-  width: 100px;
-  height: 100px;
-  display: none; /* hide completely */
-}
-
-.account-creation .div-wrapper {
-  position: absolute;
-  top: 804px;
-  left: 727px;
-  width: 281px;
-  height: 74px;
-  background-color: #b3261e;
-  border-radius: 50px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
 .account-creation .supporting-text-3 {
   font-family: "Alef", sans-serif;
   font-weight: 700;
@@ -265,3 +221,50 @@
   white-space: nowrap;
 }
 
+/* Responsive design */
+@media (max-width: 1500px) {
+  .account-creation .div {
+    width: 100%;
+    max-width: 1440px;
+    height: auto;
+    min-height: 100vh;
+  }
+  
+  .account-creation .rectangle-2 {
+    left: calc(100% - 363px);
+  }
+}
+
+@media (max-width: 768px) {
+  .account-creation .div {
+    min-width: 100%;
+    padding: 20px;
+  }
+  
+  .account-creation .rectangle,
+  .account-creation .rectangle-2 {
+    width: 100px;
+  }
+  
+  .account-creation form {
+    width: 90%;
+    max-width: 500px;
+  }
+  
+  .account-creation .supporting-text-4 {
+    font-size: 36px;
+    text-align: center;
+  }
+
+  .account-creation .button-container {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .account-creation .submit-button,
+  .account-creation .go-back-button {
+    width: 100%;
+    max-width: 280px;
+  }
+}
+fonts.googleapis.com

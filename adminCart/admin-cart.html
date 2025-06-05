@@ -4,19 +4,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta charset="utf-8" />
     <title>Admin Cart</title>
-    <link rel="stylesheet" href="globals.css" />
-    <link rel="stylesheet" href="styleguide.css" />
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <header class="admin-cart">
       <nav>
-       
         <ul>
           <li>
             <a href="#about" class="nav-item">
               <div class="icon-container">
-                <img src="img/image.svg" alt="About Us Icon" class="nav-icon" />
+                <svg class="nav-icon" viewBox="0 0 24 24">
+                  <path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2ZM21 9V7L15 6.5V9.5L21 9ZM3 9L9 9.5V6.5L3 7V9ZM15 12V22H17V16H20V14H17V12H15ZM9 12V14H6V16H9V22H11V12H9Z"/>
+                </svg>
               </div>
               <span>About Us</span>
             </a>
@@ -24,7 +23,9 @@
           <li>
             <a href="#cart" class="nav-item">
               <div class="icon-container">
-                <img src="img/vector.svg" alt="Cart Icon" class="nav-icon" />
+                <svg class="nav-icon" viewBox="0 0 24 24">
+                  <path d="M17,18C15.89,18 15,18.89 15,20A2,2 0 0,0 17,22A2,2 0 0,0 19,20C19,18.89 18.1,18 17,18M1,2V4H3L6.6,11.59L5.24,14.04C5.09,14.32 5,14.65 5,15A2,2 0 0,0 7,17H19V15H7.42A0.25,0.25 0 0,1 7.17,14.75C7.17,14.7 7.18,14.66 7.2,14.63L8.1,13H15.55C16.3,13 16.96,12.58 17.3,11.97L20.88,5H5.21L4.27,3H1M7,18C5.89,18 5,18.89 5,20A2,2 0 0,0 7,22A2,2 0 0,0 9,20C9,18.89 8.1,18 7,18Z"/>
+                </svg>
               </div>
               <span>Cart</span>
             </a>
@@ -32,7 +33,9 @@
           <li>
             <a href="#maps" class="nav-item">
               <div class="icon-container">
-                <img src="img/vector-2.svg" alt="Maps Icon" class="nav-icon" />
+                <svg class="nav-icon" viewBox="0 0 24 24">
+                  <path d="M15,19L9,16.89V5L15,7.11M20.5,3C20.44,3 20.39,3 20.34,3L15,5.1L9,3L3.36,4.9C3.15,4.97 3,5.15 3,5.38V20.5A0.5,0.5 0 0,0 3.5,21C3.55,21 3.61,21 3.66,21L9,18.9L15,21L20.64,19.1C20.85,19 21,18.85 21,18.62V3.5A0.5,0.5 0 0,0 20.5,3Z"/>
+                </svg>
               </div>
               <span>Maps</span>
             </a>
@@ -40,13 +43,15 @@
           <li>
             <a href="#account" class="nav-item">
               <div class="icon-container">
-                <img src="img/vector-3.svg" alt="Account Icon" class="nav-icon" />
+                <svg class="nav-icon" viewBox="0 0 24 24">
+                  <path d="M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,14C16.42,14 20,15.79 20,18V20H4V18C4,15.79 7.58,14 12,14Z"/>
+                </svg>
               </div>
               <span>Account</span>
             </a>
           </li>
         </ul>
-         <div class="nav-underline"></div>
+        <div class="nav-underline"></div>
       </nav>
     </header>
     <main>
@@ -76,19 +81,23 @@
               <td>ORD-1001</td>
               <td>Juan Dela Cruz</td>
               <td>
-                <img src="img/image.png" alt="Small Ely's Atsara" class="product-image" />
-                <span>Small Ely's Atsara</span>
+                <div class="product-container">
+                  <div class="product-image">ATR</div>
+                  <span>Small Ely's Atsara</span>
+                </div>
               </td>
               <td>P276.00</td>
               <td><span class="status pending">Pending</span></td>
               <td>
-                <button class="action-btn view">View</button>
-                <button class="action-btn ship">Ship</button>
-                <div class="dropdown">
-                  <button class="dropdown-toggle">▼</button>
-                  <div class="dropdown-menu">
-                    <button class="dropdown-item">Cancel</button>
-                    <button class="dropdown-item">Refund</button>
+                <div class="actions-container">
+                  <button class="action-btn view">View</button>
+                  <button class="action-btn ship">Ship</button>
+                  <div class="dropdown">
+                    <button class="dropdown-toggle">▼</button>
+                    <div class="dropdown-menu">
+                      <button class="dropdown-item">Cancel</button>
+                      <button class="dropdown-item">Refund</button>
+                    </div>
                   </div>
                 </div>
               </td>
@@ -97,19 +106,23 @@
               <td>ORD-1002</td>
               <td>Juan Dela Cruz</td>
               <td>
-                <img src="img/image-2.png" alt="Small Ely's Atsara" class="product-image" />
-                <span>Small Ely's Atsara</span>
+                <div class="product-container">
+                  <div class="product-image">ATR</div>
+                  <span>Small Ely's Atsara</span>
+                </div>
               </td>
               <td>P276.00</td>
               <td><span class="status pending">Pending</span></td>
               <td>
-                <button class="action-btn view">View</button>
-                <button class="action-btn ship">Ship</button>
-                <div class="dropdown">
-                  <button class="dropdown-toggle">▼</button>
-                  <div class="dropdown-menu">
-                    <button class="dropdown-item">Cancel</button>
-                    <button class="dropdown-item">Refund</button>
+                <div class="actions-container">
+                  <button class="action-btn view">View</button>
+                  <button class="action-btn ship">Ship</button>
+                  <div class="dropdown">
+                    <button class="dropdown-toggle">▼</button>
+                    <div class="dropdown-menu">
+                      <button class="dropdown-item">Cancel</button>
+                      <button class="dropdown-item">Refund</button>
+                    </div>
                   </div>
                 </div>
               </td>
@@ -118,19 +131,23 @@
               <td>ORD-1003</td>
               <td>Juan Dela Cruz</td>
               <td>
-                <img src="img/image-4.png" alt="Small Ely's Atsara" class="product-image" />
-                <span>Small Ely's Atsara</span>
+                <div class="product-container">
+                  <div class="product-image">ATR</div>
+                  <span>Small Ely's Atsara</span>
+                </div>
               </td>
               <td>P276.00</td>
               <td><span class="status completed">Completed</span></td>
               <td>
-                <button class="action-btn view">View</button>
-                <button class="action-btn ship">Ship</button>
-                <div class="dropdown">
-                  <button class="dropdown-toggle">▼</button>
-                  <div class="dropdown-menu">
-                    <button class="dropdown-item">Cancel</button>
-                    <button class="dropdown-item">Refund</button>
+                <div class="actions-container">
+                  <button class="action-btn view">View</button>
+                  <button class="action-btn ship">Ship</button>
+                  <div class="dropdown">
+                    <button class="dropdown-toggle">▼</button>
+                    <div class="dropdown-menu">
+                      <button class="dropdown-item">Cancel</button>
+                      <button class="dropdown-item">Refund</button>
+                    </div>
                   </div>
                 </div>
               </td>
@@ -139,19 +156,23 @@
               <td>ORD-1004</td>
               <td>Juan Dela Cruz</td>
               <td>
-                <img src="img/image-3.png" alt="Small Ely's Atsara" class="product-image" />
-                <span>Small Ely's Atsara</span>
+                <div class="product-container">
+                  <div class="product-image">ATR</div>
+                  <span>Small Ely's Atsara</span>
+                </div>
               </td>
               <td>P276.00</td>
               <td><span class="status pending">Pending</span></td>
               <td>
-                <button class="action-btn view">View</button>
-                <button class="action-btn ship">Ship</button>
-                <div class="dropdown">
-                  <button class="dropdown-toggle">▼</button>
-                  <div class="dropdown-menu">
-                    <button class="dropdown-item">Cancel</button>
-                    <button class="dropdown-item">Refund</button>
+                <div class="actions-container">
+                  <button class="action-btn view">View</button>
+                  <button class="action-btn ship">Ship</button>
+                  <div class="dropdown">
+                    <button class="dropdown-toggle">▼</button>
+                    <div class="dropdown-menu">
+                      <button class="dropdown-item">Cancel</button>
+                      <button class="dropdown-item">Refund</button>
+                    </div>
                   </div>
                 </div>
               </td>
@@ -160,19 +181,23 @@
               <td>ORD-1005</td>
               <td>Juan Dela Cruz</td>
               <td>
-                <img src="img/image-5.png" alt="Small Ely's Atsara" class="product-image" />
-                <span>Small Ely's Atsara</span>
+                <div class="product-container">
+                  <div class="product-image">ATR</div>
+                  <span>Small Ely's Atsara</span>
+                </div>
               </td>
               <td>P276.00</td>
               <td><span class="status pending">Pending</span></td>
               <td>
-                <button class="action-btn view">View</button>
-                <button class="action-btn ship">Ship</button>
-                <div class="dropdown">
-                  <button class="dropdown-toggle">▼</button>
-                  <div class="dropdown-menu">
-                    <button class="dropdown-item">Cancel</button>
-                    <button class="dropdown-item">Refund</button>
+                <div class="actions-container">
+                  <button class="action-btn view">View</button>
+                  <button class="action-btn ship">Ship</button>
+                  <div class="dropdown">
+                    <button class="dropdown-toggle">▼</button>
+                    <div class="dropdown-menu">
+                      <button class="dropdown-item">Cancel</button>
+                      <button class="dropdown-item">Refund</button>
+                    </div>
                   </div>
                 </div>
               </td>
@@ -188,6 +213,61 @@
         button.addEventListener('click', () => {
           filterButtons.forEach(btn => btn.classList.remove('active'));
           button.classList.add('active');
+        });
+      });
+
+      // Add functionality to filter orders
+      const orderRows = document.querySelectorAll('.order-table tbody tr');
+      
+      filterButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          const filter = button.textContent.toLowerCase();
+          
+          orderRows.forEach(row => {
+            const statusElement = row.querySelector('.status');
+            const status = statusElement ? statusElement.textContent.toLowerCase() : '';
+            
+            if (filter === 'all') {
+              row.style.display = '';
+            } else if (filter === 'active' && status === 'pending') {
+              row.style.display = '';
+            } else if (filter === status) {
+              row.style.display = '';
+            } else if (filter !== 'all' && filter !== status && !(filter === 'active' && status === 'pending')) {
+              row.style.display = 'none';
+            }
+          });
+        });
+      });
+
+      // Add click handlers for action buttons
+      document.querySelectorAll('.action-btn.view').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const row = e.target.closest('tr');
+          const orderId = row.cells[0].textContent;
+          alert(Viewing details for ${orderId});
+        });
+      });
+
+      document.querySelectorAll('.action-btn.ship').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const row = e.target.closest('tr');
+          const orderId = row.cells[0].textContent;
+          if (confirm(Ship order ${orderId}?)) {
+            alert(Order ${orderId} has been shipped!);
+          }
+        });
+      });
+
+      document.querySelectorAll('.dropdown-item').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const row = e.target.closest('tr');
+          const orderId = row.cells[0].textContent;
+          const action = e.target.textContent;
+          
+          if (confirm(${action} order ${orderId}?)) {
+            alert(Order ${orderId} has been ${action.toLowerCase()}ed!);
+          }
         });
       });
     </script>
