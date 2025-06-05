@@ -88,31 +88,13 @@
   -webkit-box-orient: vertical;
 }
 
-.account-login .GuestBtn {
-  position: absolute;
-  width: 264px;
-  height: 76px;
-  top: 578px;
-  left: 144px;
-  background-color: #ffffff;
-  border-radius: 50px;
-  border-color: transparent;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  z-index: 1;
-}
-.account-login .GuestBtn:hover {
-  background-color: #bcb3b3;
-}
-.account-login .GuestBtn:active {
-  background-color: #bcb3b3; 
-}
 
 .account-login .supporting-text-2 {
   width: 234px;
-  top: 27px;
-  left: 14px;
+  top: 600px;
+  left: 150px;
   color: #1d1b20;
+  background-color: #ffffff;
   height: 100%;
   font-size: 25px;
   position: absolute;
@@ -127,6 +109,14 @@
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
 }
+
+.account-login .supporting-text-2:hover {
+  background-color: #bcb3b3;
+}
+.account-login .supporting-text-2:active {
+  background-color: #bcb3b3; 
+}
+
 
 .account-login .supporting-text-3 {
   width: 286px;
@@ -147,6 +137,14 @@
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
 }
+
+.account-login .suppoting-text-2:hover {
+  background-color: #991b17; 
+}
+.account-login .SignInBtn:active {
+  background-color: #7f1513; 
+}
+
 
 .account-login .EmailIcon {
   position: absolute;
