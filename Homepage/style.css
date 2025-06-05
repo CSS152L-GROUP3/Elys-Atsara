@@ -427,7 +427,7 @@
   object-fit: cover;
 }
 
-.top-Nav {
+.homepage .top-Nav {
   display: flex;
   align-items: center;
   justify-content: space-between;

@@ -1,4 +1,6 @@
 @import url("https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css");
+@import url('https://fonts.googleapis.com/css2?family=Alef:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Allura&display=swap');
 * {
   -webkit-font-smoothing: antialiased;
   box-sizing: border-box;
@@ -7,6 +9,7 @@ html,
 body {
   margin: 0px;
   height: 100%;
+  font-family: 'Alef';
   overflow-x: hidden;
 }
 /* a blue color as a generic focus style */
