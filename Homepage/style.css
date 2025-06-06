@@ -95,6 +95,7 @@
   cursor: pointer;
   z-index: 1;
 }
+
 .homepage .AccountBtn1:hover svg rect {
   fill: #9E1F19; 
 }

@@ -247,6 +247,20 @@
   top: -50px;
 }
 
+.AboutUs .overlap2 {
+  position: relative;
+  width: 1500px;
+  height: 500px;
+  top: 100px;
+}
+
+.AboutUs .overlap3 {
+  position: relative;
+  width: 1500px;
+  height: 500px;
+  top: -20%;
+}
+
 .AboutUs .SiteDescription {
   position: relative;
   width: 850px;
@@ -286,6 +300,22 @@
   left: 63%;
 }
 
+.AboutUs .rectangle-3 {
+  position: absolute;
+  width: 500px;
+  height: 300px;
+  top: -280px;
+  left: 0%;
+}
+
+.AboutUs .rectangle-4 {
+  position: absolute;
+  width: 500px;
+  height: 300px;
+  top: -20px;
+  left: 53%;
+}
+
 .AboutUs .Business {
   position: relative;
   width: 850px;
@@ -308,6 +338,54 @@
   left: 0px;
   font-family: "Alef", sans-serif;
   line-height: 30px;
+}
+
+.AboutUs .OwnerDescription {
+  position: relative;
+  width: 850px;
+  height: 100px;
+  top: -350px;
+  left: 600px;
+  font-family: "Alef", sans-serif;
+  line-height: 30px;
+}
+
+.AboutUs .Owner {
+  position: relative;
+  width: 850px;
+  height: 100px;
+  top: -300px;
+  left: 600px;
+  font-family: "Alef", sans-serif;
+  line-height: 30px;
+  font-weight: bold;
+  color: #b7251d;
+  font-size: 30px;
+  text-align: center;
+}
+
+.AboutUs .DevelopersDescription {
+  position: relative;
+  width: 43%;
+  height: 100px;
+  top: -200px;
+  left: 7%;
+  font-family: "Alef", sans-serif;
+  line-height: 30px;
+}
+
+.AboutUs .Developers {
+  position: relative;
+  width: 850px;
+  height: 100px;
+  top: -15%;
+  left: 0%;
+  font-family: "Alef", sans-serif;
+  line-height: 30px;
+  font-weight: bold;
+  color: #b7251d;
+  font-size: 30px;
+  text-align: center;
 }
 
 .AboutUs .headline {
@@ -364,5 +442,46 @@
   .AboutUs .LearnMoreBtn:hover {
     background-color: #9E1F19 !important;
   }
+
+  .AboutUs .footer {
+    position: relative;
+    width: 100%;
+    top: -30%;
+    height: 80px;
+    border-top: #9E1F19 solid 2px;
+  }
+
+  .AboutUs .tiktokbtn {
+    position: relative;
+    width: 73px;
+    height: 73px;
+    top: 10px;
+    left: 60%;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    transition: fill 0.3s ease;
+  }
+
+  .AboutUs .tiktokbtn:hover svg path:first-child {
+    fill: #9E1F19;
+  }
+
+  .AboutUs .facebookbtn {
+    position: relative;
+    width: 73px;
+    height: 73px;
+    top: 10px;
+    left: 40%;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    transition: fill 0.3s ease;
+  }
+
+  .AboutUs .facebookbtn:hover svg path:first-child {
+    fill: #9E1F19;
+  }
+  
 
 
