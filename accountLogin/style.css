@@ -68,6 +68,37 @@
   background-color: #bcb3b3; 
 }
 
+.account-login .GuestBtn {
+  position: absolute;
+  width: 248px;
+  height: 76px;
+  top: 590px;
+  left: 145px;
+  background-color: #ffffff;
+  border-radius: 50px;
+  border-color: transparent;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  z-index: 1;
+  color: black;
+  font-family: "Alef", sans-serif;
+  font-size: 25px;
+  font-weight: 700;
+  letter-spacing: 0.25px;
+  line-height: 30px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+}
+.account-login .GuestBtn:hover {
+  background-color: #bcb3b3; 
+}
+.account-login .GuestBtn:active {
+  background-color: #bcb3b3; 
+}
+
 .account-login .text-wrapper {
   width: 105px;
   top: 23px;
@@ -87,36 +118,6 @@
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
 }
-
-
-.account-login .supporting-text-2 {
-  width: 234px;
-  top: 600px;
-  left: 150px;
-  color: #1d1b20;
-  background-color: #ffffff;
-  height: 100%;
-  font-size: 25px;
-  position: absolute;
-  text-shadow: 0px 4px 4px #00000040;
-  font-family: "Alef", sans-serif;
-  font-weight: 700;
-  letter-spacing: 0.25px;
-  line-height: 25px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 1;
-  -webkit-box-orient: vertical;
-}
-
-.account-login .supporting-text-2:hover {
-  background-color: #bcb3b3;
-}
-.account-login .supporting-text-2:active {
-  background-color: #bcb3b3; 
-}
-
 
 .account-login .supporting-text-3 {
   width: 286px;
