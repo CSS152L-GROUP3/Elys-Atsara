@@ -6,15 +6,23 @@
     <link rel="stylesheet" href="globals.css" />
     <link rel="stylesheet" href="styleguide.css" />
     <link rel="stylesheet" href="style.css" />
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   </head>
   <body>
     <div class="homepage">
       <div class="div">
 
         <div class="overlap">
-          <div class="image"></div>
-          <!-- <div class="group"><img class="icon" src="Homepage\images\profile.svg" />  -->
-          <!-- <img class="img" src="Homepage\images\sample pic.png" /></div> -->
+          <div class="slider-container">
+            <div class="slider">
+              <img src="./images/img1.jpg" class="slide" alt="Atsara 1">
+              <img src="./images/img2.jpg" class="slide" alt="Atsara 2">
+              <img src="./images/img3.jpg" class="slide" alt="Atsara 3">
+            </div>
+            <button class="slider-btn prev-btn">❮</button>
+            <button class="slider-btn next-btn">❯</button>
+            <div class="dots-container"></div>
+          </div>
         </div>
 
         <div class="top-Nav">
@@ -72,7 +80,7 @@
 
         <div class="headline">Ely's Atsara</div>
         <p class="description">
-          Ely’s Atsara crafts the best papaya mixed vegetable pickles with freshest ingredients, straight from our
+          Ely's Atsara crafts the best papaya mixed vegetable pickles with freshest ingredients, straight from our
           hearts to your homes! Perfect with any dish, our atsara adds a tangy twist to any meal. Follow us for updates
           and send a message to order!
         </p>
@@ -98,5 +106,93 @@
       </div>
     </div>
 
+    <script>
+      $(document).ready(function() {
+        var $slides = $('.slide');
+        var $prevBtn = $('.prev-btn');
+        var $nextBtn = $('.next-btn');
+        var $dotsContainer = $('.dots-container');
+        
+        var currentSlide = 0;
+        var slideCount = $slides.length;
+        var isAnimating = false;
+        
+        // Show first slide
+        $slides.eq(0).addClass('active');
+        
+        // Create dots
+        $slides.each(function(index) {
+          var $dot = $('<div>').addClass('dot');
+          if (index === 0) $dot.addClass('active');
+          $dot.on('click', function() {
+            if (!isAnimating) {
+              goToSlide(index);
+            }
+          });
+          $dotsContainer.append($dot);
+        });
+        
+        var $dots = $('.dot');
+        
+        function updateDots() {
+          $dots.removeClass('active');
+          $dots.eq(currentSlide).addClass('active');
+        }
+        
+        function goToSlide(slideIndex) {
+          if (isAnimating) return;
+          isAnimating = true;
+          
+          $slides.eq(currentSlide).removeClass('active');
+          currentSlide = slideIndex;
+          $slides.eq(currentSlide).addClass('active');
+          
+          setTimeout(function() {
+            isAnimating = false;
+          }, 500);
+          
+          updateDots();
+        }
+        
+        function nextSlide() {
+          if (!isAnimating) {
+            var nextIndex = (currentSlide + 1) % slideCount;
+            goToSlide(nextIndex);
+          }
+        }
+        
+        function prevSlide() {
+          if (!isAnimating) {
+            var prevIndex = (currentSlide - 1 + slideCount) % slideCount;
+            goToSlide(prevIndex);
+          }
+        }
+        
+        // Add event listeners
+        $prevBtn.on('click', prevSlide);
+        $nextBtn.on('click', nextSlide);
+        
+        // Auto-advance slides every 5 seconds
+        var slideInterval = setInterval(function() {
+          if (!isAnimating) {
+            nextSlide();
+          }
+        }, 5000);
+        
+        // Pause auto-advance on hover
+        $('.slider-container').hover(
+          function() {
+            clearInterval(slideInterval);
+          },
+          function() {
+            slideInterval = setInterval(function() {
+              if (!isAnimating) {
+                nextSlide();
+              }
+            }, 5000);
+          }
+        );
+      });
+    </script>
   </body>
 </html>
