@@ -38,7 +38,7 @@
             </svg>
           </div>
 
-          <button class="SignInBtn" onclick="handleLogin()"><span class="supporting-text-6">Sign in</span></button>
+          <button class="SignInBtn"><span class="supporting-text-6">Sign in</span></button>
 
           <button class="BackBtn"><span class="supporting-text-7">Go back</span></button>
 
@@ -54,47 +54,6 @@
       </div>
     </div>
 
-    <script>
-      
-      const supabaseUrl = 'https://qjokcvkcibztiibpwqsv.supabase.co'
-      const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFqb2tjdmtjaWJ6dGlpYnB3cXN2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDc5MTk5MzgsImV4cCI6MjA2MzQ5NTkzOH0.zibSsjUbI96fcDCDcOpwnBjW__ep0kzsdCW7dSLVkMs'
-      const { createClient } = supabase
-      const supabaseClient = createClient(supabaseUrl, supabaseKey)
-
-      async function handleLogin() {
-        const email = document.getElementById('email').value
-        const password = document.getElementById('password').value
-
-        try {
-        
-          const { data, error } = await supabaseClient
-            .from('user_accounts')
-            .select('email, password')
-            .eq('email', email)
-            .single()
-
-          if (error) {
-              alert('Invalid email or password. Please try again.')
-              return
-            }
-
-            if (!data) {
-              alert('Email not found. Please sign up first.')
-              return
-            }
-
-            // Check if password matches
-            if (data.password === password) {
-              alert('Login successful!')
-              window.location.href = '../homepage/homepage.html'
-            } else {
-              alert('Incorrect password. Please try again.')
-            }
-          } catch (error) {
-            alert('An error occurred: ' + error.message)
-          }
-        }
-        
-    </script>
+    <script type="module" src="../supabaseClient/accountLogin.js"></script>
   </body>
 </html>
