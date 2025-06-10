@@ -82,60 +82,7 @@
     </div>
   </div>
 
-  <script>
-    // Form submission handler
-    document.getElementById('signupForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      
-      // Get form data
-      const formData = new FormData(this);
-      const userData = {
-        name: formData.get('name'),
-        email: formData.get('email'),
-        mobile_no: formData.get('mobile_no'),
-        password: formData.get('password'),
-        role: formData.get('role')
-      };
-      
-      // Here you can add your Supabase integration
-      console.log('User data:', userData);
-      
-      // Example: Call your Supabase function
-      // createUser(userData);
-    });
+  <script type="module" src="../supabaseClient/accountCreation.js"> </script>
 
-    // Go back function
-    function goBack() {
-      window.history.back();
-    }
-
-    // You can integrate your Supabase client here
-    // import { createClient } from '@supabase/supabase-js'
-    // const supabase = createClient('your-url', 'your-anon-key')
-    
-    // async function createUser(userData) {
-    //   const { data, error } = await supabase.auth.signUp({
-    //     email: userData.email,
-    //     password: userData.password,
-    //     options: {
-    //       data: {
-    //         name: userData.name,
-    //         mobile_no: userData.mobile_no,
-    //         role: userData.role
-    //       }
-    //     }
-    //   });
-    //   
-    //   if (error) {
-    //     console.error('Error:', error);
-    //   } else {
-    //     console.log('User created:', data);
-    //   }
-    // }
-  </script>
-
-  <!-- You can also include your external JavaScript file here -->
-  <!-- <script type="module" src="../supabaseClient/main.js"></script> -->
 </body>
 </html>
-3.57.57.55
