@@ -23,20 +23,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const mobile_no = form.mobile_no.value.trim();
     const role = form.role.value.trim();
 
-    //  Validate required fields
+    
     if (!name || !email || !password || !mobile_no || !role) {
       alert('Please fill in all fields.');
       return;
     }
 
-    //  Validate email domain
+    
     if (!isValidEmailDomain(email)) {
       alert('Please use a valid email address.');
       return;
     }
 
     try {
-      //  Check if user already exists
       const { data: existingUser, error: fetchError } = await supabase
         .from('user_accounts')
         .select('email')
@@ -48,7 +47,6 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      //  Insert new user into user_accounts
       const { data, error: insertError } = await supabase
         .from('user_accounts')
         .insert([{ name, email, password, mobile_no, role }]);

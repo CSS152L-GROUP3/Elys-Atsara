@@ -54,3 +54,13 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
+
+
+document.getElementById("guestBtn").addEventListener("click", function () {
+
+  sessionStorage.setItem("userType", "guest");
+  alert("You are using a guest account.");
+  window.location.href = "../Homepage/homepage.html";
+  
+});
+
