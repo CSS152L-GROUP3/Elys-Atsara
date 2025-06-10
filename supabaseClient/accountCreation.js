@@ -23,42 +23,60 @@ document.addEventListener('DOMContentLoaded', () => {
     const mobile_no = form.mobile_no.value.trim();
     const role = form.role.value.trim();
 
-    
     if (!name || !email || !password || !mobile_no || !role) {
       alert('Please fill in all fields.');
       return;
     }
 
-    
     if (!isValidEmailDomain(email)) {
       alert('Please use a valid email address.');
       return;
     }
 
     try {
-      const { data: existingUser, error: fetchError } = await supabase
+      // Check if email is already registered
+      const { data: user, error: userError } = await supabase
         .from('user_accounts')
-        .select('email')
+        .select('*')
         .eq('email', email)
         .single();
 
-      if (existingUser) {
-        alert('This email is already registered.');
+      if (userError && userError.code !== 'PGRST116') {
+        alert('Error checking user account: ' + userError.message);
         return;
       }
 
-      const { data, error: insertError } = await supabase
-        .from('user_accounts')
-        .insert([{ name, email, password, mobile_no, role }]);
-
-      if (insertError) {
-        alert('Error creating account: ' + insertError.message);
+      if (user) {
+        alert('An account with this email is already registered.');
         return;
       }
 
-      alert('Account created successfully! You may now log in.');
+      // Sign up user with Supabase Auth
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            name,
+            mobile_no,
+            role, 
+            password
+          },
+          emailRedirectTo: 'http://127.0.0.1:5500/accountLogin/account-login.html'
+        }
+      });
+
+      if (error) {
+        if (error.message.includes('already registered')) {
+          alert('An account with this email is already registered. Please check your email for confirmation.');
+        } else {
+          alert('Signup failed: ' + error.message);
+        }
+        return;
+      }
+
+      alert('Account created! Please check your email to confirm your address.');
       form.reset();
-      window.location.href = '../accountLogin/account-login.html';
     } catch (err) {
       console.error('Unexpected error:', err);
       alert('Something went wrong. Please try again later.');
