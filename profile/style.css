@@ -116,7 +116,7 @@ html, body {
     transition: background-color 0.3s ease;
 }
 
-.button-row .signup {
+.button-row .logout {
     background-color: #B7251D;
     color: white;
 }

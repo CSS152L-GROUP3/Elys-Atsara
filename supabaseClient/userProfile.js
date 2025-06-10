@@ -1,29 +1,47 @@
-import { supabase } from './supabase.js'; 
+import { supabase } from './supabase.js';
 
-async function loadUserProfile() {
-  const user = supabase.auth.user();
+document.addEventListener('DOMContentLoaded', () => {
+  const userJson = localStorage.getItem('currentUser');
 
-  if (!user) {
-    alert('Please log in first!');
-    window.location.href = 'homepage.html'; // or login page
+  if (!userJson) {
+    console.log('No user logged in');
+    window.location.href = '../accountLogin/accountLogin.html';
     return;
   }
 
-  const { data, error } = await supabase
-    .from('profiles')  // adjust table name if different
-    .select('email, fullname, mobile_no, role')
-    .eq('email', user.email)  // use email to fetch the profile
-    .single();
+  const user = JSON.parse(userJson);
+  console.log('Loaded user:', user);
 
-  if (error) {
-    console.error('Error loading profile:', error);
-    return;
-  }
+  // Set values in input fields
+  const roleInput = document.getElementById('role');
+  const nameInput = document.getElementById('name');
+  const emailInput = document.getElementById('email');
+  const mobileInput = document.getElementById('mobile_no');
+  const passwordInput = document.getElementById('password');
 
-  document.getElementById('email').textContent = data.email || '';
-  document.getElementById('fullname').textContent = data.fullname || '';
-  document.getElementById('mobile_no').textContent = data.mobile_no || '';
-  document.getElementById('role').textContent = data.role || '';
+  if (roleInput) roleInput.value = user.role || '';
+  if (nameInput) nameInput.value = user.name || '';
+  if (emailInput) emailInput.value = user.email || '';
+  if (mobileInput) mobileInput.value = user.mobile_no || '';
+  if (passwordInput) passwordInput.value = user.password || ''; 
+});
+
+
+const goBackBtn = document.getElementById('go-back-btn');
+if (goBackBtn) {
+  goBackBtn.addEventListener('click', () => {
+    // Just go back to homepage — no restriction
+    window.location.href = '../Homepage/Homepage.html';
+  });
 }
 
-window.onload = loadUserProfile;
+const logoutBtn = document.getElementById('logout-btn'); 
+if (logoutBtn) {
+  logoutBtn.addEventListener('click', () => {
+   
+    localStorage.removeItem('currentUser');
+
+    alert('You are logged out. You can continue as guest.');
+    window.location.href = '../Homepage/Homepage.html';
+  });
+}

@@ -20,22 +20,22 @@ async function handleLogin() {
   try {
     const { data, error } = await supabase
       .from('user_accounts')
-      .select('email, password')
+      .select('*') // Fetch all columns if needed
       .eq('email', email)
       .single();
 
-    if (error) {
+    if (error || !data) {
       alert('Invalid email or password. Please try again.');
-      return;
-    }
-
-    if (!data) {
-      alert('Email not found. Please sign up first.');
       return;
     }
 
     if (data.password === password) {
       alert('Login successful!');
+      
+      // ✅ Store the user data in localStorage
+      localStorage.setItem('currentUser', JSON.stringify(data));
+      
+      // ✅ Redirect to homepage
       window.location.href = '../homepage/homepage.html';
     } else {
       alert('Incorrect password. Please try again.');
