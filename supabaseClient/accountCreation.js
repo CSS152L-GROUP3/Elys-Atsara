@@ -7,7 +7,8 @@ function isValidEmailDomain(email) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  const form = document.getElementById('signupForm'); 
+  const form = document.getElementById('signupForm');
+
   if (!form) {
     console.error('Signup form not found.');
     return;
@@ -22,49 +23,47 @@ document.addEventListener('DOMContentLoaded', () => {
     const mobile_no = form.mobile_no.value.trim();
     const role = form.role.value.trim();
 
-    // Validate email domain before signup
+    //  Validate required fields
+    if (!name || !email || !password || !mobile_no || !role) {
+      alert('Please fill in all fields.');
+      return;
+    }
+
+    //  Validate email domain
     if (!isValidEmailDomain(email)) {
-      alert('Please use a valid email only.');
+      alert('Please use a valid email address.');
       return;
     }
 
     try {
-      // Step 1: Create user in Supabase Auth
-      const { data, error: signUpError } = await supabase.auth.signUp({
-        email,
-        password,
-      });
+      //  Check if user already exists
+      const { data: existingUser, error: fetchError } = await supabase
+        .from('user_accounts')
+        .select('email')
+        .eq('email', email)
+        .single();
 
-      if (signUpError) {
-        if (signUpError.message.includes('duplicate key value')) {
-          alert('Account is already in use');
-        } else {
-          alert('Error: ' + signUpError.message);
-        }
+      if (existingUser) {
+        alert('This email is already registered.');
         return;
       }
 
-      const auth_id = data.user.id;
-
-      // Step 2: Insert into user_accounts
-      const { error: insertError } = await supabase
+      //  Insert new user into user_accounts
+      const { data, error: insertError } = await supabase
         .from('user_accounts')
-        .insert([{ auth_id, password, name, email, mobile_no, role }]);
+        .insert([{ name, email, password, mobile_no, role }]);
 
       if (insertError) {
-        if (insertError.message.includes('duplicate key value')) {
-          alert('Account is already in use');
-        } else {
-          alert('Error: ' + insertError.message);
-        }
+        alert('Error creating account: ' + insertError.message);
         return;
       }
 
-      alert('Account created successfully!');
+      alert('Account created successfully! You may now log in.');
       form.reset();
+      window.location.href = '../accountLogin/account-login.html';
     } catch (err) {
-      alert('Unexpected error occurred: ' + err.message);
-      console.error('Supabase error:', err);
+      console.error('Unexpected error:', err);
+      alert('Something went wrong. Please try again later.');
     }
   });
 });

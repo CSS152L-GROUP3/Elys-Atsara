@@ -20,7 +20,7 @@ async function handleLogin() {
   try {
     const { data, error } = await supabase
       .from('user_accounts')
-      .select('*') // Fetch all columns if needed
+      .select('*') 
       .eq('email', email)
       .single();
 
@@ -32,10 +32,10 @@ async function handleLogin() {
     if (data.password === password) {
       alert('Login successful!');
       
-      // ✅ Store the user data in localStorage
+      
       localStorage.setItem('currentUser', JSON.stringify(data));
       
-      // ✅ Redirect to homepage
+    
       window.location.href = '../homepage/homepage.html';
     } else {
       alert('Incorrect password. Please try again.');
@@ -44,3 +44,13 @@ async function handleLogin() {
     alert('An error occurred: ' + error.message);
   }
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+  const signUpBtn = document.querySelector('.SignUpBtn');
+
+  if (signUpBtn) {
+    signUpBtn.addEventListener('click', () => {
+      window.location.href = '../accountCreation/account-creation.html';
+    });
+  }
+});
