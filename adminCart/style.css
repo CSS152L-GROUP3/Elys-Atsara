@@ -237,7 +237,7 @@ main {
   }
 }
 
-.Admin-Cart .AboutUsBtn2 {
+.AboutUsBtn2 {
   position: absolute;
   width: 160px;
   top: 19px;
@@ -255,24 +255,24 @@ main {
   padding-right: 20px;
 }
 
-.Admin-Cart .AboutUsBtn2:hover {
+.AboutUsBtn2:hover {
   color: #b3261e;
   background-color: transparent;
 }
 
-.Admin-Cart .AboutUsBtn1 {
+.AboutUsBtn1 {
   background: transparent; 
   border: none; 
   padding: 0; 
   cursor: pointer;
   z-index: 1;
 }
-.Admin-Cart .AboutUsBtn1:hover svg rect {
+.AboutUsBtn1:hover svg rect {
   fill: #9E1F19; 
 }
 
-.Admin-Cart .AccountBtn2 {
-  position: absolute;
+.AccountBtn2 {
+   position: absolute;
   width: 120px;
   height: 30px;
   top: 17px;
@@ -290,23 +290,23 @@ main {
   padding-right: 25px;
 }
 
-.Admin-Cart .AccountBtn2:hover {
+ .AccountBtn2:hover {
   color: #b3261e;
   background-color: transparent;
 }
 
-.Admin-Cart .AccountBtn1 {
+ .AccountBtn1 {
   background: transparent; 
   border: none; 
   padding: 0; 
   cursor: pointer;
   z-index: 1;
 }
-.Admin-Cart .AccountBtn1:hover svg rect {
+.AccountBtn1:hover svg rect {
   fill: #9E1F19; 
 }
 
-.Admin-Cart .CartBtn1 {
+.CartBtn1 {
   background: transparent; 
   border: none; 
   padding: 0; 
@@ -314,11 +314,11 @@ main {
   z-index: 1;
 }
 
-.Admin-Cart .CartBtn1:hover svg rect {
+.CartBtn1:hover svg rect {
   fill: #9E1F19; 
 }
 
-.Admin-Cart .CartBtn2 {
+.CartBtn2 {
   width: 75px;
   top: 18px;
   left: -70px;
@@ -336,12 +336,12 @@ main {
   transition: background-color 0.3s ease;
 }
 
-.Admin-Cart .CartBtn2:hover {
+.CartBtn2:hover {
   color: #b3261e;
   background-color: transparent;
 }
 
-.Admin-Cart .MapBtn1 {
+.MapBtn1 {
   background: transparent; 
   border: none; 
   padding: 0; 
@@ -349,11 +349,11 @@ main {
   z-index: 1;
 }
 
-.Admin-Cart .MapBtn1:hover svg ellipse {
+.MapBtn1:hover svg ellipse {
   fill: #9E1F19; 
 }
 
-.Admin-Cart .MapBtn2 {
+ .MapBtn2 {
   width: 85px;
   top: 18px;
   left: -70px;
@@ -371,12 +371,12 @@ main {
   transition: background-color 0.3s ease;
 }
 
-.Admin-Cart .MapBtn2:hover {
+ .MapBtn2:hover {
   color: #b3261e;
   background-color: transparent;
 }
 
-.Admin-Cart .top-Nav {
+.top-Nav {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -388,8 +388,7 @@ main {
   z-index: 1000;
   border-bottom: 2px solid #b7251d;
 }
-
-.Admin-Cart .group1 {
+ .group1 {
   position: absolute;
   width: 60px;
   height: 58px;
@@ -398,7 +397,7 @@ main {
   border-radius: 30px / 29px;
 }
 
-.Admin-Cart .group2 {
+.group2 {
   position: absolute;
   width: 60px;
   height: 58px;
@@ -407,7 +406,7 @@ main {
   border-radius: 30px / 29px;
 }
 
-.Admin-Cart .group3 {
+ .group3 {
   position: absolute;
   width: 60px;
   height: 58px;
@@ -416,7 +415,7 @@ main {
   border-radius: 30px / 29px;
 }
 
-.Admin-Cart .group4 {
+ .group4 {
   position: absolute;
   width: 60px;
   height: 58px;
