@@ -1,85 +1,135 @@
+// import { supabase } from './supabase.js';
+
+// document.addEventListener('DOMContentLoaded', () => {
+//   const signupForm = document.getElementById('signupForm');
+
+//   if (!signupForm) return;
+
+//   signupForm.addEventListener('submit', async (e) => {
+//     e.preventDefault();
+
+//     const name = signupForm.name.value.trim();
+//     const email = signupForm.email.value.trim();
+//     const password = signupForm.password.value;
+//     const mobile_no = signupForm.mobile_no.value.trim();
+//     const role = signupForm.role.value;
+
+//     if (!email || !password || !name || !mobile_no || !role) {
+//       alert('All fields are required.');
+//       return;
+//     }
+
+//     console.log({ name, email, password, mobile_no, role });
+
+//     const { data, error } = await supabase.auth.signUp({
+//       email,
+//       password,
+//       options: {
+//         data: {
+//           name,
+//           mobile_no,
+//           role,
+//         },
+//          emailRedirectTo: 'http://127.0.0.1:5500/accountLogin/account-login.html'
+//       },
+//     });
+
+//     if (error) {
+//       alert('Signup failed: ' + error.message);
+//       console.error(error);
+//     } else {
+//       alert('Signup successful! Please log in.');
+//       window.location.href = '../accountLogin/account-login.html';
+//     }
+//   });
+// });
+
 import { supabase } from './supabase.js';
 
-function isValidEmailDomain(email) {
-  const commonDomains = ['gmail.com', 'yahoo.com', 'hotmail.com', 'outlook.com', 'icloud.com'];
-  const domain = email.split('@')[1]?.toLowerCase();
-  return domain && commonDomains.includes(domain);
-}
-
 document.addEventListener('DOMContentLoaded', () => {
-  const form = document.getElementById('signupForm');
+  const signupForm = document.getElementById('signupForm');
 
-  if (!form) {
-    console.error('Signup form not found.');
-    return;
-  }
+  if (!signupForm) return;
 
-  form.addEventListener('submit', async (e) => {
+  signupForm.addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    const name = form.name.value.trim();
-    const email = form.email.value.trim();
-    const password = form.password.value;
-    const mobile_no = form.mobile_no.value.trim();
-    const role = form.role.value.trim();
+    const name = signupForm.name.value.trim();
+    const email = signupForm.email.value.trim();
+    const password = signupForm.password.value;
+    const mobile_no = signupForm.mobile_no.value.trim();
+    const role = signupForm.role.value;
 
-    if (!name || !email || !password || !mobile_no || !role) {
-      alert('Please fill in all fields.');
-      return;
-    }
+    console.log('Name:', name);
+    console.log('Email:', email);
+    console.log('Password:', password);  
+    console.log('Mobile No:', mobile_no);
+    console.log('Role:', role);
 
-    if (!isValidEmailDomain(email)) {
-      alert('Please use a valid email address.');
+    if (!email || !password || !name || !mobile_no || !role) {
+      alert('All fields are required.');
       return;
     }
 
     try {
-      // Check if email is already registered
-      const { data: user, error: userError } = await supabase
-        .from('user_accounts')
-        .select('*')
-        .eq('email', email)
-        .single();
-
-      if (userError && userError.code !== 'PGRST116') {
-        alert('Error checking user account: ' + userError.message);
-        return;
-      }
-
-      if (user) {
-        alert('An account with this email is already registered.');
-        return;
-      }
-
-      // Sign up user with Supabase Auth
-      const { data, error } = await supabase.auth.signUp({
+     
+      const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
         email,
         password,
         options: {
-          data: {
-            name,
-            mobile_no,
-            role, 
-            password
-          },
+          data: { name, mobile_no, role, password },
           emailRedirectTo: 'http://127.0.0.1:5500/accountLogin/account-login.html'
         }
       });
 
-      if (error) {
-        if (error.message.includes('already registered')) {
-          alert('An account with this email is already registered. Please check your email for confirmation.');
-        } else {
-          alert('Signup failed: ' + error.message);
-        }
+      if (signUpError) {
+        alert('Signup failed: ' + signUpError.message);
+        console.error(signUpError);
         return;
       }
 
-      alert('Account created! Please check your email to confirm your address.');
-      form.reset();
+      const uuid = signUpData?.user?.id;
+      if (!uuid) {
+        alert('Signup successful, but no user ID returned.');
+        return;
+      }
+
+      console.log('User UUID from Auth:', uuid);
+
+     
+      const targetTable = role === 'admin' ? 'admin_accounts' : 'customer_accounts';
+
+     
+      const { error: insertError } = await supabase
+        .from(targetTable)
+        .insert([
+          {
+            uuid,
+            name,
+            email,
+            mobile_no,
+            role, 
+            password
+          }
+        ]);
+
+      if (insertError) {
+       if (insertError.message.includes('duplicate key value')) {
+          alert('You already have an account. Please log in instead.');
+        } else {
+          alert('Signup succeeded, but we couldn’t save your details. Please try again.');
+        }
+        console.error(insertError);
+        return;
+      }
+
+
+      alert('Signup successful! Please check your email to verify your account.');
+      window.location.href = '../accountLogin/account-login.html';
+
     } catch (err) {
-      console.error('Unexpected error:', err);
-      alert('Something went wrong. Please try again later.');
+      alert('Unexpected error: ' + err.message);
+      console.error(err);
     }
   });
 });
