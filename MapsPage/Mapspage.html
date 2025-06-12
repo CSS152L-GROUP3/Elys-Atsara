@@ -3,198 +3,114 @@
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta charset="utf-8" />
-    <title> Ely's Atsara</title>
     <link rel="stylesheet" href="globals.css" />
-    <link rel="stylesheet" href="styleguide.css" />
     <link rel="stylesheet" href="style.css" />
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
   </head>
   <body>
-    <div class="homepage">
+    <div class="AboutUs">
       <div class="div">
 
-        <div class="overlap">
-          <div class="slider-container">
-            <div class="slider">
-              <img src="./images/img1.jpg" class="slide" alt="Atsara 1">
-              <img src="./images/img2.jpg" class="slide" alt="Atsara 2">
-              <img src="./images/img3.jpg" class="slide" alt="Atsara 3">
-            </div>
-            <button class="slider-btn prev-btn">❮</button>
-            <button class="slider-btn next-btn">❯</button>
-            <div class="dots-container"></div>
-          </div>
-        </div>
-
-        <div class="top-Nav">
-
+   <div class="top-Nav">
         <div class="About">
           <div class="group1">
+          <a href="../AboutUs/AboutUs.html">
           <button class="AboutUsBtn1">
             <svg width="60" height="58" viewBox="0 0 60 58" fill="none" xmlns="http://www.w3.org/2000/svg">
               <rect width="60" height="58" rx="29" fill="#B3261E"/>
               <path d="M30 32.7926C32.8821 32.7926 35.4908 31.3762 37.3795 29.0873C39.2661 26.8008 40.4348 23.6392 40.4348 20.1463C40.4348 16.6534 39.2661 13.4918 37.3795 11.2054C35.4908 8.91639 32.8821 7.5 30 7.5C27.1179 7.5 24.5092 8.91639 22.6205 11.2054C20.7339 13.4918 19.5652 16.6534 19.5652 20.1463C19.5652 23.6392 20.7339 26.8008 22.6205 29.0873C23.5885 30.2636 24.7387 31.1966 26.0051 31.8325C27.2716 32.4684 28.6292 32.7947 30 32.7926ZM46.6957 35.3219C47.3812 35.3236 48.0603 35.1611 48.6939 34.844C49.3275 34.5268 49.9032 34.0611 50.388 33.4736C50.8727 32.8861 51.257 32.1884 51.5187 31.4205C51.7804 30.6526 51.9144 29.8296 51.913 28.9987C51.913 27.2535 51.3308 25.6728 50.3854 24.527C49.9014 23.939 49.3262 23.4727 48.693 23.155C48.0598 22.8372 47.381 22.6743 46.6957 22.6756C46.0101 22.6739 45.331 22.8363 44.6974 23.1535C44.0638 23.4707 43.4881 23.9364 43.0033 24.5239C42.5186 25.1114 42.1343 25.8091 41.8726 26.577C41.6109 27.3449 41.4769 28.1679 41.4783 28.9987C41.4772 29.8295 41.6114 30.6523 41.8732 31.4201C42.135 32.1878 42.5192 32.8854 43.0039 33.4729C43.4886 34.0603 44.0642 34.526 44.6977 34.8433C45.3312 35.1606 46.0102 35.3232 46.6957 35.3219ZM46.6957 36.8142C43.9179 36.8142 41.8289 37.841 40.608 39.2625C38.281 36.9432 34.6017 35.3219 30 35.3219C25.271 35.3219 21.6626 36.9609 19.3732 39.2777C18.1294 37.8486 16.0174 36.8142 13.3043 36.8142C8.73809 36.8142 6 39.5711 6 42.333C6 43.7115 8.73809 45.095 13.3043 45.095C14.5649 45.095 15.696 44.966 16.6915 44.7586L16.608 45.4415C16.608 47.9707 21.6292 50.5 30 50.5C37.8511 50.5 43.392 47.9707 43.392 45.4415L43.3503 44.7965C44.3165 44.9811 45.4268 45.095 46.6957 45.095C50.976 45.095 54 43.7115 54 42.333C54 39.5711 51.1346 36.8142 46.6957 36.8142ZM13.3043 35.3219C14.7443 35.3219 16.0487 34.6162 16.9941 33.4705C17.4793 32.8839 17.864 32.1868 18.1262 31.4194C18.3884 30.652 18.5228 29.8293 18.5217 28.9987C18.5231 28.1679 18.3891 27.3449 18.1274 26.577C17.8657 25.8091 17.4814 25.1114 16.9967 24.5239C16.5119 23.9364 15.9362 23.4707 15.3026 23.1535C14.669 22.8363 13.9899 22.6739 13.3043 22.6756C12.6189 22.6742 11.9399 22.8369 11.3064 23.1542C10.6729 23.4715 10.0973 23.9372 9.61264 24.5246C9.12794 25.112 8.74368 25.8096 8.48187 26.5774C8.22006 27.3452 8.08586 28.168 8.08696 28.9987C8.08558 29.8296 8.21959 30.6526 8.48131 31.4205C8.74302 32.1884 9.12727 32.8861 9.61203 33.4736C10.0968 34.0611 10.6725 34.5268 11.3061 34.844C11.9397 35.1611 12.6188 35.3236 13.3043 35.3219Z" fill="white"/>
             </svg>
           </button>
-          <button class="AboutUsBtn2" onclick="window.location.href='../AboutUs/AboutUs.html'">About Us</button>
+          </a>
+          <a href="../AboutUs/AboutUs.html">
+          <button class="AboutUsBtn2">About Us</button>
+          </a>
           </div>
         </div>
 
         <div class="Cart">
           <div class="group2">
+          <a href="../CartPage/CartPage.html">
           <button class="CartBtn1">
             <svg width="60" height="58" viewBox="0 0 60 58" fill="none" xmlns="http://www.w3.org/2000/svg">
               <rect width="60" height="58" rx="29" fill="#B3261E"/>
               <path d="M24.4444 42.6842C23.7852 42.6842 23.1407 42.8694 22.5925 43.2164C22.0444 43.5634 21.6171 44.0566 21.3648 44.6336C21.1126 45.2107 21.0465 45.8456 21.1752 46.4582C21.3038 47.0708 21.6212 47.6334 22.0874 48.0751C22.5536 48.5167 23.1475 48.8175 23.7941 48.9393C24.4407 49.0612 25.111 48.9986 25.7201 48.7596C26.3291 48.5206 26.8497 48.1159 27.216 47.5965C27.5823 47.0772 27.7778 46.4667 27.7778 45.8421C27.7778 45.0046 27.4266 44.2014 26.8015 43.6091C26.1763 43.0169 25.3285 42.6842 24.4444 42.6842ZM47.7778 36.3684H21.1111C20.5217 36.3684 19.9565 36.1466 19.5398 35.7518C19.123 35.357 18.8889 34.8215 18.8889 34.2632C18.8889 33.7048 19.123 33.1693 19.5398 32.7745C19.9565 32.3797 20.5217 32.1579 21.1111 32.1579H39.9805C41.4281 32.1535 42.8352 31.7047 43.9909 30.8789C45.1467 30.0531 45.9888 28.8947 46.3911 27.5773L49.9143 15.8945C50.0088 15.5812 50.0253 15.2514 49.9624 14.931C49.8995 14.6106 49.7589 14.3085 49.5518 14.0483C49.3447 13.7881 49.0767 13.577 48.7689 13.4316C48.461 13.2863 48.1217 13.2106 47.7778 13.2105H20.5313C20.0712 11.9839 19.2232 10.9215 18.1027 10.168C16.9822 9.41456 15.6438 9.0067 14.2698 9H12.2222C11.6329 9 11.0676 9.2218 10.6509 9.61662C10.2341 10.0114 10 10.5469 10 11.1053C10 11.6636 10.2341 12.1991 10.6509 12.5939C11.0676 12.9887 11.6329 13.2105 12.2222 13.2105H14.2698C14.7522 13.2121 15.221 13.3617 15.6062 13.6369C15.9913 13.9121 16.272 14.2981 16.4062 14.7371L16.7518 15.8839L16.7524 15.8945L20.3982 27.9833C18.7017 28.1562 17.1397 28.9388 16.0339 30.17C14.9281 31.4011 14.3627 32.987 14.4541 34.6012C14.5454 36.2154 15.2866 37.735 16.525 38.847C17.7634 39.959 19.4048 40.5789 21.1111 40.5789H47.7778C48.3671 40.5789 48.9324 40.3571 49.3491 39.9623C49.7659 39.5675 50 39.032 50 38.4737C50 37.9153 49.7659 37.3799 49.3491 36.985C48.9324 36.5902 48.3671 36.3684 47.7778 36.3684ZM44.8318 17.4211L42.118 26.4198C41.984 26.8591 41.7032 27.2455 41.3178 27.5209C40.9324 27.7963 40.4632 27.9459 39.9805 27.9474H25.0098L24.4432 26.069L21.8365 17.4211H44.8318ZM42.2222 42.6842C41.563 42.6842 40.9185 42.8694 40.3703 43.2164C39.8222 43.5634 39.3949 44.0566 39.1426 44.6336C38.8903 45.2107 38.8243 45.8456 38.9529 46.4582C39.0816 47.0708 39.399 47.6334 39.8652 48.0751C40.3314 48.5167 40.9253 48.8175 41.5719 48.9393C42.2185 49.0612 42.8887 48.9986 43.4978 48.7596C44.1069 48.5206 44.6275 48.1159 44.9938 47.5965C45.3601 47.0772 45.5556 46.4667 45.5556 45.8421C45.5556 45.0046 45.2044 44.2014 44.5792 43.6091C43.9541 43.0169 43.1063 42.6842 42.2222 42.6842Z" fill="white"/>
             </svg>
           </button>
-          <button class="CartBtn2" onclick="window.location.href='####'">Cart</button> 
+          </a>
+          <a href="../CartPage/CartPage.html">
+          <button class="CartBtn2">Cart</button> 
+          </a>
           </div>       
         </div>
 
         <div class="Account">
         <div class ="group4">
+          <a href="../profile/profile.html">
           <button class="AccountBtn1">
             <svg width="60" height="58" viewBox="0 0 60 58" fill="none" xmlns="http://www.w3.org/2000/svg" z-index="0">
               <rect width="60" height="58" rx="29" fill="#B3261E"/>
               <path d="M39 16.4999C39 12.4849 34.818 9 30 9C25.182 9 21 12.4849 21 16.4999C21 20.5148 25.182 23.9998 30 23.9998C34.818 23.9998 39 20.5148 39 16.4999ZM30 26.4997C22.116 26.4997 15 33.5871 15 42.3945C15 51.2018 45 51.2018 45 42.3945C45 33.5871 37.884 26.4997 30 26.4997Z" fill="white"/>
             </svg>
           </button>
-          <button class="AccountBtn2" onclick="window.location.href='#####'">Account</button>
+          </a>
+          <a href="../profile/profile.html">
+          <button class="AccountBtn2">Account</button>
+          </a>
         </div>
         </div>
         
         <div class="Maps">
         <div class="group3"> 
+          <a href="../MapsPage/Mapspage.html">
           <button class="MapBtn1">
             <svg width="60" height="58" viewBox="0 0 60 58" fill="none" xmlns="http://www.w3.org/2000/svg">
               <ellipse cx="30" cy="29" rx="30" ry="29" fill="#B3261E"/>
               <path d="M46.776 17.5289L35.976 14.0866H35.85C35.7662 14.0785 35.6818 14.0785 35.598 14.0866H35.184H34.95H34.824L24.6 17.4428L14.376 14.0866C14.1053 14.0012 13.8173 13.9786 13.5356 14.0205C13.254 14.0623 12.9868 14.1676 12.756 14.3275C12.5234 14.4859 12.3335 14.6949 12.202 14.9374C12.0706 15.1798 12.0013 15.4486 12 15.7217V39.8179C11.999 40.1788 12.1167 40.5307 12.3363 40.8242C12.556 41.1176 12.8665 41.3376 13.224 41.453L24.024 44.8953C24.3866 45.0084 24.7774 45.0084 25.14 44.8953L35.4 41.6251L45.624 44.9814C45.8151 45.0062 46.0089 45.0062 46.2 44.9814C46.5764 44.9865 46.9437 44.8714 47.244 44.6544C47.4766 44.496 47.6665 44.287 47.798 44.0446C47.9294 43.8021 47.9987 43.5333 48 43.2602V19.164C48.001 18.8032 47.8833 18.4512 47.6637 18.1578C47.444 17.8643 47.1335 17.6444 46.776 17.5289ZM22.8 40.8678L15.6 38.5787V18.1141L22.8 20.4032V40.8678ZM33.6 38.5787L26.4 40.8678V20.4032L33.6 18.1141V38.5787ZM44.4 40.8678L37.2 38.5787V18.1141L44.4 20.4032V40.8678Z" fill="white"/>
             </svg>
           </button>     
-          <button class="MapBtn2" onclick="window.location.href='../MapsPage/Mapspage.html'">Maps</button>
+          </a>
+          <a href="../MapsPage/Mapspage.html">
+          <button class="MapBtn2">Maps</button>
+          </a>
           </div>   
+        </div>   
         </div>
         
 
+ <!-- Map section styled as in the provided image -->
+        <div style="display: flex; justify-content: center; align-items: center; margin: 100px 0 40px 0; gap: 40px;">
+          <div style="box-shadow: 0 2px 8px rgba(0,0,0,0.04); border-radius: 8px; overflow: hidden;">
+            <div id="map" style="width: 420px; height: 260px; border-radius: 8px;"></div>
+          </div>
+          <div style="background: #B3261E; color: white; border-radius: 24px; padding: 32px 36px; font-size: 2rem; font-weight: bold; font-family: inherit; display: flex; align-items: center; text-align: center; min-width: 340px;">
+            <svg style="margin-right: 12px;" width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="white"/></svg>
+            Click The Icon to find the branch!
+          </div>
         </div>
+        <!-- End map section -->
 
-        <div class="headline">Ely's Atsara</div>
-        <p class="description">
-          Ely's Atsara crafts the best papaya mixed vegetable pickles with freshest ingredients, straight from our
-          hearts to your homes! Perfect with any dish, our atsara adds a tangy twist to any meal. Follow us for updates
-          and send a message to order!
-        </p>
-        <div class="ShopNow">
-          <button class="ShopNowBtn">Shop Now</button>
-        </div>
-        
-        <div class="Privacy">
-          <a href="../PrivacyPolicy/PrivacyPolicy.html" div class="supporting-text-6">Privacy Policy </a></div>
-          <svg width="60" height="58" viewBox="0 0 60 58" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M39.9852 29.5887L30.64 38.6225C33.0701 38.4794 35.362 37.4817 37.0836 35.8176C38.8051 34.1534 39.8372 31.9379 39.9852 29.5887Z" fill="#B3261E"/>
-            <path d="M52.4539 17.5357L44.4829 25.2409C44.8371 26.4593 45.0137 27.7194 45.0077 28.9849C45.0077 32.8286 43.4281 36.5149 40.6165 39.2328C37.8049 41.9507 33.9916 43.4776 30.0154 43.4776C28.7062 43.4835 27.4027 43.3127 26.1423 42.9704L20.0455 48.8641C23.218 50.0851 26.6006 50.7161 30.0154 50.724C43.7583 50.724 54.8526 40.3134 59.7751 29.9994C59.9234 29.6804 60 29.3346 60 28.9849C60 28.6352 59.9234 28.2894 59.7751 27.9704C57.9257 24.1371 55.4541 20.6144 52.4539 17.5357ZM59.2679 0.707211C58.7993 0.254384 58.1639 0 57.5013 0C56.8387 0 56.2033 0.254384 55.7347 0.707211L44.6579 11.4149C43.1664 10.5262 41.6039 9.75399 39.9852 9.10574C36.8127 7.88473 33.4301 7.25371 30.0154 7.24584C16.2724 7.24584 5.17807 17.6564 0.25559 27.9704C0.107349 28.2894 0.0307048 28.6352 0.0307048 28.9849C0.0307048 29.3346 0.107349 29.6804 0.25559 29.9994C2.105 33.8327 4.57662 37.3554 7.57684 40.4341C8.71579 41.61 9.93813 42.7076 11.235 43.7192L0.76283 53.8471C0.524177 54.07 0.333819 54.3365 0.202863 54.6312C0.0719077 54.9259 0.00297741 55.2428 9.43436e-05 55.5636C-0.00278872 55.8843 0.0604332 56.2023 0.186071 56.4992C0.311709 56.796 0.497247 57.0657 0.731858 57.2925C0.96647 57.5193 1.24546 57.6987 1.55254 57.8201C1.85962 57.9416 2.18865 58.0027 2.52043 57.9999C2.85221 57.9971 3.18009 57.9305 3.48495 57.8039C3.7898 57.6773 4.06552 57.4933 4.29602 57.2626L59.2679 4.12266C59.7363 3.6697 59.9995 3.05543 59.9995 2.41494C59.9995 1.77444 59.7363 1.16018 59.2679 0.707211ZM15.023 28.9849C15.0203 26.3247 15.7758 23.7153 17.2065 21.4429C18.6373 19.1706 20.688 17.3232 23.1336 16.1036C25.5793 14.884 28.3252 14.3393 31.07 14.5293C33.8149 14.7193 36.4525 15.6366 38.6934 17.1806L35.0603 20.6927C33.1616 19.5894 30.9357 19.1317 28.7368 19.3926C26.538 19.6534 24.4926 20.6176 22.9261 22.1319C21.3596 23.6462 20.3621 25.6234 20.0923 27.749C19.8225 29.8745 20.2959 32.0263 21.4372 33.8617L17.8041 37.3738C15.9914 34.9279 15.0187 31.9937 15.023 28.9849Z" fill="#B3261E"/>
-          </svg>
-        </div>
-
-        <a href="../Terms&Conditions/Terms&Conditions.html" class="supporting-text-7">Terms and Conditions </a></div>
-        
-        <!-- <img class="element-privacy" src="img/33-privacy.png" /> -->
-        
-        <!-- <img class="group-2" src="img/group-3.png" /> -->
-        
-        <!-- <img class="line-2" src="img/line-3.svg" /> -->
+      <div class= "footer">
+        <a href="../Homepage/Homepage.html" class="BackBtn">
+        <button class="BackBtn">Go Back</button>
+        </a>
+      </div>
+      
       </div>
     </div>
-
-    <script>
-      $(document).ready(function() {
-        var $slides = $('.slide');
-        var $prevBtn = $('.prev-btn');
-        var $nextBtn = $('.next-btn');
-        var $dotsContainer = $('.dots-container');
-        
-        var currentSlide = 0;
-        var slideCount = $slides.length;
-        var isAnimating = false;
-        
-        // Show first slide
-        $slides.eq(0).addClass('active');
-        
-        // Create dots
-        $slides.each(function(index) {
-          var $dot = $('<div>').addClass('dot');
-          if (index === 0) $dot.addClass('active');
-          $dot.on('click', function() {
-            if (!isAnimating) {
-              goToSlide(index);
-            }
-          });
-          $dotsContainer.append($dot);
-        });
-        
-        var $dots = $('.dot');
-        
-        function updateDots() {
-          $dots.removeClass('active');
-          $dots.eq(currentSlide).addClass('active');
-        }
-        
-        function goToSlide(slideIndex) {
-          if (isAnimating) return;
-          isAnimating = true;
-          
-          $slides.eq(currentSlide).removeClass('active');
-          currentSlide = slideIndex;
-          $slides.eq(currentSlide).addClass('active');
-          
-          setTimeout(function() {
-            isAnimating = false;
-          }, 500);
-          
-          updateDots();
-        }
-        
-        function nextSlide() {
-          if (!isAnimating) {
-            var nextIndex = (currentSlide + 1) % slideCount;
-            goToSlide(nextIndex);
-          }
-        }
-        
-        function prevSlide() {
-          if (!isAnimating) {
-            var prevIndex = (currentSlide - 1 + slideCount) % slideCount;
-            goToSlide(prevIndex);
-          }
-        }
-        
-        // Add event listeners
-        $prevBtn.on('click', prevSlide);
-        $nextBtn.on('click', nextSlide);
-        
-        // Auto-advance slides every 5 seconds
-        var slideInterval = setInterval(function() {
-          if (!isAnimating) {
-            nextSlide();
-          }
-        }, 5000);
-        
-        // Pause auto-advance on hover
-        $('.slider-container').hover(
-          function() {
-            clearInterval(slideInterval);
-          },
-          function() {
-            slideInterval = setInterval(function() {
-              if (!isAnimating) {
-                nextSlide();
-              }
-            }, 5000);
-          }
-        );
-      });
-    </script>
-    <script type="module" src="../supabaseClient/homepage.js"></script>
   </body>
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 </html>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var map = L.map('map').setView([14.5995, 120.9842], 14); // Metro Manila, closer zoom
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+    L.marker([14.5995, 120.9842]).addTo(map)
+      .bindPopup('Metro Manila, Philippines')
+      .openPopup();
+  });
+</script>
