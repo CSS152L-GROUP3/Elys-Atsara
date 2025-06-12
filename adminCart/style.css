@@ -3,6 +3,12 @@ body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   background-color: #f4f4f4;
   color: #000;
+  overflow: auto;
+}
+
+html {
+  height: 100%;
+  overflow-y: auto;
 }
 
 .admin-cart {
@@ -21,7 +27,7 @@ body {
 }
 
 main {
-  padding: 24px 32px;
+  padding: 120px 32px 24px 32px;
 }
 
 .order-section h1 {
@@ -238,21 +244,24 @@ main {
 }
 
 .AboutUsBtn2 {
-  position: absolute;
-  width: 160px;
-  top: 19px;
-  left: -130px;
+  position: static;
+  display: block;
+  margin-top: 8px;
+  width: auto;
+  left: unset;
+  top: unset;
+  text-align: center;
   font-family: "Alef", sans-serif;
   font-weight: 700;
   color: #1d1b20;
-  font-size: 20px;
+  font-size: 18px;
   letter-spacing: 0.25px;
   line-height: 20px;
   background-color: transparent;
   border-color: transparent;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  padding-right: 20px;
+  padding: 0;
 }
 
 .AboutUsBtn2:hover {
@@ -272,30 +281,32 @@ main {
 }
 
 .AccountBtn2 {
-   position: absolute;
-  width: 120px;
-  height: 30px;
-  top: 17px;
-  left: -100px;
-  font-size: 20px;
+  position: static;
+  display: block;
+  margin-top: 8px;
+  width: auto;
+  left: unset;
+  top: unset;
+  text-align: center;
   font-family: "Alef", sans-serif;
   font-weight: 700;
   color: #1d1b20;
+  font-size: 18px;
   letter-spacing: 0.25px;
   line-height: 20px;
   background-color: transparent;
   border-color: transparent;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  padding-right: 25px;
+  padding: 0;
 }
 
- .AccountBtn2:hover {
+.AccountBtn2:hover {
   color: #b3261e;
   background-color: transparent;
 }
 
- .AccountBtn1 {
+.AccountBtn1 {
   background: transparent; 
   border: none; 
   padding: 0; 
@@ -319,21 +330,24 @@ main {
 }
 
 .CartBtn2 {
-  width: 75px;
-  top: 18px;
-  left: -70px;
-  font-size: 20px;
-  position: absolute;
+  position: static;
+  display: block;
+  margin-top: 8px;
+  width: auto;
+  left: unset;
+  top: unset;
+  text-align: center;
   font-family: "Alef", sans-serif;
   font-weight: 700;
   color: #1d1b20;
+  font-size: 18px;
   letter-spacing: 0.25px;
   line-height: 20px;
-  padding-right: 10px;
   background-color: transparent;
   border-color: transparent;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  padding: 0;
 }
 
 .CartBtn2:hover {
@@ -353,25 +367,28 @@ main {
   fill: #9E1F19; 
 }
 
- .MapBtn2 {
-  width: 85px;
-  top: 18px;
-  left: -70px;
-  padding-right: 30px;
-  font-size: 20px;
-  position: absolute;
+.MapBtn2 {
+  position: static;
+  display: block;
+  margin-top: 8px;
+  width: auto;
+  left: unset;
+  top: unset;
+  text-align: center;
   font-family: "Alef", sans-serif;
   font-weight: 700;
   color: #1d1b20;
+  font-size: 18px;
   letter-spacing: 0.25px;
   line-height: 20px;
   background-color: transparent;
   border-color: transparent;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  padding: 0;
 }
 
- .MapBtn2:hover {
+.MapBtn2:hover {
   color: #b3261e;
   background-color: transparent;
 }
@@ -379,47 +396,48 @@ main {
 .top-Nav {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 40px 20px;
+  justify-content: flex-start;
+  padding: 24px 40px 24px 40px;
   background-color: white;
   color: white;
   position: fixed;
   width: 100%;
-  z-index: 1000;
+  z-index: 900;
   border-bottom: 2px solid #b7251d;
 }
- .group1 {
-  position: absolute;
-  width: 60px;
-  height: 58px;
-  top: 25px;
-  left: 5px;
-  border-radius: 30px / 29px;
+
+/* Add a flex container for the button groups */
+.top-Nav .nav-groups {
+  display: flex;
+  align-items: center;
+  gap: 250px; /*for spacing */
 }
 
-.group2 {
-  position: absolute;
-  width: 60px;
-  height: 58px;
-  top: -1px;
-  left: 50px;
+/* Remove absolute positioning from group classes */
+.group1, .group2, .group3, .group4 {
+  position: static;
+  width: auto;
+  height: auto;
   border-radius: 30px / 29px;
+  display: flex;
+  align-items: center;
 }
 
- .group3 {
-  position: absolute;
-  width: 60px;
-  height: 58px;
-  top: 8px;
-  left: 900px;
-  border-radius: 30px / 29px;
+/* Remove left/top from About, Cart, Account, Maps containers */
+.About, .Cart, .Account, .Maps {
+  position: static;
+  width: auto;
+  height: auto;
+  border-radius: 100px;
+  display: flex;
+  align-items: center;
 }
 
- .group4 {
-  position: absolute;
-  width: 60px;
-  height: 58px;
-  top: -3px;
-  left: -80px;
-  border-radius: 30px / 29px;
+/* 2. Navbar text labels visible */
+.nav-groups .group1, .nav-groups .group2, .nav-groups .group3, .nav-groups .group4 {
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  min-width: 10px;
 }
