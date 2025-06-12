@@ -6,6 +6,8 @@
     <link rel="stylesheet" href="globals.css" />
     <link rel="stylesheet" href="style.css" />
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    
+
   </head>
   <body>
     <div class="AboutUs">
@@ -566,7 +568,30 @@
       </div>
     </div>
   <script src="script.js"></script>
-  </body>
+
+<!-- Custom Modal for Account Access -->
+<div id="accountModal" class="modal">
+  <div class="modal-content enhanced-modal">
+    <span class="close-btn" id="closeAccountModal">&times;</span>
+    <div class="modal-icon">
+      <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="24" cy="24" r="24" fill="#B3261E"/>
+        <path d="M24 14V26" stroke="#fff8f3" stroke-width="3" stroke-linecap="round"/>
+        <circle cx="24" cy="33" r="2" fill="#fff8f3"/>
+      </svg>
+    </div>
+    <h2 style="margin-top: 0.5em;">Account Access</h2>
+    <p style="margin-bottom: 1.5em;">You must be logged in to view your account.</p>
+    <button id="accountLoginRedirectBtn" class="modal-login-btn">
+      <svg style="vertical-align: middle; margin-right: 8px; margin-bottom: 2px;" width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="24" height="24" rx="12" fill="#fff8f3"/>
+        <path d="M12 8V16M8 12H16" stroke="#B3261E" stroke-width="2.2" stroke-linecap="round"/>
+      </svg>
+      <span style="vertical-align: middle; font-weight: 700; font-size: 1.1rem;">Log In</span>
+    </button>
+  </div>
+</div>
+</body>
 </html>
 
 <!-- Custom Modal for Cart Access (Unified Style) -->

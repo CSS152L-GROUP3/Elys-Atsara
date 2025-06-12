@@ -68,20 +68,3 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (userInfo) userInfo.textContent = 'Welcome, Guest!';
   sessionStorage.setItem('userType', 'guest');
 });
-
-
-document.addEventListener('DOMContentLoaded', () => {
-  const accountBtns = document.querySelectorAll('.AccountBtn1, .AccountBtn2');
-  
-  accountBtns.forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const userJson = localStorage.getItem('currentUser');
-      if (userJson) {
-        window.location.href = '../profile/UserProfile.html';
-      } else {
-        alert('You must be logged in to view your account.');
-        window.location.href = '../accountLogin/account-login.html';
-      }
-    });
-  });
-});

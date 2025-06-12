@@ -78,3 +78,31 @@ carousel.addEventListener('mouseleave', () => {
 // Initialize the slider
 showSlide(currentSlide);
 startAutoSlide(); 
+
+// Modal logic for Account access
+$(document).ready(function() {
+  // Modal logic for Account access
+  $('.AccountBtn1, .AccountBtn2').on('click', function(e) {
+    const userJson = localStorage.getItem('currentUser');
+    if (!userJson) {
+      e.preventDefault();
+      $('#accountModal').css('display', 'flex');
+    } else {
+      window.location.href = '../profile/UserProfile.html';
+    }
+  });
+
+  $('#closeAccountModal').on('click', function() {
+    $('#accountModal').css('display', 'none');
+  });
+
+  $('#accountLoginRedirectBtn').on('click', function() {
+    window.location.href = '../accountLogin/account-login.html';
+  });
+
+  $(window).on('click', function(event) {
+    if (event.target === document.getElementById('accountModal')) {
+      $('#accountModal').css('display', 'none');
+    }
+  });
+});
