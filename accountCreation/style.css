@@ -13,23 +13,25 @@
   justify-content: center;
   width: 100%;
   min-height: 100vh;
+  position: relative;
 }
 
 .account-creation .div {
   background-color: #ffffff;
-  overflow: hidden;
-  width: 1440px;
-  height: 1038px;
+  width: 100%;
+  min-height: 100vh;
   position: relative;
+  padding-bottom: 50px;
 }
 
 .account-creation .rectangle,
 .account-creation .rectangle-2 {
-  position: absolute;
-  width: 350px;
-  height: 1024px;
+  position: fixed;
+  width: 25%;
+  height: 100vh;
   top: 0;
   background-color: #b7251d;
+  z-index: 1;
 }
 
 .account-creation .rectangle {
@@ -37,15 +39,17 @@
 }
 
 .account-creation .rectangle-2 {
-  left: 1076px;
+  right: 0;
+  left: auto;
 }
 
 .account-creation form {
-  position: absolute;
+  position: relative;
   width: 541px;
   left: 50%;
   transform: translateX(-50%);
   top: 260px;
+  z-index: 2;
 }
 
 .account-creation .input-group {
@@ -138,10 +142,12 @@
   align-items: center;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  text-decoration: none;
 }
 
 .account-creation .go-back-button:hover {
   background-color: #9c1e17;
+  text-decoration: none;
 }
 
 .account-creation .supporting-text-4 {
@@ -219,6 +225,46 @@
   letter-spacing: 0.25px;
   line-height: 30px;
   white-space: nowrap;
+}
+
+.account-creation .input-group select {
+  width: calc(100% - 90px);
+  height: 70px;
+  border: none;
+  background: transparent;
+  font-family: "Alef", sans-serif;
+  font-size: 20px;
+  font-weight: 400;
+  padding-left: 35px;
+  color: #1d1b20;
+  outline: none;
+  border-radius: 50px;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  cursor: pointer;
+}
+
+.account-creation .input-group select:focus {
+  background-color: #f5f5f5;
+}
+
+.account-creation .input-group select option {
+  background-color: #ffffff;
+  color: #1d1b20;
+  font-family: "Alef", sans-serif;
+  font-size: 20px;
+  padding: 10px;
+}
+
+.account-creation .input-group label {
+  position: absolute;
+  left: 35px;
+  top: -25px;
+  font-family: "Alef", sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: #1d1b20;
 }
 
 /* Responsive design */
