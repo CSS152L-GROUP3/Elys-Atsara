@@ -167,6 +167,11 @@ async function handleLogin() {
   const email = document.getElementById('email').value.trim();
   const password = document.getElementById('password').value;
 
+  if (!email || !password) {
+    showAlert('Missing Information', 'Please enter both email and password.');
+    return;
+  }
+
   console.log('Attempting login with:', { email });
 
   try {
@@ -177,7 +182,7 @@ async function handleLogin() {
 
     if (authError) {
       console.error('Auth error:', authError);
-      alert('Login failed: ' + authError.message);
+      showAlert('Login Failed', authError.message);
       return;
     }
 
@@ -185,14 +190,12 @@ async function handleLogin() {
     const uuid = user?.id;
 
     if (!user || !uuid) {
-      alert('Login failed: No user data returned.');
+      showAlert('Login Failed', 'No user data returned.');
       return;
     }
 
-    
     localStorage.setItem('authUuid', uuid);
     console.log('Logged in user UUID:', uuid);
-
 
     const { data: adminData, error: adminError, status: adminStatus } = await supabase
       .from('admin_accounts')
@@ -205,13 +208,12 @@ async function handleLogin() {
     }
 
     if (adminData) {
-      alert('Login successful as Admin!');
+      showAlert('Success', 'Login successful as Admin!');
       localStorage.setItem('currentUser', JSON.stringify(adminData));
       sessionStorage.setItem('userType', 'admin');
       window.location.href = '../homepage/homepage.html';
       return;
     }
-
 
     const { data: customerData, error: customerError, status: customerStatus } = await supabase
       .from('customer_accounts')
@@ -224,14 +226,14 @@ async function handleLogin() {
     }
 
     if (customerData) {
-      alert('Login successful as Customer!');
+      showAlert('Success', 'Login successful as Customer!');
       localStorage.setItem('currentUser', JSON.stringify(customerData));
       sessionStorage.setItem('userType', 'customer');
       window.location.href = '../homepage/homepage.html';
       return;
     }
 
-    alert('Login failed: User not found in admin or customer tables.');
+    showAlert('Login Failed', 'User not found in admin or customer tables.');
   } catch (err) {
     console.error('Unexpected login error:', err);
     alert('Unexpected error: ' + err.message);
