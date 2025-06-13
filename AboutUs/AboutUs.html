@@ -66,10 +66,14 @@
         </div>
         
         <div class="headline">About Us</div>
-        <button class="LearnMoreBtn"> Learn More
-          <select name="role" id="role" required>
-          <option value="admin">Admin</option>
+        <button class="LearnMoreBtn">
+          <select name="role" id="role" required onchange="scrollToSection(this.value)">
+          <option value="Site">The Site</option>
+          <option value="Business">The Business</option>
+          <option value="Owner">The Owner</option>
+          <option value="Developers">The Developers</option>
        </select></button>
+
     
     <svg width="1440" height="918" viewBox="0 0 1440 918" fill="none" xmlns="http://www.w3.org/2000/svg" style="position: relative; top: -180px;">
 <ellipse cx="340" cy="346" rx="340" ry="346" transform="matrix(-1 0 0 1 747 0)" fill="#B3261E"/>
@@ -435,7 +439,7 @@
 
           <div class="overlap">
             <img class="rectangle-1" src="images/Business.png" alt="Description of image" class="rectangle">
-          <div class="Site">The Site</div>
+          <div id="Site" class="Site">The Site</div>
           <p class="SiteDescription">
             Ely’s Atsara crafts the best papaya mixed vegetable pickles with freshest ingredients, straight from our
             hearts to your homes! Perfect with any dish, our atsara adds a tangy twist to any meal. Follow us for
@@ -452,7 +456,7 @@
 
         <div class="overlap1">
           <img class="rectangle-2" src="images/Business.png" alt="Ely's Atsara Logo"/>
-        <div class="Business">The Business</div>
+        <div id="Business" class="Business">The Business</div>
         <p class="BusinessDescription">
           Ely’s Atsara crafts the best papaya mixed vegetable pickles with freshest ingredients, straight from our
           hearts to your homes! Perfect with any dish, our atsara adds a tangy twist to any meal. Follow us for updates
@@ -469,7 +473,7 @@
 
         <div class="overlap2">
             <img class="rectangle-3" src="images/Business.png" alt="Description of image" class="rectangle">
-          <div class="Owner">The Owner</div>
+          <div id="Owner" class="Owner">The Owner</div>
           <p class="OwnerDescription">
             Ely’s Atsara crafts the best papaya mixed vegetable pickles with freshest ingredients, straight from our
             hearts to your homes! Perfect with any dish, our atsara adds a tangy twist to any meal. Follow us for
@@ -485,7 +489,7 @@
           </div>
         
         <div class="overlap3">
-           <div class="Developers">The Developers</div>
+           <div id="Developers" class="Developers">The Developers</div>
           <div class="Carousel">
               <div class="navigation-arrows">
                 <svg width="100%" height="75" viewBox="0 0 1354 75" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -679,6 +683,33 @@
 </style>
 
 <script>
+
+  document.getElementById('role').addEventListener('change', function() {
+    const selectedValue = this.value;
+    let targetSectionId = '';
+    switch (selectedValue) {
+      case 'Site':
+        targetSectionId = 'Site';
+        break;
+      case 'Business':
+        targetSectionId = 'Business';
+        break;
+      case 'Owner':
+        targetSectionId = 'Owner';
+        break;
+      case 'Developers':
+        targetSectionId = 'Developers';
+        break;
+      default:
+        return; 
+    }
+    document.getElementById(targetSectionId).scrollIntoView({ behavior: 'smooth' });
+      window.scrollTo({
+      top: middle,
+      behavior: 'smooth'
+  });
+  });
+
 function userIsLoggedIn() {
   // Replace with your actual login check
   const userType = sessionStorage.getItem('userType');
