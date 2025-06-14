@@ -236,15 +236,21 @@
 
         // Modal logic for Cart guest warning
         function userIsLoggedIn() {
-          // TODO: Replace with your actual login check
-          return false;
+          const userType = sessionStorage.getItem('userType');
+          const userJson = localStorage.getItem('currentUser');
+          return userType && userType !== 'guest' && userJson;
         }
 
         // Attach modal logic to both cart buttons
         $('.CartBtn1, .CartBtn2').on('click', function(e) {
+          const userType = sessionStorage.getItem('userType');
           if (!userIsLoggedIn()) {
             e.preventDefault();
             $('#cartModal').css('display', 'flex');
+          } else if (userType === 'admin') {
+            window.location.href = '../adminCart/admin-cart.html';
+          } else {
+            window.location.href = '../CartPage/CartPage.html';
           }
         });
         $('#closeCartModal').on('click', function() {

@@ -58,16 +58,35 @@ if (goBackBtn) {
 
 
 const logoutBtn = document.getElementById('logout-btn');
+const logoutModal = document.getElementById('logoutModal');
+const logoutOkBtn = document.getElementById('logoutOkBtn');
+const closeLogoutModal = document.getElementById('closeLogoutModal');
+
 if (logoutBtn) {
-  logoutBtn.addEventListener('click', async () => {
-    await supabase.auth.signOut(); 
-
-    localStorage.removeItem('currentUser');
-    sessionStorage.removeItem('userType');
-
-    alert('You are logged out. You can continue as guest.');
-    window.location.href = '../homepage/homepage.html';
+  logoutBtn.addEventListener('click', () => {
+    if (logoutModal) logoutModal.style.display = 'flex';
   });
 }
+
+if (logoutOkBtn) {
+  logoutOkBtn.addEventListener('click', async () => {
+    await supabase.auth.signOut();
+    localStorage.removeItem('currentUser');
+    sessionStorage.removeItem('userType');
+    window.location.href = '../Homepage/Homepage.html';
+  });
+}
+
+if (closeLogoutModal) {
+  closeLogoutModal.addEventListener('click', () => {
+    if (logoutModal) logoutModal.style.display = 'none';
+  });
+}
+
+window.addEventListener('click', function(event) {
+  if (event.target === logoutModal) {
+    logoutModal.style.display = 'none';
+  }
+});
 
 
