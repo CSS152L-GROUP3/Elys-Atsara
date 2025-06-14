@@ -724,3 +724,60 @@
   margin-bottom: 1.5em;
 }
 
+.AboutUs .LearnMoreBtn select {
+  width: 200px;
+  height: 48px;
+  border-radius: 32px;
+  border: none;
+  padding: 0 24px;
+  font-size: 20px;
+  font-family: "Alef", sans-serif;
+  color: #fff;
+  background: #b3261e;
+  box-shadow: 0 4px 16px rgba(179, 38, 30, 0.10);
+  transition: box-shadow 0.2s, background 0.2s;
+  outline: none;
+  margin-top: 0;
+  margin-bottom: 0;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  cursor: pointer;
+}
+
+.AboutUs .LearnMoreBtn select:focus {
+  box-shadow: 0 0 0 3px #fff, 0 0 0 6px #b3261e55;
+  background: #9e1f19;
+}
+
+.AboutUs .LearnMoreBtn option {
+  color: #b3261e;
+  background: #fff;
+  font-size: 18px;
+}
+
+/* Optional: Custom dropdown arrow */
+.AboutUs .LearnMoreBtn {
+  position: relative;
+}
+.AboutUs .LearnMoreBtn select::-ms-expand {
+  display: none;
+}
+.AboutUs .LearnMoreBtn::after {
+  content: "";
+  position: absolute;
+  right: 40px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-top: 8px solid #fff;
+}
+
