@@ -781,3 +781,26 @@
   border-top: 8px solid #fff;
 }
 
+.back-button {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    color: #b7251d;
+    text-decoration: none;
+    font-size: 2rem;
+    transition: transform 0.2s ease;
+    z-index: 1000;
+    background: white;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.back-button:hover {
+    transform: translateX(-5px);
+    color: #c41e3a;
+}
