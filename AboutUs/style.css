@@ -432,7 +432,7 @@
     justify-content: center;
     gap: 8px;
     position: absolute;
-    top: 400px;
+    top: 300px;
     left: 1025px;  
     background-color: #b3261e;
     border-radius: 100px;
@@ -450,7 +450,7 @@
     cursor: pointer;
     transition: background-color 0.3s ease;
     pointer-events: auto;
-    z-index: 1000;
+    z-index: 1;
   }
   
   .AboutUs .LearnMoreBtn:hover {
