@@ -201,6 +201,31 @@ if (userType !== 'guest') {
       console.error('🛑 Supabase cart update error:', err);
     }
   });
+
+document.addEventListener('DOMContentLoaded', () => {
+  const cartIconBtn = document.getElementById('cart-icon-btn');
+  const cartTextBtn = document.getElementById('cart-text-btn');
+
+  function goToCartPage() {
+    const role = sessionStorage.getItem('userType');
+
+    if (role === 'admin') {
+      window.location.href = '../adminCart/admin-cart.html';
+    } else if (role === 'customer') {
+      window.location.href = '../updatedCartPage/Cartpage.html';
+    } else if (role === 'guest' || !role) {
+      alert('Please log in to view your cart.');
+      window.location.href = '../accountLogin/account-login.html'; 
+    } else {
+      alert('User role not recognized.');
+    }
+  }
+
+  cartIconBtn?.addEventListener('click', goToCartPage);
+  cartTextBtn?.addEventListener('click', goToCartPage);
+});
+
+  
 }
 
 
