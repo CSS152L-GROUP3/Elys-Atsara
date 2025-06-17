@@ -149,10 +149,12 @@
   text-align: center;
   letter-spacing: 0.10px;
   line-height: 20px;
+  transition: all 0.3s ease;
 }
 
 .homepage .ShopNowBtn:hover {
-  background-color: #9E1F19;
+  background-color: #d32f2f;
+  transform: scale(1.05);
 }
 
 .homepage .state-layer {
