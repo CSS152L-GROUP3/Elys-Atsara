@@ -308,6 +308,27 @@ body {
   -webkit-box-orient: vertical;
 }
 
+.shop-now .supporting-text-23 {
+  width: 155px;
+  top: 23px;
+  left: 600px;
+  text-shadow: 0px 4px 4px #00000040;
+  color: #fef7ff;
+  font-size: 31px;
+  -webkit-line-clamp: 1;
+  position: absolute;
+  font-family: "Alef-Bold", Helvetica;
+  font-weight: 700;
+  letter-spacing: 0.25px;
+  line-height: 20px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  background-color: #b3261e;
+  border: none;
+}
+
 .shop-now .line {
   top: 88px;
   position: absolute;
