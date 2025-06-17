@@ -1,6 +1,6 @@
 // cart-page.js
-import { supabase } from './supabase.js';
-import { getCartItems, updateCartItemQuantity } from './cart.js';
+import { supabase } from '../supabaseClient/supabase.js';
+import { getCartItems, updateCartItemQuantity } from '../supabaseClient/cart.js';
 
 async function updateCartDisplay() {
   const cartContainer = document.getElementById('cart-items');
