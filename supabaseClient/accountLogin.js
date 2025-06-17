@@ -151,8 +151,14 @@ document.addEventListener('DOMContentLoaded', () => {
   if (guestBtn) {
     guestBtn.addEventListener('click', () => {
       sessionStorage.setItem('userType', 'guest');
-      alert('You are using a guest account.');
-      window.location.href = '../homepage/homepage.html';
+      showAlert('Guest Account', 'You are using a guest account.');
+      // Wait for user to confirm before redirecting
+      const confirmBtn = document.getElementById('alertConfirmBtn');
+      const handler = () => {
+        window.location.href = '../homepage/homepage.html';
+        confirmBtn.removeEventListener('click', handler);
+      };
+      confirmBtn.addEventListener('click', handler);
     });
   }
 

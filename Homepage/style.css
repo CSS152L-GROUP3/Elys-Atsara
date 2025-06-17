@@ -149,10 +149,12 @@
   text-align: center;
   letter-spacing: 0.10px;
   line-height: 20px;
+  transition: all 0.3s ease;
 }
 
 .homepage .ShopNowBtn:hover {
-  background-color: #9E1F19;
+  background-color: #d32f2f;
+  transform: scale(1.05);
 }
 
 .homepage .state-layer {
@@ -362,9 +364,9 @@
 }
 
 .homepage .supporting-text-6 {
-  width: 148px;
+  width: 196px;
   top: 920px;
-  left: 380px;
+  left: 416px;
   font-size: 20px;
   position: absolute;
   font-family: "Alef", sans-serif;
@@ -373,6 +375,14 @@
   letter-spacing: 0.25px;
   line-height: 20px;
   z-index: 1;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.homepage .supporting-text-6:hover {
+  color: #b3261e;
+  font-size: 22px;
+  transform: scale(1.05);
 }
 
 .homepage .supporting-text-7 {
@@ -387,6 +397,14 @@
   letter-spacing: 0.25px;
   line-height: 20px;
   z-index: 1;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.homepage .supporting-text-7:hover {
+  color: #b3261e;
+  font-size: 22px;
+  transform: scale(1.05);
 }
 
 .homepage .element-privacy {
@@ -464,7 +482,7 @@
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: rgba(179, 38, 30, 0.7);
+  background: #B3261E;
   color: white;
   padding: 1rem 0.5rem;
   border: none;
@@ -475,7 +493,7 @@
 }
 
 .slider-btn:hover {
-  background: rgba(179, 38, 30, 0.9);
+  background: #F28B82;
 }
 
 .prev-btn {

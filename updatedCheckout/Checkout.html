@@ -9,13 +9,14 @@
 </head>
 
 <body>
-  <div class="shop-now">
+
+  <div class="homepage">
     <div class="div">
       <div class="top-Nav">
-        <div class="nav-separator"></div>
+
         <div class="About">
           <div class="group1">
-            <button class="AboutUsBtn1" onclick="window.location.href='../AboutUs/AboutUs.html'">
+            <button class="AboutUsBtn1">
               <svg width="60" height="58" viewBox="0 0 60 58" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <rect width="60" height="58" rx="29" fill="#B3261E" />
                 <path
@@ -23,14 +24,13 @@
                   fill="white" />
               </svg>
             </button>
-            <button class="AboutUsBtn2" onclick="window.location.href='../AboutUs/AboutUs.html'">About Us</button>
+            <button class="AboutUsBtn2">About Us</button>
           </div>
         </div>
 
         <div class="Cart">
           <div class="group2">
-            <button class="CartBtn1" onclick="window.location.href='../CartPage/Cartpage.html'">
-              <div class="cart-badge" id="cart-badge">0</div>
+            <button class="CartBtn1">
               <svg width="60" height="58" viewBox="0 0 60 58" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <rect width="60" height="58" rx="29" fill="#B3261E" />
                 <path
@@ -38,13 +38,12 @@
                   fill="white" />
               </svg>
             </button>
-            <button class="CartBtn2" onclick="window.location.href='../updatedCartPage/Cartpage.html'">Cart</button>
+            <button class="CartBtn2">Cart</button>
           </div>
         </div>
 
         <div class="Account">
           <div class="group4">
-            <a href="../profile/UserProfile.html">
             <button class="AccountBtn1">
               <svg width="60" height="58" viewBox="0 0 60 58" fill="none" xmlns="http://www.w3.org/2000/svg"
                 z-index="0">
@@ -54,14 +53,12 @@
                   fill="white" />
               </svg>
             </button>
-            </a>
-            <button class="AccountBtn2" onclick="window.location.href='../profile/UserProfile.html'">Account</button>
+            <button class="AccountBtn2">Account</button>
           </div>
         </div>
 
         <div class="Maps">
           <div class="group3">
-          <a href="../MapsPage/Mapspage.html">
             <button class="MapBtn1">
               <svg width="60" height="58" viewBox="0 0 60 58" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <ellipse cx="30" cy="29" rx="30" ry="29" fill="#B3261E" />
@@ -70,31 +67,147 @@
                   fill="white" />
               </svg>
             </button>
-          </a>
-            <button class="MapBtn2" onclick="window.location.href='../MapsPage/Mapspage.html'">Maps</button>
+            <button class="MapBtn2">Maps</button>
           </div>
         </div>
+      </div>
+      <!-- Delivery Address Section -->
+      <div class="section-header-address">
+        <div class="icon">📍</div>
+        <div>Delivery Address</div>
+      </div>
 
-        <div class="product-grid-container">
-          <div class="page-title">
-
+      <div class="address-container">
+        <div class="address-card">
+          <div class="address-info-container">
+            <div class="customer-info">
+              <p id="customer-name" class="customer-name-text"></p>
+              <p id="customer-mobile" class="customer-mobile-text"></p>
+            </div>
+            <div class="address-details">
+              <p id="address" class="address-text"></p>
+              <p id="city" class="city-text"></p>
+              <p id="zip" class="zip-text"></p>
+            </div>
           </div>
-          <div class="product-grid" id="product-list">
-            <!-- Product cards will be inserted here dynamically -->
-          </div>
+          <button class="change-btn">Change Address</button>
+        </div>
+      </div>
+      <div class="new-address-form" id="new-address-form" style="display: none;">
+        <h4>Add New Address</h4>
+        <input type="text" id="new-address" placeholder="Street Address" required>
+        <input type="text" id="new-city" placeholder="City" required>
+        <input type="text" id="new-zip" placeholder="ZIP Code" required>
+        <button id="save-address-btn">Save Address</button>
+      </div>
 
-          <div class="bottom-section">
-            <div class="bottom-separator"></div>
-            <div class="div-wrapper">
-              <button class="supporting-text-22" onclick="window.location.href='../Homepage/Homepage.html'">Go
-                Back</button>
-              <button class="supporting-text-23">Buy Now</button>
+
+      <hr class="top">
+
+      <!-- Products Ordered Section -->
+      <div class="section-header">
+        <div class="col product-header">Products Ordered</div>
+        <div class="col price">Unit Price</div>
+        <div class="col qty">Quantity</div>
+        <div class="col subtotal">Item Subtotal</div>
+      </div>
+
+      <div class="product-row">
+        <div class="col product">
+          <table id="checkout-cart-summary" class="cart-summary-table">
+
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="delivery-info-row">
+        <div class="message-section">
+          <label for="message">Message for Seller:</label>
+          <input type="text" id="message" placeholder="Enter your message here">
+        </div>
+
+        <div class="shipping-container">
+          <div class="shipping-card">
+            <div class="shipping-option-display">
+              <p id="shipping-name">Shipping Method: <span class="value">—</span></p>
+              <p id="shipping-price">Price: <span class="value">—</span></p>
+              <p style="font-size: 12px; display: flex; align-items: center; gap: 4px;">
+              <p class="delivery-time">Estimated delivery: <span class="delivery-days">—</span></p>
+              </p>
+            </div>
+
+            <!-- Hidden shipping choices -->
+            <div class="shipping-options-select" id="shipping-options-select" style="display: none;">
+              <ul id="shipping-options-list"></ul>
+            </div>
+
+            <button class="change-btn" id="change-shipping-btn">Change Shipping</button>
+          </div>
+        </div>
+      </div>
+      <div class="order-total">
+        <div class="total-section">
+          <p><strong>Total:</strong> <span id="checkout-subtotal">₱0</span></p>
+        </div>
+      </div>
+
+      <hr class="middle">
+      <div class="section-header-payment">
+        <div class="payment-label">Payment Method:</div>
+
+        <div class="payment-details">
+          <div class="payment-container">
+            <div class="payment-card">
+              <div class="payment-option-display">
+                <p id="payment-method"><span class="value">Cash on Delivery</span></p>
+              </div>
+
+              <!-- Hidden Main Payment Choice -->
+              <div class="main-payment-choices" id="main-payment-choices" style="display: none;">
+                <button class="big-option-btn" data-method="Cash on Delivery">Cash on Delivery</button>
+                <button class="big-option-btn" data-method="E-Wallet">E-Wallet</button>
+              </div>
+
+              <!-- Hidden E-Wallet Options (radio buttons) -->
+              <div class="e-wallet-options" id="e-wallet-options" style="display: none;">
+                <label><input type="radio" name="e_wallet_method" value="GCash" /> <img src="gcash-logo.png" alt="GCash"
+                    class="logo"> GCash</label><br>
+                <label><input type="radio" name="e_wallet_method" value="Maya" /> <img src="maya-logo.png" alt="Maya"
+                    class="logo"> Maya</label><br>
+                <button id="confirm-ewallet-btn">Confirm</button>
+              </div>
+
+              <button class="change-btn" id="change-payment-btn">Change Payment</button>
+            </div>
+          </div>
+          <div class="payment-breakdown">
+            <div class="breakdown-row">
+              <span>Merchandise Subtotal:</span>
+              <span id="checkout-subtotal-breakdown">₱0.00</span>
+            </div>
+            <div class="breakdown-row">
+              <span>Shipping Total:</span>
+              <span id="checkout-shipping">₱0.00</span>
             </div>
           </div>
         </div>
       </div>
-    </div>
 
+      <hr class="bottom">
+
+      <div class="footer">
+        <button class="footer-btn go-back-btn">Go Back</button>
+        <div class="total-payment">
+          <span>Total Payment: <strong id="checkout-total">₱0.00</strong></span>
+        </div>
+        <button class="footer-btn place-order" id="place-order">Place Order</button>
+      </div>
+
+    </div>
+  </div>
 </body>
-<script type="module" src="shop-now.js"></script>
+
+<script type="module" src="Checkout.js"></script>
+
 </html>
