@@ -468,14 +468,14 @@ document.addEventListener('DOMContentLoaded', async () => {
             tableBody.appendChild(row);
         });
 
-        document.getElementById('checkout-subtotal').textContent = `₱${subtotal.toFixed(2)}`;
-
         // Populate shipping dropdown
         console.log('Fetching shipping options...');
         shippingOptions = await fetchShippingOptions();
         console.log('Shipping options:', shippingOptions);
 
         const selectedShipping = shippingOptions[0];
+        updateCheckoutTotals(subtotal, parseFloat(selectedShipping.price));
+        const { total: initialTotal } = calculateTotals(cartItems, selectedShipping.price);
         const deliveryDays = parseInt(selectedShipping.estimated_time.match(/\d+/)?.[0]);
 
         console.log("Estimated delivery days:", deliveryDays);
@@ -507,7 +507,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                 priceSpan.textContent = `₱${option.price}`;
                 daysSpan.textContent = option.estimated_time;
                 optionsDiv.style.display = 'none';
+
+                calculateTotals(cartItems, option.price);
             };
+
             shippingList.appendChild(li);
         });
 
@@ -609,16 +612,105 @@ bigOptionBtns.forEach(btn => {
     });
 });
 
-confirmEwalletBtn.addEventListener('click', () => {
+function updateCheckoutTotals(subtotal, shipping) {
+    const total = subtotal + shipping;
+
+    const subtotalElem = document.getElementById('checkout-subtotal');
+    const breakdownElem = document.getElementById('checkout-subtotal-breakdown');
+    const shippingElem = document.getElementById('checkout-shipping');
+    const totalElem = document.getElementById('checkout-total');
+
+    // ✅ Update both subtotal elements if they exist
+    if (subtotalElem) subtotalElem.textContent = `₱${subtotal.toFixed(2)}`;
+    if (breakdownElem) breakdownElem.textContent = `₱${subtotal.toFixed(2)}`;
+    if (shippingElem) shippingElem.textContent = `₱${shipping.toFixed(2)}`;
+    if (totalElem) totalElem.textContent = `₱${total.toFixed(2)}`;
+}
+
+function calculateTotals(cartItems, shippingPrice) {
+    const subtotal = cartItems.reduce((acc, item) => {
+        return acc + item.quantity * item.products.price;
+    }, 0);
+
+    const shipping = parseFloat(shippingPrice) || 0;
+    const total = subtotal + shipping;
+
+    updateCheckoutTotals(subtotal, shippingPrice);
+    return { subtotal, total };
+}
+
+confirmEwalletBtn.addEventListener('click', async () => {
     const selectedRadio = document.querySelector('input[name="e_wallet_method"]:checked');
     if (!selectedRadio) {
         alert("Please choose a payment option.");
         return;
     }
-    methodDisplay.textContent = selectedRadio.value;
+
+    const selectedMethod = selectedRadio.value; // e.g., "gcash", "paymaya", "card", "grab_pay"
+    methodDisplay.textContent = selectedMethod.charAt(0).toUpperCase() + selectedMethod.slice(1);
     mainChoices.style.display = 'none';
     eWalletSection.style.display = 'none';
+
+    try {
+        // Fetch cart items again
+        const { data: cartItems, error: cartError } = await supabase
+            .from('cart_items')
+            .select('quantity, products(name, price)')
+            .eq('user_id', (await supabase.auth.getUser()).data.user.id);
+
+        if (cartError || !cartItems.length) {
+            alert("Unable to load cart.");
+            return;
+        }
+
+        // Assume shipping is fixed (e.g. 100 PHP) — replace with your logic if dynamic
+        const shippingFee = 100;
+        const shippingAmount = Math.round(shippingFee * 100);
+
+        const formattedItems = cartItems.map(item => ({
+            name: item.products.name,
+            quantity: item.quantity,
+            amount: Math.round(item.products.price * 100),
+            description: item.products.name
+        }));
+
+        // ✅ Add shipping as separate line item
+        formattedItems.push({
+            name: "Shipping Fee",
+            quantity: 1,
+            amount: shippingAmount,
+            description: "Standard Shipping"
+        });
+
+        // ✅ Total includes shipping
+        const total = formattedItems.reduce((acc, item) => acc + item.amount, 0);
+
+
+        const response = await fetch("http://localhost:3000/create-paymongo-checkout", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                amount: total,
+                items: formattedItems,
+                payment_method_types: [selectedMethod] // ⬅️ Include chosen method
+            })
+        });
+
+        const data = await response.json();
+
+        if (data.checkout_url) {
+            window.location.href = data.checkout_url;
+        } else {
+            alert("Checkout failed.");
+            console.error(data);
+        }
+
+    } catch (error) {
+        console.error("Payment error:", error);
+        alert("Something went wrong.");
+    }
 });
+
 
 document.getElementById('place-order').addEventListener('click', async () => {
     const { data: { user }, error: userError } = await supabase.auth.getUser();
@@ -662,22 +754,16 @@ document.getElementById('place-order').addEventListener('click', async () => {
         .select('product_id, quantity, products(price)')
         .eq('user_id', userId);
 
-    const subtotal = cartItems.reduce((acc, item) => {
-        return acc + item.quantity * item.products.price;
-    }, 0);
+    const { subtotal, total } = calculateTotals(cartItems, shippingPrice);
+
 
     if (cartError || !cartItems.length) {
         alert("Your cart is empty.");
         return;
     }
 
-    const total = subtotal + shippingPrice;
+    total = subtotal + shippingPrice;
 
-    document.getElementById('checkout-subtotal-breakdown').textContent = `₱${subtotal.toFixed(2)}`;
-    document.getElementById('checkout-shipping').textContent = `₱${shippingPrice.toFixed(2)}`;
-    document.getElementById('checkout-total').textContent = `₱${total.toFixed(2)}`;
-
-  
     const orderItemsJson = cartItems.map(item => ({
         product_id: item.product_id,
         quantity: item.quantity
@@ -693,7 +779,7 @@ document.getElementById('place-order').addEventListener('click', async () => {
             subtotal_price: subtotal,
             total_price: total,
             delivery_date: estimatedDelivery.toISOString(),
-            orders: orderItemsJson 
+            orders: orderItemsJson
         }])
         .select()
         .single();

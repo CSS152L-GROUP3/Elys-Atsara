@@ -31,7 +31,7 @@
         <div class="Cart">
           <div class="group2">
             <button class="CartBtn1">
-                 <div class="cart-badge" id="cart-badge">0</div>
+              <div class="cart-badge" id="cart-badge">0</div>
               <svg width="60" height="58" viewBox="0 0 60 58" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <rect width="60" height="58" rx="29" fill="#B3261E" />
                 <path
@@ -172,12 +172,29 @@
 
               <!-- Hidden E-Wallet Options (radio buttons) -->
               <div class="e-wallet-options" id="e-wallet-options" style="display: none;">
-                <label><input type="radio" name="e_wallet_method" value="GCash" /> <img src="gcash-logo.png" alt="GCash"
-                    class="logo"> GCash</label><br>
-                <label><input type="radio" name="e_wallet_method" value="Maya" /> <img src="maya-logo.png" alt="Maya"
-                    class="logo"> Maya</label><br>
+                <label>
+                  <input type="radio" name="e_wallet_method" value="gcash" />
+                  <img src="gcash-logo.png" alt="GCash" class="logo" /> GCash
+                </label><br>
+
+                <label>
+                  <input type="radio" name="e_wallet_method" value="paymaya" />
+                  <img src="maya-logo.png" alt="Maya" class="logo" /> Maya
+                </label><br>
+
+                <label>
+                  <input type="radio" name="e_wallet_method" value="card" />
+                  <img src="card-icon.png" alt="Card" class="logo" /> Card
+                </label><br>
+
+                <label>
+                  <input type="radio" name="e_wallet_method" value="grab_pay" />
+                  <img src="grabpay-logo.png" alt="GrabPay" class="logo" /> GrabPay
+                </label><br>
+
                 <button id="confirm-ewallet-btn">Confirm</button>
               </div>
+
 
               <button class="change-btn" id="change-payment-btn">Change Payment</button>
             </div>
