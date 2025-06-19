@@ -6,6 +6,7 @@ async function updateCartDisplay() {
   const cartContainer = document.getElementById('cart-items');
   const user = await supabase.auth.getUser();
   const userId = user.data?.user?.id;
+  
 
   if (!userId) {
     cartContainer.innerHTML = '<p>Please log in to view your cart.</p>';
