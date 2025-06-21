@@ -370,3 +370,136 @@ function populateOrdersTable(orders, adminEmail) {
 
   addActionListeners(adminEmail);
 }
+
+function addActionListeners(adminEmail) {
+  document.querySelectorAll('.action-btn.ship').forEach(btn => {
+    btn.addEventListener('click', async e => {
+      const row = e.target.closest('tr');
+      const orderId = row.children[0].textContent;
+      const order = allOrders.find(o => String(o.id) === String(orderId));
+      if (!order) return alert('Order not found.');
+
+      if (confirm(`Mark order ${orderId} as shipped?`)) {
+        try {
+          let shipperName = 'Unknown';
+          if (order.shipping_option_id) {
+            const { data: shippingOption } = await supabase
+              .from('shipping_options')
+              .select('name')
+              .eq('id', order.shipping_option_id)
+              .single();
+            shipperName = shippingOption?.name || 'Unknown';
+          }
+
+          await supabase
+            .from('orders')
+            .update({ status: 'In Transit' })
+            .eq('id', orderId);
+
+          await supabase
+            .from('shipment_logs')
+            .insert([{
+              order_id: orderId,
+              status: 'Shipped',
+              updated_by: adminEmail,
+              shipping_option_id: order.shipping_option_id || null,
+              shipper_name: shipperName
+            }]);
+
+          alert(`Order ${orderId} marked as shipped.`);
+
+          const [updatedOrders, customers, shipmentLogs] = await Promise.all([
+            fetchOrders(),
+            fetchCustomers(),
+            fetchShipmentLogs()
+          ]);
+
+          allOrders = attachCustomerAndShipperNames(updatedOrders, customers, shipmentLogs);
+          populateOrdersTable(allOrders, adminEmail);
+        } catch (err) {
+          console.error('Ship error:', err.message);
+          alert('Failed to mark order as shipped.');
+        }
+      }
+    });
+  });
+
+  document.querySelectorAll('.action-btn.complete').forEach(btn => {
+    btn.addEventListener('click', async e => {
+      const row = e.target.closest('tr');
+      const orderId = row.children[0].textContent;
+
+      if (!confirm(`Mark order ${orderId} as completed?`)) return;
+
+      try {
+        await supabase
+          .from('orders')
+          .update({ status: 'Completed' })
+          .eq('id', orderId);
+
+        alert(`Order ${orderId} marked as completed.`);
+
+        const [updatedOrders, customers, shipmentLogs] = await Promise.all([
+          fetchOrders(),
+          fetchCustomers(),
+          fetchShipmentLogs()
+        ]);
+
+        allOrders = attachCustomerAndShipperNames(updatedOrders, customers, shipmentLogs);
+        populateOrdersTable(allOrders, adminEmail);
+      } catch (err) {
+        console.error('Complete error:', err.message);
+        alert('Failed to complete order.');
+      }
+    });
+  });
+
+  document.querySelectorAll('.action-btn.cancel').forEach(btn => {
+    btn.addEventListener('click', async e => {
+      const row = e.target.closest('tr');
+      const orderId = row.children[0].textContent;
+
+      if (!confirm(`Cancel order ${orderId}? This cannot be undone.`)) return;
+
+      try {
+        await supabase
+          .from('orders')
+          .update({ status: 'Cancelled' })
+          .eq('id', orderId);
+
+        alert(`Order ${orderId} was cancelled.`);
+
+        const [updatedOrders, customers, shipmentLogs] = await Promise.all([
+          fetchOrders(),
+          fetchCustomers(),
+          fetchShipmentLogs()
+        ]);
+
+        allOrders = attachCustomerAndShipperNames(updatedOrders, customers, shipmentLogs);
+        populateOrdersTable(allOrders, adminEmail);
+      } catch (err) {
+        console.error('Cancel error:', err.message);
+        alert('Failed to cancel order.');
+      }
+    });
+  });
+}
+
+function setupFilterButtons(adminEmail) {
+  const filterButtons = document.querySelectorAll('.filter-btn');
+
+  filterButtons.forEach(button => {
+    button.addEventListener('click', () => {
+    
+      filterButtons.forEach(btn => btn.classList.remove('active'));
+      button.classList.add('active');
+
+      const status = button.getAttribute('data-status');
+      const filtered = status === 'all'
+        ? allOrders
+        : allOrders.filter(order => order.status?.toLowerCase() === status.toLowerCase());
+
+      populateOrdersTable(filtered, adminEmail);
+    });
+  });
+}

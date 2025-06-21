@@ -482,3 +482,9 @@ button.action-btn.cancel {
   border-radius: 5px;
   cursor: pointer;
 }
+
+
+.filter-btn.active {
+  background-color: #B3261E;
+  color: white;
+}
