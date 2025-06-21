@@ -1,174 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Cart</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
 
- <!-- 
-    <div class="top-Nav">
-      <div class="nav-groups">
-        <div class="About">
-          <div class="group1">
-            <button class="AboutUsBtn2">About Us</button>
-            <button class="AboutUsBtn1">
-         
-              <svg width="60" height="58" viewBox="0 0 60 58" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect width="60" height="58" rx="29" fill="#B3261E"/>
-           
-              </svg>
-            </button>
-          </div>
-        </div>
-
-        <div class="Cart">
-          <div class="group2">
-            <button class="CartBtn2">Cart</button>
-            <button class="CartBtn1">
-            
-              <svg width="60" height="58" viewBox="0 0 60 58" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect width="60" height="58" rx="29" fill="#B3261E"/>
-
-              </svg>
-            </button>
-          </div>
-        </div>
-
-        <div class="Maps">
-          <div class="group3">
-            <button class="MapBtn2">Maps</button>
-            <button class="MapBtn1">
-             
-              <svg width="60" height="58" viewBox="0 0 60 58" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <ellipse cx="30" cy="29" rx="30" ry="29" fill="#B3261E"/>
-           
-              </svg>
-            </button>
-          </div>
-        </div>
-
-        <div class="Account">
-          <div class="group4">
-            <button class="AccountBtn2">Account</button>
-            <button class="AccountBtn1">
-            
-              <svg width="60" height="58" viewBox="0 0 60 58" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect width="60" height="58" rx="29" fill="#B3261E"/>
-              >
-              </svg>
-            </button>
-          </div>
-        </div>
+ 
+  <div class="top-Nav">
+    <div class="nav-groups">
+      <div class="About group1">
+        <button class="AboutUsBtn2">About Us</button>
+        <button class="AboutUsBtn1">
+          <svg width="60" height="58" viewBox="0 0 60 58" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="60" height="58" rx="29" fill="#B3261E"/>
+          </svg>
+        </button>
+      </div>
+      <div class="Cart group2">
+        <button class="CartBtn2">Cart</button>
+        <button class="CartBtn1">
+          <svg width="60" height="58" viewBox="0 0 60 58" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="60" height="58" rx="29" fill="#B3261E"/>
+          </svg>
+        </button>
+      </div>
+      <div class="Maps group3">
+        <button class="MapBtn2">Maps</button>
+        <button class="MapBtn1">
+          <svg width="60" height="58" viewBox="0 0 60 58" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <ellipse cx="30" cy="29" rx="30" ry="29" fill="#B3261E"/>
+          </svg>
+        </button>
+      </div>
+      <div class="Account group4">
+        <button class="AccountBtn2">Account</button>
+        <button class="AccountBtn1">
+          <svg width="60" height="58" viewBox="0 0 60 58" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="60" height="58" rx="29" fill="#B3261E"/>
+          </svg>
+        </button>
       </div>
     </div>
-
-    <main>
-      <section class="order-section">
-        <h1>Order</h1>
-        <div class="order-filters">
-          <button class="filter-btn active">All</button>
-          <button class="filter-btn">Active</button>
-          <button class="filter-btn">Draft</button>
-          <button class="filter-btn">In Transit</button>
-          <button class="filter-btn">Completed</button>
-          <button class="filter-btn">Cancelled</button>
-        </div>
-        <table class="order-table">
-          <thead>
-            <tr>
-              <th>Cargo ID</th>
-              <th>Customer</th>
-              <th>Items</th>
-              <th>Total</th>
-              <th>Status</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-          
-          </tbody>
-        </table>
-      </section>
-    </main>
-
-    <script>
-      const filterButtons = document.querySelectorAll('.filter-btn');
-      const orderRows = document.querySelectorAll('.order-table tbody tr');
-
-      filterButtons.forEach(button => {
-        button.addEventListener('click', () => {
-          filterButtons.forEach(btn => btn.classList.remove('active'));
-          button.classList.add('active');
-
-          const filter = button.textContent.toLowerCase();
-
-          orderRows.forEach(row => {
-            const statusElement = row.querySelector('.status');
-            const status = statusElement ? statusElement.textContent.toLowerCase() : '';
-
-            if (filter === 'all') {
-              row.style.display = '';
-            } else if (filter === 'active' && status === 'pending') {
-              row.style.display = '';
-            } else if (filter === status) {
-              row.style.display = '';
-            } else {
-              row.style.display = 'none';
-            }
-          });
-        });
-      });
+  </div>
 
 
-      document.querySelectorAll('.action-btn.view').forEach(btn => {
-        btn.addEventListener('click', e => {
-          const row = e.target.closest('tr');
-          const orderId = row.cells[0].textContent;
-          alert(`Viewing details for ${orderId}`);
-        });
-      });
+  <main>
+    <section class="order-section">
 
-      document.querySelectorAll('.action-btn.ship').forEach(btn => {
-        btn.addEventListener('click', e => {
-          const row = e.target.closest('tr');
-          const orderId = row.cells[0].textContent;
-          if (confirm(`Ship order ${orderId}?`)) {
-            alert(`Order ${orderId} has been shipped!`);
-          }
-        });
-      });
+ 
+      <div class="filter-buttons">
+      <button class="filter-btn" data-status="all">All</button>
+      <button class="filter-btn" data-status="Pending">Pending</button>
+      <button class="filter-btn" data-status="In Transit">In Transit</button>
+      <button class="filter-btn" data-status="Completed">Completed</button>
+      <button class="filter-btn" data-status="Cancelled">Cancelled</button>
+      </div>
 
-      document.querySelectorAll('.dropdown-item').forEach(btn => {
-        btn.addEventListener('click', e => {
-          const row = e.target.closest('tr');
-          const orderId = row.cells[0].textContent;
-          const action = e.target.textContent;
+     
+      <table class="order-table">
+        <thead>
+          <tr>
+            <th>Order ID</th>
+            <th>User Name</th>
+            <th>Items</th>
+            <th>Total</th>
+            <th>Payment</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+      
+        </tbody>
+      </table>
+    </section>
+  </main>
 
-          if (confirm(`${action} order ${orderId}?`)) {
-            alert(`Order ${orderId} has been ${action.toLowerCase()}ed!`);
-          }
-        });
-      });
-    </script>
-  </body>
-</html> -->
 
-<!DOCTYPE html>
-  <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta charset="utf-8" />
-    <title>Admin Cart</title>
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-
-<table class="order-table">
-  <thead>
-    <tr>
-      <th>Order ID</th>
-      <th>User Name</th>
-      <th>Items</th>
-      <th>Total</th>
-      <th>Payment</th>
-      <th>Status</th>
-      <th>Actions</th>
-    </tr>
-  </thead>
-  <tbody></tbody>
-  <script type="module" src="adminCart.js"> </script>
-</table>
-
+  <script type="module" src="adminCart.js"></script>
+</body>
+</html>
