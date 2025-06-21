@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -7,17 +7,17 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <!-- TOP NAVIGATION (restored) -->
+ 
     <div class="top-Nav">
       <div class="nav-groups">
         <div class="About">
           <div class="group1">
             <button class="AboutUsBtn2">About Us</button>
             <button class="AboutUsBtn1">
-              <!-- About Icon SVG -->
+         
               <svg width="60" height="58" viewBox="0 0 60 58" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <rect width="60" height="58" rx="29" fill="#B3261E"/>
-                <!-- path trimmed for brevity -->
+           
               </svg>
             </button>
           </div>
@@ -27,10 +27,10 @@
           <div class="group2">
             <button class="CartBtn2">Cart</button>
             <button class="CartBtn1">
-              <!-- Cart Icon SVG -->
+            
               <svg width="60" height="58" viewBox="0 0 60 58" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <rect width="60" height="58" rx="29" fill="#B3261E"/>
-                <!-- path trimmed for brevity -->
+
               </svg>
             </button>
           </div>
@@ -40,10 +40,10 @@
           <div class="group3">
             <button class="MapBtn2">Maps</button>
             <button class="MapBtn1">
-              <!-- Maps Icon SVG -->
+             
               <svg width="60" height="58" viewBox="0 0 60 58" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <ellipse cx="30" cy="29" rx="30" ry="29" fill="#B3261E"/>
-                <!-- path trimmed for brevity -->
+           
               </svg>
             </button>
           </div>
@@ -53,10 +53,10 @@
           <div class="group4">
             <button class="AccountBtn2">Account</button>
             <button class="AccountBtn1">
-              <!-- Account Icon SVG -->
+            
               <svg width="60" height="58" viewBox="0 0 60 58" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <rect width="60" height="58" rx="29" fill="#B3261E"/>
-                <!-- path trimmed for brevity -->
+              >
               </svg>
             </button>
           </div>
@@ -87,7 +87,7 @@
             </tr>
           </thead>
           <tbody>
-            <!-- Your order rows here -->
+          
           </tbody>
         </table>
       </section>
@@ -121,7 +121,7 @@
         });
       });
 
-      // Dropdown and action button handlers
+
       document.querySelectorAll('.action-btn.view').forEach(btn => {
         btn.addEventListener('click', e => {
           const row = e.target.closest('tr');
@@ -153,4 +153,22 @@
       });
     </script>
   </body>
-</html>
+</html> -->
+
+
+<table class="order-table">
+  <thead>
+    <tr>
+      <th>Order ID</th>
+      <th>User ID</th>
+      <th>Items</th>
+      <th>Total</th>
+      <th>Payment</th>
+      <th>Status</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+  <script type="module" src="adminCart.js"> </script>
+</table>
+
