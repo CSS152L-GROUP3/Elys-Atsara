@@ -64,30 +64,46 @@
 //   if (userInfo) userInfo.textContent = 'Welcome, Guest!';
 // });
 
-
 import { supabase } from './supabase.js';
 
-document.addEventListener('DOMContentLoaded', async () => {
+document.addEventListener('DOMContentLoaded', () => {
+  checkUserSession();
+});
+
+async function checkUserSession() {
   const userInfo = document.getElementById('user-info');
 
-  const { data: { user }, error } = await supabase.auth.getUser();
 
-  if (error || !user) {
-    console.log('User not found or error occurred.');
-    localStorage.setItem('userType', 'guest');
-    localStorage.removeItem('currentUser');
-    if (userInfo) userInfo.textContent = 'Welcome, Guest!';
-    return;
+  const { data: { session }, error } = await supabase.auth.getSession();
+
+  if (session?.user) {
+    handleUser(session.user, userInfo);
+  } else {
+ 
+    supabase.auth.onAuthStateChange((event, session) => {
+      if (session?.user) {
+        handleUser(session.user, userInfo);
+      } else {
+        setGuest(userInfo);
+      }
+    });
   }
+}
 
+async function handleUser(user, userInfo) {
   const uuid = user.id;
   console.log('Logged in user:', user.email);
 
-  const { data: adminData } = await supabase
+
+  const { data: adminData, error: adminError } = await supabase
     .from('admin_accounts')
     .select('*')
     .eq('uuid', uuid)
     .maybeSingle();
+
+  if (adminError) {
+    console.error('Error checking admin table:', adminError.message);
+  }
 
   if (adminData) {
     console.log('Admin logged in');
@@ -98,11 +114,15 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
  
-  const { data: customerData } = await supabase
+  const { data: customerData, error: customerError } = await supabase
     .from('customer_accounts')
     .select('*')
     .eq('uuid', uuid)
     .maybeSingle();
+
+  if (customerError) {
+    console.error('Error checking customer table:', customerError.message);
+  }
 
   if (customerData) {
     console.log('Customer logged in');
@@ -112,9 +132,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     return;
   }
 
+  console.warn('User not found in any role table');
+  setGuest(userInfo);
+}
 
-  console.warn('User not found in admin or customer tables.');
+function setGuest(userInfo) {
   localStorage.setItem('userType', 'guest');
   localStorage.removeItem('currentUser');
   if (userInfo) userInfo.textContent = 'Welcome, Guest!';
-});
+}
