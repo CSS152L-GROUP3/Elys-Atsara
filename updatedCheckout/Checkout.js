@@ -424,10 +424,40 @@ import { supabase } from '../supabaseClient/supabase.js';
 let shippingOptions = []; // Declare globally
 let defaultAddress = null; // ✅ global variable
 
+const urlParams = new URLSearchParams(window.location.search);
+const status = urlParams.get('status');
+
+if (status === 'success') {
+    alert("✅ Payment successful! Your order has been received.");
+} else if (status === 'cancel') {
+    alert("❌ Payment was canceled or failed. Please try again.");
+}
+
+async function getCurrentUserWithRetry(retries = 5, delay = 300) {
+    for (let i = 0; i < retries; i++) {
+        const { data: { user }, error } = await supabase.auth.getUser();
+        if (user) return user;
+        await new Promise(res => setTimeout(res, delay));
+
+        const { data: sessionData } = await supabase.auth.getSession();
+        console.log("🔎 Current Supabase session:", sessionData);
+    }
+
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
+    const savedMethod = localStorage.getItem('selected_payment_method');
+    if (savedMethod) {
+        document.querySelector('#payment-method .value').textContent = savedMethod.charAt(0).toUpperCase() + savedMethod.slice(1);
+    }
+    localStorage.removeItem('selected_payment_method');
+
+
+    const session = await supabase.auth.getSession();
+    console.log("🔍 Supabase session on load:", session);
     try {
         console.log('Starting to load checkout data...');
-        const user = await getCurrentUser();
+        const user = await getCurrentUserWithRetry();
         console.log('Current user:', user);
 
         if (!user) {
@@ -555,8 +585,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         document.getElementById('save-address-btn').addEventListener('click', async () => {
-            const user = await getCurrentUser();
-
             const newAddress = {
                 user_id: user.id,
                 address: document.getElementById('new-address').value,
@@ -653,10 +681,13 @@ confirmEwalletBtn.addEventListener('click', async () => {
 
     try {
         // Fetch cart items again
+        const user = await getCurrentUserWithRetry();
+
         const { data: cartItems, error: cartError } = await supabase
             .from('cart_items')
             .select('quantity, products(name, price)')
-            .eq('user_id', (await supabase.auth.getUser()).data.user.id);
+            .eq('user_id', user.id); // ✅ now it's attached properly
+
 
         if (cartError || !cartItems.length) {
             alert("Unable to load cart.");
@@ -696,6 +727,8 @@ confirmEwalletBtn.addEventListener('click', async () => {
             })
         });
 
+        localStorage.setItem('selected_payment_method', selectedMethod);
+
         const data = await response.json();
 
         if (data.checkout_url) {
@@ -710,7 +743,6 @@ confirmEwalletBtn.addEventListener('click', async () => {
         alert("Something went wrong.");
     }
 });
-
 
 document.getElementById('place-order').addEventListener('click', async () => {
     const { data: { user }, error: userError } = await supabase.auth.getUser();
@@ -761,9 +793,6 @@ document.getElementById('place-order').addEventListener('click', async () => {
         alert("Your cart is empty.");
         return;
     }
-
-    total = subtotal + shippingPrice;
-
     const orderItemsJson = cartItems.map(item => ({
         product_id: item.product_id,
         quantity: item.quantity
@@ -820,8 +849,8 @@ document.getElementById('place-order').addEventListener('click', async () => {
         console.log("✅ Cart cleared.");
     }
 
-    alert("🎉 Order placed successfully!");
-    window.location.href = "/order-confirmation.html";
+    alert("Order placed successfully!");
+    window.location.href = "../Homepage/Homepage.html";
 });
 
 async function insertOrderItems(orderId, cartItems) {
