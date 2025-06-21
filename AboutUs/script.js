@@ -115,3 +115,12 @@ document.getElementById('go-back-btn').addEventListener('click', function() {
                  window.location.href = '../Homepage/Homepage.html';
             }
         });
+
+  function scrollToSection(value) {
+    if (value) {
+      const section = document.getElementById(value);
+      if (section) {
+        section.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  }

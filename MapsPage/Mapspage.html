@@ -48,17 +48,13 @@
 
         <div class="Account">
         <div class ="group4">
-          <a href="../profile/profile.html">
           <button class="AccountBtn1">
             <svg width="60" height="58" viewBox="0 0 60 58" fill="none" xmlns="http://www.w3.org/2000/svg" z-index="0">
               <rect width="60" height="58" rx="29" fill="#B3261E"/>
               <path d="M39 16.4999C39 12.4849 34.818 9 30 9C25.182 9 21 12.4849 21 16.4999C21 20.5148 25.182 23.9998 30 23.9998C34.818 23.9998 39 20.5148 39 16.4999ZM30 26.4997C22.116 26.4997 15 33.5871 15 42.3945C15 51.2018 45 51.2018 45 42.3945C45 33.5871 37.884 26.4997 30 26.4997Z" fill="white"/>
             </svg>
           </button>
-          </a>
-        
-          <button class="AccountBtn2"  onclick="window.location.href='../profile/UserProfile.html'">Account</button>
-          </a>
+          <button class="AccountBtn2" onclick="window.location.href='#####'">Account</button>
         </div>
         </div>
         
@@ -271,11 +267,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
 <script type="module" src="../updatedShopNow/shop-now.js"></script>
 <script>
-function userIsLoggedIn() {
-  // Replace with your actual login check
-  const userType = sessionStorage.getItem('userType');
-  return userType && userType !== 'guest';
-}
+        function userIsLoggedIn() {
+          const userType = sessionStorage.getItem('userType');
+          const userJson = localStorage.getItem('currentUser');
+          return userType && userType !== 'guest' && userJson;
+        }
+        
 $(document).ready(function() {
   $('.CartBtn1, .CartBtn2').on('click', function(e) {
     if (!userIsLoggedIn()) {

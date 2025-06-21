@@ -168,6 +168,7 @@
   width: 100%;
   z-index: 1000;
   border-bottom: 2px solid #b7251d;
+  left: -1%;
 }
 
 .AboutUs .group1 {
@@ -458,13 +459,14 @@
   }
 
   .AboutUs .footer {
-    position: relative;
+    position: fixed;
     width: 100%;
-    top: 100px;
-    height: 80px;
+    bottom: 0%;
+    height: 15%;
     border-top: #9E1F19 solid 2px;
     margin-top: 40px;
     background-color: #ffffff;
+    left: -1%;
   }
 
   .AboutUs .tiktokbtn {
@@ -507,10 +509,9 @@
     height: 70px;
     align-items: center;
     justify-content: center;
-    gap: 8px;
     position: absolute;
-    top: 10px;
-    left: 5%;  
+    top: -10%;
+    left: 5%; 
     background-color: #b3261e;
     overflow: hidden;
     font-family: "Alef", sans-serif, Arial, sans-serif;
@@ -848,3 +849,44 @@
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(179, 38, 30, 0.3);
 }
+
+.Invisite {
+  position: absolute;
+  width: 100%;
+  height: 10%;
+  top: -30%;
+  left: 0;
+  background-color: transparent;
+  z-index: 2000;
+}
+
+.Invisibus {
+  position: absolute;
+  width: 100%;
+  height: 10%;
+  top: -30%;
+  left: 0;
+  background-color: transparent;
+  z-index: 2000;
+}
+
+.Invisiown {
+  position: absolute;
+  width: 100%;
+  height: 10%;
+  top: -80%;
+  left: 0;
+  background-color: transparent;
+  z-index: 2000;
+}
+
+.Invisidev {
+  position: absolute;
+  width: 100%;
+  height: 10%;
+  top: -20%;
+  left: 0;
+  background-color: transparent;
+  z-index: 2000;
+}
+
