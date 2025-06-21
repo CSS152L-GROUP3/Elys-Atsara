@@ -1,51 +1,69 @@
-
 import { supabase } from '../supabaseClient/supabase.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
   try {
-    const orders = await fetchOrders();
-    populateOrdersTable(orders);
+    // Fetch both orders and customers in parallel
+    const [orders, customers] = await Promise.all([
+      fetchOrders(),
+      fetchCustomers()
+    ]);
+
+    // Merge the customer name into each order
+    const ordersWithNames = attachCustomerNames(orders, customers);
+
+    // Populate the table with enriched data
+    populateOrdersTable(ordersWithNames);
   } catch (error) {
-    console.error('Error loading admin cart data:', error.message || error);
-    alert('Failed to load orders.');
+    console.error('❌ Error loading admin cart data:', error.message || error);
+    alert('Failed to load orders. Check console for more info.');
   }
 });
 
-// Fetch orders from the 'orders' table
+// Fetch all orders
 async function fetchOrders() {
-  const { data: orders, error } = await supabase
+  const { data, error } = await supabase
     .from('orders')
-    .select(`
-      id,
-      user_id,
-      address_id,
-      shipping_option_id,
-      payment_method,
-      subtotal_price,
-      total_price,
-      status,
-      delivery_date,
-      created_at,
-      orders
-    `)
+    .select('*')
     .order('created_at', { ascending: false });
 
   if (error) {
-    console.error('Error fetching orders:', error.message);
+    console.error('❌ fetchOrders() error:', error.message);
     throw error;
   }
 
-  return orders || [];
+  return data || [];
 }
 
-// Populate orders in HTML table
+// Fetch all customers
+async function fetchCustomers() {
+  const { data, error } = await supabase
+    .from('customer_accounts')
+    .select('uuid, name'); // change to full_name if that's what you're using
+
+  if (error) {
+    console.error('❌ fetchCustomers() error:', error.message);
+    throw error;
+  }
+
+  return data || [];
+}
+
+// Join customer name into each order based on user_id
+function attachCustomerNames(orders, customers) {
+  const customerMap = new Map();
+  customers.forEach(c => customerMap.set(c.uuid, c.name));
+
+  return orders.map(order => ({
+    ...order,
+    customer_name: customerMap.get(order.user_id) || 'Unknown'
+  }));
+}
+
+// Render table
 function populateOrdersTable(orders) {
   const tableBody = document.querySelector('.order-table tbody');
 
-  if (!tableBody) {
-    console.error('Table body not found');
-    return;
-  }
+  if (!tableBody) return;
 
   tableBody.innerHTML = '';
 
@@ -57,13 +75,14 @@ function populateOrdersTable(orders) {
   }
 
   orders.forEach(order => {
-    const itemCount = Array.isArray(order.orders) ? order.orders.reduce((sum, item) => sum + item.quantity, 0) : 0;
-    const dateStr = new Date(order.created_at).toLocaleString();
+    const itemCount = Array.isArray(order.orders)
+      ? order.orders.reduce((sum, item) => sum + item.quantity, 0)
+      : 0;
 
     const row = document.createElement('tr');
     row.innerHTML = `
       <td>${order.id}</td>
-      <td>${order.user_id}</td>
+      <td>${order.customer_name}</td>
       <td>${itemCount} item(s)</td>
       <td>₱${order.total_price?.toFixed(2)}</td>
       <td>${order.payment_method}</td>
@@ -98,5 +117,3 @@ function addActionListeners() {
     });
   });
 }
-
-
