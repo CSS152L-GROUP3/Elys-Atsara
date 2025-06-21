@@ -1,28 +1,21 @@
 // import { supabase } from './supabase.js';
 
 // document.addEventListener('DOMContentLoaded', async () => {
-//   const userJson = localStorage.getItem('currentUser');
 //   const userInfo = document.getElementById('user-info');
 
-//   if (!userJson) {
-//     console.log('No user logged in (guest mode)');
+//   const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+
+//   if (sessionError || !session?.user) {
+//     console.log('No Supabase session found or session error.');
+//     localStorage.setItem('userType', 'guest');
+//     localStorage.removeItem('currentUser');
 //     if (userInfo) userInfo.textContent = 'Welcome, Guest!';
-//     sessionStorage.setItem('userType', 'guest');
 //     return;
 //   }
 
-//   const session = await supabase.auth.getSession();
-//   const user = session.data.session?.user;
-
-//   if (!user) {
-//     console.log('No Supabase session found');
-//     if (userInfo) userInfo.textContent = 'Welcome, Guest!';
-//     sessionStorage.setItem('userType', 'guest');
-//     return;
-//   }
-
+//   const user = session.user;
 //   const uuid = user.id;
-//   console.log('User is logged in:', user.email);
+//   console.log('Supabase Auth User Object:', user);
 
 
 //   const { data: adminData, error: adminError } = await supabase
@@ -36,15 +29,15 @@
 //   }
 
 //   if (adminData) {
-//     console.log('Logged in as ADMIN:');
-//     console.table(adminData);
-//     sessionStorage.setItem('userType', 'admin');
+//     console.log('Logged in as ADMIN');
+//     console.log('Admin Record:', adminData);
+//     localStorage.setItem('userType', 'admin');
 //     localStorage.setItem('currentUser', JSON.stringify(adminData));
 //     if (userInfo) userInfo.textContent = `Welcome, ${adminData.email}`;
 //     return;
 //   }
 
-  
+ 
 //   const { data: customerData, error: customerError } = await supabase
 //     .from('customer_accounts')
 //     .select('*')
@@ -56,37 +49,50 @@
 //   }
 
 //   if (customerData) {
-//     console.log('Logged in as CUSTOMER:');
-//     console.table(customerData); 
-//     sessionStorage.setItem('userType', 'customer');
+//     console.log('Logged in as CUSTOMER');
+//     console.log('Customer Record:', customerData);
+//     localStorage.setItem('userType', 'customer');
 //     localStorage.setItem('currentUser', JSON.stringify(customerData));
 //     if (userInfo) userInfo.textContent = `Welcome, ${customerData.email}`;
 //     return;
 //   }
 
-//   console.log('User not found in either table.');
+  
+//   console.warn('User not found in admin or customer accounts.');
+//   localStorage.setItem('userType', 'guest');
+//   localStorage.removeItem('currentUser');
 //   if (userInfo) userInfo.textContent = 'Welcome, Guest!';
-//   sessionStorage.setItem('userType', 'guest');
 // });
 
 import { supabase } from './supabase.js';
 
-document.addEventListener('DOMContentLoaded', async () => {
+document.addEventListener('DOMContentLoaded', () => {
+  checkUserSession();
+});
+
+async function checkUserSession() {
   const userInfo = document.getElementById('user-info');
 
-  const { data: { session }, error: sessionError } = await supabase.auth.getSession();
 
-  if (sessionError || !session?.user) {
-    console.log('No Supabase session found or session error.');
-    localStorage.setItem('userType', 'guest');
-    localStorage.removeItem('currentUser');
-    if (userInfo) userInfo.textContent = 'Welcome, Guest!';
-    return;
+  const { data: { session }, error } = await supabase.auth.getSession();
+
+  if (session?.user) {
+    handleUser(session.user, userInfo);
+  } else {
+ 
+    supabase.auth.onAuthStateChange((event, session) => {
+      if (session?.user) {
+        handleUser(session.user, userInfo);
+      } else {
+        setGuest(userInfo);
+      }
+    });
   }
+}
 
-  const user = session.user;
+async function handleUser(user, userInfo) {
   const uuid = user.id;
-  console.log('👤 Supabase Auth User Object:', user);
+  console.log('Logged in user:', user.email);
 
 
   const { data: adminData, error: adminError } = await supabase
@@ -96,12 +102,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     .maybeSingle();
 
   if (adminError) {
-    console.error('Error fetching admin data:', adminError.message);
+    console.error('Error checking admin table:', adminError.message);
   }
 
   if (adminData) {
-    console.log('Logged in as ADMIN');
-    console.log('Admin Record:', adminData);
+    console.log('Admin logged in');
     localStorage.setItem('userType', 'admin');
     localStorage.setItem('currentUser', JSON.stringify(adminData));
     if (userInfo) userInfo.textContent = `Welcome, ${adminData.email}`;
@@ -116,21 +121,23 @@ document.addEventListener('DOMContentLoaded', async () => {
     .maybeSingle();
 
   if (customerError) {
-    console.error('⚠️ Error fetching customer data:', customerError.message);
+    console.error('Error checking customer table:', customerError.message);
   }
 
   if (customerData) {
-    console.log('Logged in as CUSTOMER');
-    console.log('Customer Record:', customerData);
+    console.log('Customer logged in');
     localStorage.setItem('userType', 'customer');
     localStorage.setItem('currentUser', JSON.stringify(customerData));
     if (userInfo) userInfo.textContent = `Welcome, ${customerData.email}`;
     return;
   }
 
-  
-  console.warn('User not found in admin or customer accounts.');
+  console.warn('User not found in any role table');
+  setGuest(userInfo);
+}
+
+function setGuest(userInfo) {
   localStorage.setItem('userType', 'guest');
   localStorage.removeItem('currentUser');
   if (userInfo) userInfo.textContent = 'Welcome, Guest!';
-});
+}
