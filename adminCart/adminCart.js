@@ -159,7 +159,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     populateOrdersTable(allOrders, adminEmail);
     setupFilterButtons(adminEmail);
   } catch (error) {
-    console.error('❌ Error loading admin cart data:', error.message || error);
+    console.error('Error loading admin cart data:', error.message || error);
     alert('Failed to load orders. Check console for more info.');
   }
 });

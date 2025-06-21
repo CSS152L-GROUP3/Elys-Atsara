@@ -849,8 +849,8 @@ document.getElementById('place-order').addEventListener('click', async () => {
         console.log("✅ Cart cleared.");
     }
 
-    alert("🎉 Order placed successfully!");
-    window.location.href = "../order-confirmation.html";
+    alert("Order placed successfully!");
+    window.location.href = "../Homepage/Homepage.html";
 });
 
 async function insertOrderItems(orderId, cartItems) {
