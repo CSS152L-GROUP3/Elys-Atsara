@@ -823,3 +823,28 @@
   z-index: 2;
   border: 2px solid #fff8f3;
 }
+
+.supporting-text-22 {
+  width: 320px;
+  max-width: 100%;
+  height: 71px;
+  background-color: #b3261e;
+  color: #ffffff;
+  font-family: "Alef", sans-serif;
+  font-weight: 700;
+  font-size: 24px;
+  text-align: center;
+  letter-spacing: 0.5px;
+  line-height: 71px;
+  cursor: pointer;
+  border: none;
+  border-radius: 16px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(179, 38, 30, 0.2);
+}
+
+.supporting-text-22:hover {
+  background-color: #9e1f19;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(179, 38, 30, 0.3);
+}

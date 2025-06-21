@@ -106,3 +106,12 @@ $(document).ready(function() {
     }
   });
 });
+
+document.getElementById('go-back-btn').addEventListener('click', function() {
+            // Check if there's history to go back to
+            if (window.history.length > 1) {
+                window.history.back();
+            } else {
+                 window.location.href = '../Homepage/Homepage.html';
+            }
+        });

@@ -419,3 +419,12 @@ document.addEventListener('DOMContentLoaded', async () => {
   cartIconBtn?.addEventListener('click', goToCartPage);
   cartTextBtn?.addEventListener('click', goToCartPage);
 });
+
+document.getElementById('go-back-btn').addEventListener('click', function() {
+            // Check if there's history to go back to
+            if (window.history.length > 1) {
+                window.history.back();
+            } else {
+                 window.location.href = '../Homepage/Homepage.html';
+            }
+        });

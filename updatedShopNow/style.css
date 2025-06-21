@@ -297,6 +297,12 @@ body {
   box-shadow: 0 6px 20px rgba(179, 38, 30, 0.3);
 }
 
+.fallback-message {
+  color: #d32f2f;
+  margin-top: 20px;
+  display: none;
+}
+
 .shop-now .supporting-text-23 {
   width: 155px;
   top: 23px;
