@@ -1,0 +1,33 @@
+.order-table button {
+  padding: 6px 12px;
+  margin: 2px;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.cancel-btn {
+  background-color: #e53935;
+  color: white;
+}
+
+.cancel-btn:hover {
+  background-color: #c62828;
+}
+
+.reorder-btn {
+  background-color: #388e3c;
+  color: white;
+}
+
+.reorder-btn:hover {
+  background-color: #2e7d32;
+}
+
+.order-images {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 4px;
+}
