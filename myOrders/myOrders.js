@@ -64,7 +64,6 @@ function attachShipperNames(orders, shipmentLogs) {
     shipper_name: shipperMap.get(order.id) || null
   }));
 }
-
 function populateTable(orders) {
   const tbody = document.querySelector('.order-table tbody');
   tbody.innerHTML = '';
@@ -97,15 +96,15 @@ function populateTable(orders) {
       </td>
       <td>
         ${order.status === 'Pending' ? `<button class="cancel-btn" data-id="${order.id}">Cancel</button>` : ''}
-        ${order.status === 'Cancelled' ? `<button class="reorder-btn" data-items='${JSON.stringify(order.orders)}'>Reorder</button>` : ''}
+        <!-- Reorder button removed -->
       </td>
     `;
     tbody.appendChild(row);
   });
 
   attachCancelListeners();
-  attachReorderListeners();
 }
+
 
 function attachCancelListeners() {
   document.querySelectorAll('.cancel-btn').forEach(btn => {
@@ -131,32 +130,52 @@ function attachCancelListeners() {
 function attachReorderListeners() {
   document.querySelectorAll('.reorder-btn').forEach(btn => {
     btn.addEventListener('click', async () => {
-      const items = JSON.parse(btn.dataset.items);
-      const row = btn.closest('tr');
-      const statusText = row.querySelector('.status')?.textContent?.trim();
+      try {
+        const orderData = JSON.parse(decodeURIComponent(btn.dataset.order));
+        const items = orderData.orders;
+        const originalOrderId = orderData.id;
 
-      if (statusText !== 'Cancelled') {
-        alert('You can only reorder cancelled orders.');
-        return;
-      }
+        if (!Array.isArray(items) || items.length === 0) {
+          alert('This order has no items to reorder.');
+          return;
+        }
 
-      const { data: { user } } = await supabase.auth.getUser();
+       
+        const { data: { user }, error: userError } = await supabase.auth.getUser();
+        if (userError || !user) throw userError;
 
-      const inserts = items.map(i => ({
-        user_id: user.id,
-        product_id: i.product_id,
-        quantity: i.quantity
-      }));
+     
+        const { data: fullOrder, error: fetchError } = await supabase
+          .from('orders')
+          .select('*')
+          .eq('id', originalOrderId)
+          .single();
 
-      const { error } = await supabase
-        .from('cart_items')
-        .upsert(inserts, { onConflict: ['user_id', 'product_id'] });
+        if (fetchError || !fullOrder) throw fetchError || new Error('Original order not found.');
 
-      if (error) {
-        alert('Reorder failed.');
-      } else {
-        alert('Items added to cart.');
-        window.location.href = '../updatedCartPage/Cartpage.html';
+        const { error: insertError } = await supabase.from('orders').insert([
+          {
+            user_id: user.id,
+            status: 'Pending',
+            payment_method: fullOrder.payment_method,
+            shipping_option_id: fullOrder.shipping_option_id,
+            shipping_address_id: fullOrder.shipping_address_id, // if you use this
+            total_price: fullOrder.total_price,
+            orders: fullOrder.orders
+          }
+        ]);
+
+        if (insertError) {
+          console.error(insertError);
+          alert('Failed to place reorder.');
+        } else {
+          alert('Reorder placed successfully!');
+          location.reload();
+        }
+
+      } catch (err) {
+        console.error('Reorder error:', err);
+        alert('An error occurred during reorder.');
       }
     });
   });
