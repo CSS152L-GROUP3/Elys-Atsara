@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Orders</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <button class="back-btn" onclick="goBack()">&#8592; Back</button>
+  <script>
+    function goBack() {
+      if (document.referrer && document.referrer !== window.location.href) {
+        window.history.back();
+      } else {
+        window.location.href = '../updatedCartPage/Cartpage.html';
+      }
+    }
+  </script>
+
+  <div class="top-Nav">
+  
+  </div>
+
+  <main>
+    <section class="order-section">
+      <div class="filter-buttons">
+        <button class="filter-btn" data-status="all">All</button>
+        <button class="filter-btn" data-status="Pending">Pending</button>
+        <button class="filter-btn" data-status="In Transit">In Transit</button>
+        <button class="filter-btn" data-status="Completed">Completed</button>
+        <button class="filter-btn" data-status="Cancelled">Cancelled</button>
+      </div>
+
+      <table class="order-table">
+        <thead>
+          <tr>
+            <th>Order ID</th>
+            <th>Items</th>
+            <th>Total</th>
+            <th>Payment</th>
+            <th>Date</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+        
+        </tbody>
+      </table>
+    </section>
+  </main>
+
+
+  <div id="review-modal" class="modal hidden">
+    <div class="modal-content">
+      <span class="close-modal">&times;</span>
+      <h3>Leave a Review</h3>
+      <form id="review-form">
+        <input type="hidden" name="order_id" />
+        <input type="hidden" name="product_id" />
+        <label>Rating:
+          <select name="rating" required>
+            <option value="">Select</option>
+            <option value="1">⭐ 1</option>
+            <option value="2">⭐ 2</option>
+            <option value="3">⭐ 3</option>
+            <option value="4">⭐ 4</option>
+            <option value="5">⭐ 5</option>
+          </select>
+        </label>
+        <label>Comment:
+          <textarea name="comment" placeholder="Write your feedback..." required></textarea>
+        </label>
+        <button type="submit">Submit Review</button>
+      </form>
+    </div>
+  </div>
+
+  <script type="module" src="myOrders.js"></script>
+</body>
+</html>

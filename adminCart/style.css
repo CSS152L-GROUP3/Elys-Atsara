@@ -441,3 +441,50 @@ main {
   gap: 20px;
   min-width: 10px;
 }
+
+.filter-buttons {
+  margin-bottom: 1rem;
+}
+
+.filter-btn {
+  padding: 6px 12px;
+  margin: 4px;
+  border: 1px solid #ccc;
+  cursor: pointer;
+}
+
+.filter-btn.active {
+  background-color: #007bff;
+  color: white;
+}
+
+.status.pending {
+  background-color: orange;
+  color: white;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+.status.active {
+  background-color: green;
+  color: white;
+}
+.status.cancelled {
+  background-color: red;
+  color: white;
+}
+
+
+button.action-btn.cancel {
+  background-color: #e74c3c; 
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+
+.filter-btn.active {
+  background-color: #B3261E;
+  color: white;
+}
