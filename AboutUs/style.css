@@ -176,7 +176,7 @@
   width: 60px;
   height: 58px;
   top: 25px;
-  left: 5px;
+  left: 45px;
   border-radius: 30px / 29px;
 }
 
@@ -212,7 +212,7 @@
   width: 60px;
   height: 58px;
   top: -21%;
-  left: 123px;
+  left: 163px;
   border-radius: 100px;
 }
 
@@ -221,7 +221,7 @@
   width: 60px;
   height: 58px;
   top: 10px;
-  left: 430px;
+  left: 470px;
   border-radius: 100px;
 }
 
@@ -322,7 +322,7 @@
   left: 0;
   margin: 0 auto 20px;
   object-fit: cover;
-  border-radius: 10px;
+  border-radius: 50%;
   display: block;
   transition: opacity 0.5s ease-in-out;
   z-index: 1;
@@ -573,7 +573,7 @@
   width: 300px;
   height: 300px;
   object-fit: cover;
-  border-radius: 10px;
+  border-radius: 50%;
   margin: 0 auto 20px;
   display: block;
   transition: opacity 0.5s ease-in-out;

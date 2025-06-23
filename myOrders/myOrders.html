@@ -8,6 +8,17 @@
 </head>
 <body>
 
+  <button class="back-btn" onclick="goBack()">&#8592; Back</button>
+  <script>
+    function goBack() {
+      if (document.referrer && document.referrer !== window.location.href) {
+        window.history.back();
+      } else {
+        window.location.href = '../updatedCartPage/Cartpage.html';
+      }
+    }
+  </script>
+
   <div class="top-Nav">
   
   </div>
