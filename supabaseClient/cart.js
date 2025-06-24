@@ -52,3 +52,68 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Step 4: Show total
   cartTotal.textContent = `Total: ₱${total.toFixed(2)}`;
 });
+
+// Get cart items for a specific user
+export async function getCartItems(userId) {
+  const { data, error } = await supabase
+    .from('cart_items')
+    .select('*, products(*)')
+    .eq('user_id', userId);
+  
+  if (error) {
+    console.error('Error fetching cart items:', error);
+    return { data: [], error };
+  }
+  
+  // Transform the data to match the expected format
+  const transformedData = data.map(item => ({
+    id: item.id,
+    quantity: item.quantity,
+    price: item.products.price,
+    name: item.products.name,
+    variation: item.products.variation,
+    image_url: item.products.image_url
+  }));
+  
+  return { data: transformedData, error: null };
+}
+
+// Update cart item quantity
+export async function updateCartItemQuantity(cartItemId, newQuantity) {
+  if (newQuantity <= 0) {
+    // If quantity is 0 or negative, remove the item
+    const { error } = await supabase
+      .from('cart_items')
+      .delete()
+      .eq('id', cartItemId);
+    
+    if (error) {
+      console.error('Error removing cart item:', error);
+      throw error;
+    }
+  } else {
+    // Update the quantity
+    const { error } = await supabase
+      .from('cart_items')
+      .update({ quantity: newQuantity })
+      .eq('id', cartItemId);
+    
+    if (error) {
+      console.error('Error updating cart item quantity:', error);
+      throw error;
+    }
+  }
+}
+
+// Clear all cart items for a user
+export async function clearCart(userId) {
+  const { error } = await supabase
+    .from('cart_items')
+    .delete()
+    .eq('user_id', userId);
+  
+  if (error) {
+    console.error('Error clearing cart:', error);
+    throw error;
+  }
+}
