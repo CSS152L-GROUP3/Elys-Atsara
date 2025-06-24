@@ -1,111 +1,28 @@
-@import url('https://fonts.googleapis.com/css2?family=Alef:wght@400;700&display=swap');
-
-body {
-  font-family: 'Alef', sans-serif;
-  background: #fff8f3;
-  color: #1d1b20;
-  margin: 0;
-  padding: 0;
-  padding-top: 32px;
-  padding-left: 32px;
-}
-
-.order-table {
-  width: 95%;
-  margin: 32px auto 0 auto;
-  border-collapse: separate;
-  border-spacing: 0;
-  background: #fff;
-  box-shadow: 0 4px 24px rgba(179, 38, 30, 0.08);
-  border-radius: 18px;
-  overflow: hidden;
-}
-
-.order-table th, .order-table td {
-  padding: 14px 18px;
-  text-align: left;
-}
-
-.order-table th {
-  background: #b3261e;
-  color: #fff8f3;
-  font-weight: 700;
-  font-size: 1.08rem;
-  letter-spacing: 0.5px;
-}
-
-.order-table tr:nth-child(even) {
-  background: #fff8f3;
-}
-
-.order-table tr:nth-child(odd) {
-  background: #fff;
-}
-
-.order-table td {
-  font-size: 1rem;
-  color: #1d1b20;
-}
-
 .order-table button {
-  padding: 8px 18px;
+  padding: 6px 12px;
   margin: 2px;
   border: none;
-  border-radius: 100px;
-  font-size: 1rem;
-  font-family: 'Alef', sans-serif;
-  font-weight: 700;
+  border-radius: 6px;
+  font-size: 0.9rem;
   cursor: pointer;
-  transition: background 0.2s, color 0.2s, box-shadow 0.2s, transform 0.2s;
-  box-shadow: 0 2px 8px rgba(179,38,30,0.08);
 }
 
 .cancel-btn {
-  background: #b3261e;
-  color: #fff8f3;
+  background-color: #e53935;
+  color: white;
 }
+
 .cancel-btn:hover {
-  background: #9e1f19;
-  color: #fff;
-  transform: translateY(-2px) scale(1.04);
+  background-color: #c62828;
 }
 
 .reorder-btn {
-  background: #388e3c;
-  color: #fff8f3;
+  background-color: #388e3c;
+  color: white;
 }
+
 .reorder-btn:hover {
-  background: #2e7d32;
-  color: #fff;
-  transform: translateY(-2px) scale(1.04);
-}
-
-.order-table .review-btn {
-  background: #fff8f3;
-  color: #b3261e;
-  border: 2px solid #b3261e;
-}
-.order-table .review-btn:hover {
-  background: #b3261e;
-  color: #fff8f3;
-  transform: translateY(-2px) scale(1.04);
-}
-
-.order-table .status-pending {
-  color: #b3261e;
-  font-weight: 700;
-}
-.order-table .status-completed {
-  color: #388e3c;
-  font-weight: 700;
-}
-.order-table .status-cancelled {
-  color: #e53935;
-  font-weight: 700;
-}
-.order-table .status-intransit {
-  color: #b7251d;
-  font-weight: 700;
+  background-color: #2e7d32;
 }
 
 .order-images {
@@ -113,114 +30,4 @@ body {
   flex-wrap: wrap;
   gap: 4px;
   margin-top: 4px;
-}
-
-/* Filter Buttons */
-.filter-btn, .filter-btn:focus {
-  background: #fff8f3;
-  color: #b3261e;
-  border: 2px solid #b3261e;
-  border-radius: 100px;
-  font-family: 'Alef', sans-serif;
-  font-weight: 700;
-  font-size: 1rem;
-  padding: 7px 22px;
-  margin: 0 4px 12px 0;
-  cursor: pointer;
-  transition: background 0.2s, color 0.2s, border 0.2s, transform 0.2s;
-  outline: none;
-}
-.filter-btn.active, .filter-btn:hover {
-  background: #b3261e;
-  color: #fff8f3;
-  border: 2px solid #b3261e;
-  transform: translateY(-2px) scale(1.04);
-}
-
-/* Modal Styles (copied and themed) */
-.modal {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100vw; height: 100vh;
-  background: rgba(179, 38, 30, 0.13);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 999;
-}
-.modal.hidden { display: none; }
-.modal-content {
-  background: #fff8f3;
-  padding: 2rem 2.5rem;
-  border-radius: 18px;
-  max-width: 420px;
-  width: 90%;
-  position: relative;
-  box-shadow: 0 8px 32px rgba(179,38,30,0.13);
-  font-family: 'Alef', sans-serif;
-}
-.close-modal {
-  position: absolute;
-  top: 12px;
-  right: 18px;
-  font-size: 1.3rem;
-  color: #b3261e;
-  cursor: pointer;
-  transition: color 0.2s;
-}
-.close-modal:hover {
-  color: #9e1f19;
-}
-textarea, select {
-  width: 100%;
-  margin-bottom: 1rem;
-  font-family: 'Alef', sans-serif;
-  border-radius: 8px;
-  border: 1.5px solid #b3261e;
-  padding: 8px 12px;
-  font-size: 1rem;
-  background: #fff;
-  color: #1d1b20;
-  transition: border 0.2s;
-}
-textarea:focus, select:focus {
-  border: 2px solid #b3261e;
-  outline: none;
-}
-
-/* Responsive */
-@media (max-width: 900px) {
-  .order-table {
-    width: 100%;
-    font-size: 0.95rem;
-  }
-  .order-table th, .order-table td {
-    padding: 10px 6px;
-  }
-  .modal-content {
-    padding: 1.2rem 0.7rem;
-  }
-}
-
-.back-btn {
-  background: #b3261e;
-  color: #fff8f3;
-  border: none;
-  border-radius: 100px;
-  font-family: 'Alef', sans-serif;
-  font-weight: 700;
-  font-size: 1.1rem;
-  padding: 10px 32px;
-  margin-bottom: 24px;
-  margin-left: 0;
-  margin-top: 0;
-  cursor: pointer;
-  box-shadow: 0 2px 8px rgba(179,38,30,0.08);
-  transition: background 0.2s, color 0.2s, transform 0.2s;
-  display: inline-block;
-}
-.back-btn:hover {
-  background: #9e1f19;
-  color: #fff;
-  transform: translateY(-2px) scale(1.04);
 }
