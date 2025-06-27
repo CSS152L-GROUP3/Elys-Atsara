@@ -66,7 +66,7 @@
 //         return;
 //       }
 
-/
+
 //       alert('Signup successful! A confirmation email has been sent to your inbox. Please verify your email before logging in.');
 //       window.location.href = '../accountLogin/account-login.html';
 
