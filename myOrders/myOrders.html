@@ -78,6 +78,22 @@
     </div>
   </div>
 
+  <div id="cancel-reason-modal" class="modal hidden">
+    <div class="modal-content">
+      <span class="close-cancel-modal">&times;</span>
+      <h3>Why are you cancelling this order?</h3>
+      <form id="cancel-reason-form">
+        <input type="hidden" name="order_id" />
+        <label><input type="radio" name="reason" value="Wrong mode of Payment" required> Wrong mode of Payment</label><br>
+        <label><input type="radio" name="reason" value="Change of Delivery Address"> Change of Delivery Address</label><br>
+        <label><input type="radio" name="reason" value="Found a Better Price"> Found a Better Price</label><br>
+        <label><input type="radio" name="reason" value="Ordered by Mistake"> Ordered by Mistake</label><br>
+        <label><input type="radio" name="reason" value="Other"> Other: <input type="text" name="other_reason" placeholder="Please specify" style="margin-left: 4px;" /></label><br>
+        <button type="submit">Submit Reason</button>
+      </form>
+    </div>
+  </div>
+
   <script type="module" src="myOrders.js"></script>
 </body>
 </html>

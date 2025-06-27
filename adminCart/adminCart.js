@@ -3,6 +3,54 @@ import { supabase } from '../supabaseClient/supabase.js';
 let allOrders = [];
 
 document.addEventListener('DOMContentLoaded', async () => {
+  // Always hide the modal on page load
+  const modal = document.getElementById('cancel-reason-modal-admin');
+  if (modal) modal.classList.add('hidden');
+
+  // Notification Bell Dropdown
+  const notifBell = document.getElementById('notif-bell');
+  const notifDropdown = document.getElementById('notif-dropdown');
+  if (notifBell && notifDropdown) {
+    notifBell.addEventListener('click', async (e) => {
+      e.stopPropagation();
+      if (!notifDropdown.classList.contains('hidden')) {
+        notifDropdown.classList.add('hidden');
+        return;
+      }
+      // Fetch recent unread cancellations (limit 10)
+      const { data, error } = await supabase
+        .from('order_cancellations')
+        .select('order_id, reason, details, created_at, read')
+        .order('created_at', { ascending: false })
+        .limit(10);
+      notifDropdown.innerHTML = '';
+      if (error || !data || data.length === 0) {
+        notifDropdown.innerHTML = '<div class="notif-empty">No recent notifications.</div>';
+      } else {
+        data.forEach(item => {
+          notifDropdown.innerHTML += `
+            <div class="notif-item${item.read ? '' : ' unread'}">
+              <b>Order:</b> ${item.order_id}<br>
+              <b>Reason:</b> ${item.reason || 'N/A'}<br>
+              <small style="color:#888;">${new Date(item.created_at).toLocaleString()}</small>
+            </div>
+          `;
+        });
+      }
+      notifDropdown.classList.remove('hidden');
+    });
+    // Hide dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!notifDropdown.classList.contains('hidden')) {
+        notifDropdown.classList.add('hidden');
+      }
+    });
+    // Prevent dropdown from closing when clicking inside
+    notifDropdown.addEventListener('click', (e) => {
+      e.stopPropagation();
+    });
+  }
+
   try {
     const [orders, customers, shipmentLogs, userResult] = await Promise.all([
       fetchOrders(),
@@ -17,6 +65,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     allOrders = attachCustomerAndShipperNames(orders, customers, shipmentLogs);
     populateOrdersTable(allOrders, adminEmail);
     setupFilterDropdowns(adminEmail);
+    updateNotifBadge();
   } catch (error) {
     console.error('Error loading admin cart data:', error.message || error);
     alert('Failed to load orders. Check console for more info.');
@@ -98,6 +147,10 @@ function populateOrdersTable(orders, adminEmail) {
         <button class="action-btn complete" style="background-color: #2ecc71; color: white;">Complete</button>
         <button class="action-btn cancel" style="background-color: #e74c3c; color: white;">Cancel</button>
       `;
+    } else if (order.status === 'Cancelled') {
+      actionsHTML = `
+        <button class="action-btn view-reason" data-order-id="${order.id}" style="background-color: #b3261e; color: #fff;">View Reason</button>
+      `;
     }
 
     const shipperInfo = order.status === 'In Transit'
@@ -126,6 +179,43 @@ function populateOrdersTable(orders, adminEmail) {
   });
 
   addActionListeners(adminEmail);
+
+  // Add view reason listeners
+  document.querySelectorAll('.view-reason').forEach(btn => {
+    btn.addEventListener('click', async e => {
+      const orderId = btn.getAttribute('data-order-id');
+      const { data, error } = await supabase
+        .from('order_cancellations')
+        .select('id, reason, details, created_at, read')
+        .eq('order_id', orderId)
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      const modal = document.getElementById('cancel-reason-modal-admin');
+      const content = document.getElementById('cancel-reason-content-admin');
+      if (error || !data) {
+        content.innerHTML = '<span style="color:#b3261e;">No reason found for this cancellation.</span>';
+      } else {
+        content.innerHTML = `<b>Reason:</b> ${data.reason}<br>${data.details ? `<b>Details:</b> ${data.details}<br>` : ''}<small style='color:#888;'>Submitted: ${new Date(data.created_at).toLocaleString()}</small>`;
+        // Mark as read if not already
+        if (data.id && data.read === false) {
+          await supabase.from('order_cancellations').update({ read: true }).eq('id', data.id);
+          updateNotifBadge();
+        }
+      }
+      modal.classList.remove('hidden');
+      document.body.classList.add('modal-open'); // Prevent background scroll
+    });
+  });
+}
+
+// Modal close logic for admin cancel reason
+const closeCancelModalAdmin = document.querySelector('.close-cancel-modal-admin');
+if (closeCancelModalAdmin) {
+  closeCancelModalAdmin.onclick = () => {
+    document.getElementById('cancel-reason-modal-admin').classList.add('hidden');
+    document.body.classList.remove('modal-open'); // Restore background scroll
+  };
 }
 
 function addActionListeners(adminEmail) {
@@ -308,4 +398,21 @@ function setupFilterDropdowns(adminEmail) {
   if (priceSort) priceSort.addEventListener('change', filterOrders);
   if (itemSort) itemSort.addEventListener('change', filterOrders);
   if (dateSort) dateSort.addEventListener('change', filterOrders);
+}
+
+// Fetch unread cancellations count and update bell badge
+async function updateNotifBadge() {
+  const { data, error } = await supabase
+    .from('order_cancellations')
+    .select('id')
+    .eq('read', false);
+  const badge = document.getElementById('notif-badge');
+  if (!badge) return;
+  const count = data ? data.length : 0;
+  if (count > 0) {
+    badge.textContent = count;
+    badge.style.display = 'flex';
+  } else {
+    badge.style.display = 'none';
+  }
 }
