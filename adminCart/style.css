@@ -488,3 +488,48 @@ button.action-btn.cancel {
   background-color: #B3261E;
   color: white;
 }
+
+.admin-cart-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  margin-top: 12px;
+  gap: 24px;
+}
+
+.admin-cart-filters {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  padding: 8px 16px;
+}
+
+.admin-cart-filters label {
+  font-weight: 600;
+  color: #222;
+  margin-right: 4px;
+}
+
+.admin-cart-filters select {
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 15px;
+  background: #faf7f5;
+  color: #222;
+  outline: none;
+  transition: border 0.2s;
+}
+
+.admin-cart-filters select:focus {
+  border: 1.5px solid #b3261e;
+}
+
+/* Remove old filter-buttons if not used */
+.filter-buttons {
+  display: none !important;
+}

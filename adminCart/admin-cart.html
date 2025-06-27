@@ -53,17 +53,40 @@
 
   <main>
     <section class="order-section">
-
- 
-      <div class="filter-buttons">
-      <button class="filter-btn" data-status="all">All</button>
-      <button class="filter-btn" data-status="Pending">Pending</button>
-      <button class="filter-btn" data-status="In Transit">In Transit</button>
-      <button class="filter-btn" data-status="Completed">Completed</button>
-      <button class="filter-btn" data-status="Cancelled">Cancelled</button>
+      <div class="admin-greeting" style="font-size: 2rem; font-weight: 700; color: #B3261E; margin: 24px 0 16px 0; font-family: 'Alef', sans-serif; letter-spacing: 1px;">Hello Admin!</div>
+      <div class="admin-cart-filters" style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px; flex-wrap: wrap;">
+        <label for="status-filter" style="font-weight: 600; color: #222;">Filter by:</label>
+        <select id="status-filter" style="padding: 6px 12px; border-radius: 6px; border: 1px solid #ccc; font-size: 15px; background: #faf7f5; color: #222;">
+          <option value="">All Statuses</option>
+          <option value="Pending">Pending</option>
+          <option value="In Transit">In Transit</option>
+          <option value="Completed">Completed</option>
+          <option value="Cancelled">Cancelled</option>
+        </select>
+        <select id="payment-filter" style="padding: 6px 12px; border-radius: 6px; border: 1px solid #ccc; font-size: 15px; background: #faf7f5; color: #222;">
+          <option value="">All Payments</option>
+          <option value="Cash on Delivery">Cash on Delivery</option>
+          <option value="PayMongo">PayMongo</option>
+        </select>
+        <label for="price-sort" style="font-weight: 600; color: #222; margin-left: 16px;">Sort by Price:</label>
+        <select id="price-sort" style="padding: 6px 12px; border-radius: 6px; border: 1px solid #ccc; font-size: 15px; background: #faf7f5; color: #222;">
+          <option value="">None</option>
+          <option value="desc">Highest to Lowest</option>
+          <option value="asc">Lowest to Highest</option>
+        </select>
+        <label for="item-sort" style="font-weight: 600; color: #222; margin-left: 16px;">Sort by Items:</label>
+        <select id="item-sort" style="padding: 6px 12px; border-radius: 6px; border: 1px solid #ccc; font-size: 15px; background: #faf7f5; color: #222;">
+          <option value="">None</option>
+          <option value="desc">Most to Least</option>
+          <option value="asc">Least to Most</option>
+        </select>
+        <label for="date-sort" style="font-weight: 600; color: #222; margin-left: 16px;">Sort by Ordered Date:</label>
+        <select id="date-sort" style="padding: 6px 12px; border-radius: 6px; border: 1px solid #ccc; font-size: 15px; background: #faf7f5; color: #222;">
+          <option value="">None</option>
+          <option value="desc">Newest to Oldest</option>
+          <option value="asc">Oldest to Newest</option>
+        </select>
       </div>
-
-     
       <table class="order-table">
         <thead>
           <tr>
@@ -77,7 +100,7 @@
           </tr>
         </thead>
         <tbody>
-      
+          <!-- Orders will be rendered here -->
         </tbody>
       </table>
     </section>
