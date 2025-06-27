@@ -26,6 +26,107 @@ async function loadOrders() {
         populateTable(filtered);
       });
     });
+
+    const notifBell = document.getElementById('notif-bell');
+    const notifDropdown = document.getElementById('notif-dropdown');
+    const notifBadge = document.getElementById('notif-badge');
+
+    let userId = null;
+    // Get current user
+    if (user) userId = user.id;
+
+    async function updateNotifBadge() {
+      if (!userId) return;
+      const { data, error } = await supabase
+        .from('user_notifications')
+        .select('id')
+        .eq('user_id', userId)
+        .eq('read', false);
+      const count = data ? data.length : 0;
+      if (count > 0) {
+        notifBadge.textContent = count;
+        notifBadge.style.display = 'flex';
+      } else {
+        notifBadge.style.display = 'none';
+      }
+    }
+
+    if (notifBell && notifDropdown) {
+      notifBell.addEventListener('click', async (e) => {
+        e.stopPropagation();
+        if (!notifDropdown.classList.contains('hidden')) {
+          notifDropdown.classList.add('hidden');
+          return;
+        }
+        // Fetch unread notifications for this user
+        const { data, error } = await supabase
+          .from('user_notifications')
+          .select('id, type, order_id, message, details, created_at, read')
+          .eq('user_id', userId)
+          .eq('read', false)
+          .order('created_at', { ascending: false })
+          .limit(10);
+        notifDropdown.innerHTML = '';
+        if (error || !data || data.length === 0) {
+          notifDropdown.innerHTML = '<div class="notif-empty">No notifications.</div>';
+        } else {
+          // Fetch order details for all notifications
+          const orderIds = data.map(item => item.order_id);
+          let orderDetailsMap = {};
+          if (orderIds.length > 0) {
+            const { data: ordersData, error: ordersError } = await supabase
+              .from('orders')
+              .select('id, payment_method, total_price')
+              .in('id', orderIds);
+            if (!ordersError && ordersData) {
+              ordersData.forEach(order => {
+                orderDetailsMap[order.id] = order;
+              });
+            }
+          }
+          data.forEach(item => {
+            const order = orderDetailsMap[item.order_id] || {};
+            notifDropdown.innerHTML += `
+              <div class="notif-item${item.read ? '' : ' unread'}" data-notif-id="${item.id}">
+                <b>${item.message}</b><br>
+                <span style="color:#b3261e; font-size:0.97rem; font-weight:600;">Order ID: ${item.order_id}</span><br>
+                ${order.payment_method ? `<span>Payment: <b>${order.payment_method}</b></span>` : ''}
+                ${order.total_price !== undefined ? `<span>Total: <b>₱${Number(order.total_price).toFixed(2)}</b></span>` : ''}
+                ${item.details ? `<span>Reason: ${item.details}</span><br>` : ''}
+                <small style="color:#888;">${new Date(item.created_at).toLocaleString()}</small>
+              </div>
+            `;
+          });
+          // Add click listeners to notif items
+          notifDropdown.querySelectorAll('.notif-item').forEach(div => {
+            div.addEventListener('click', async function() {
+              const notifId = this.getAttribute('data-notif-id');
+              // Mark as read in DB
+              await supabase.from('user_notifications').update({ read: true }).eq('id', notifId);
+              // Remove from dropdown
+              this.remove();
+              // Update badge
+              updateNotifBadge();
+            });
+          });
+        }
+        notifDropdown.classList.remove('hidden');
+      });
+
+      // Hide dropdown when clicking outside
+      document.addEventListener('click', (e) => {
+        if (!notifDropdown.classList.contains('hidden')) {
+          notifDropdown.classList.add('hidden');
+        }
+      });
+      // Prevent dropdown from closing when clicking inside
+      notifDropdown.addEventListener('click', (e) => {
+        e.stopPropagation();
+      });
+    }
+
+    // Initial badge update
+    updateNotifBadge();
   } catch (err) {
     console.error('Error loading orders:', err);
     alert('Failed to load orders.');

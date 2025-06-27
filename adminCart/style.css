@@ -511,22 +511,17 @@ main {
 
 /* FIXED MODAL STYLES */
 .modal {
-  position: fixed !important;
-  top: 0 !important;
-  left: 0 !important;
-  width: 100vw !important;
-  height: 100vh !important;
-  background: rgba(0, 0, 0, 0.5) !important;
-  display: flex !important;
-  justify-content: center !important;
-  align-items: center !important;
-  z-index: 9999 !important;
-  margin: 0 !important;
-  padding: 0 !important;
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0; top: 0; width: 100vw; height: 100vh;
+  background: rgba(0,0,0,0.18);
+  align-items: center;
+  justify-content: center;
 }
 
-.modal.hidden {
-  display: none !important;
+.modal:not(.hidden) {
+  display: flex;
 }
 
 .modal-content {

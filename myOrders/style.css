@@ -339,3 +339,44 @@ textarea:focus, select:focus {
   color: #fff;
   transform: translateY(-2px) scale(1.04);
 }
+
+/* Notification Dropdown Styles (matching adminCart) */
+.notif-dropdown {
+  position: absolute;
+  top: 36px;
+  right: 0;
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+  min-width: 320px;
+  max-width: 400px;
+  max-height: 400px;
+  overflow-y: auto;
+  z-index: 10001;
+  padding: 0.5rem 0;
+  font-family: 'Inter', 'Alef', sans-serif;
+}
+.notif-dropdown.hidden {
+  display: none !important;
+}
+.notif-item {
+  padding: 12px 18px;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 15px;
+  color: #222;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.notif-item:last-child {
+  border-bottom: none;
+}
+.notif-item:hover {
+  background: #f8f8f8;
+}
+.notif-empty {
+  padding: 18px;
+  color: #888;
+  text-align: center;
+  font-size: 15px;
+}

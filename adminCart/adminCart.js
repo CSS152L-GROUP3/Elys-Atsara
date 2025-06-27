@@ -28,13 +28,29 @@ document.addEventListener('DOMContentLoaded', async () => {
       if (error || !data || data.length === 0) {
         notifDropdown.innerHTML = '<div class="notif-empty">No recent notifications.</div>';
       } else {
-        notifDropdown.innerHTML = '';
+        // Fetch order details for all notifications
+        const orderIds = data.map(item => item.order_id);
+        let orderDetailsMap = {};
+        if (orderIds.length > 0) {
+          const { data: ordersData, error: ordersError } = await supabase
+            .from('orders')
+            .select('id, payment_method, total_price')
+            .in('id', orderIds);
+          if (!ordersError && ordersData) {
+            ordersData.forEach(order => {
+              orderDetailsMap[order.id] = order;
+            });
+          }
+        }
         data.forEach(item => {
+          const order = orderDetailsMap[item.order_id] || {};
           notifDropdown.innerHTML += `
             <div class="notif-item${item.read ? '' : ' unread'}" data-notif-id="${item.id}">
-              <b>Order:</b> ${item.order_id}<br>
+              <b>Order:</b> <span style=\"color:#b3261e; font-size:0.97rem; font-weight:600;\">${item.order_id}</span><br>
+              ${order.payment_method ? `<span>Payment: <b>${order.payment_method}</b></span>` : ''}
+              ${order.total_price !== undefined ? `<span>Total: <b>₱${Number(order.total_price).toFixed(2)}</b></span>` : ''}
               <b>Reason:</b> ${item.reason || 'N/A'}<br>
-              <small style="color:#888;">${new Date(item.created_at).toLocaleString()}</small>
+              <small style=\"color:#888;\">${new Date(item.created_at).toLocaleString()}</small>
             </div>
           `;
         });
@@ -240,7 +256,29 @@ function addActionListeners(adminEmail) {
       const order = allOrders.find(o => String(o.id) === String(orderId));
       if (!order) return alert('Order not found.');
 
-      if (confirm(`Mark order ${orderId} as shipped?`)) {
+      // Show custom ship confirmation modal
+      const shipModal = document.getElementById('ship-confirm-modal');
+      const shipMsg = document.getElementById('ship-confirm-message');
+      const shipNoBtn = document.getElementById('ship-no-btn');
+      const shipYesBtn = document.getElementById('ship-yes-btn');
+      shipMsg.textContent = `Mark order ${orderId} as shipped?`;
+      shipModal.classList.remove('hidden');
+      document.body.classList.add('modal-open');
+
+      // Helper to close ship modal
+      function closeShipModal() {
+        shipModal.classList.add('hidden');
+        document.body.classList.remove('modal-open');
+      }
+
+      // No button closes modal
+      shipNoBtn.onclick = () => {
+        closeShipModal();
+      };
+
+      // Yes button proceeds with shipping
+      shipYesBtn.onclick = async () => {
+        closeShipModal();
         try {
           let shipperName = 'Unknown';
           if (order.shipping_option_id) {
@@ -267,6 +305,18 @@ function addActionListeners(adminEmail) {
               shipper_name: shipperName
             }]);
 
+          // Notify user their order was shipped
+          await supabase
+            .from('user_notifications')
+            .insert([{
+              user_id: order.user_id,
+              type: 'shipped',
+              order_id: orderId,
+              message: 'Your order has been shipped!',
+              details: '',
+              read: false
+            }]);
+
           alert(`Order ${orderId} marked as shipped.`);
 
           const [updatedOrders, customers, shipmentLogs] = await Promise.all([
@@ -281,7 +331,7 @@ function addActionListeners(adminEmail) {
           console.error('Ship error:', err.message);
           alert('Failed to mark order as shipped.');
         }
-      }
+      };
     });
   });
 
@@ -319,29 +369,104 @@ function addActionListeners(adminEmail) {
     btn.addEventListener('click', async e => {
       const row = e.target.closest('tr');
       const orderId = row.children[0].textContent;
+      const order = allOrders.find(o => String(o.id) === String(orderId));
+      if (!order) return alert('Order not found.');
 
-      if (!confirm(`Cancel order ${orderId}? This cannot be undone.`)) return;
+      // Show custom modal for cancellation reason
+      const modal = document.getElementById('cancel-reason-modal-admin-custom');
+      const reasonInput = document.getElementById('cancel-reason-input-admin');
+      const cancelBtn = document.getElementById('cancel-reason-cancel-btn-admin');
+      const submitBtn = document.getElementById('cancel-reason-submit-btn-admin');
+      reasonInput.value = '';
+      modal.classList.remove('hidden');
+      document.body.classList.add('modal-open');
 
-      try {
-        await supabase
-          .from('orders')
-          .update({ status: 'Cancelled' })
-          .eq('id', orderId);
-
-        alert(`Order ${orderId} was cancelled.`);
-
-        const [updatedOrders, customers, shipmentLogs] = await Promise.all([
-          fetchOrders(),
-          fetchCustomers(),
-          fetchShipmentLogs()
-        ]);
-
-        allOrders = attachCustomerAndShipperNames(updatedOrders, customers, shipmentLogs);
-        populateOrdersTable(allOrders, adminEmail);
-      } catch (err) {
-        console.error('Cancel error:', err.message);
-        alert('Failed to cancel order.');
+      // Helper to close modal
+      function closeModal() {
+        modal.classList.add('hidden');
+        document.body.classList.remove('modal-open');
       }
+
+      // Cancel button closes modal
+      cancelBtn.onclick = () => {
+        closeModal();
+      };
+
+      // Submit button logic
+      submitBtn.onclick = async () => {
+        const reason = reasonInput.value.trim();
+        if (!reason) {
+          alert('Cancellation reason is required.');
+          return;
+        }
+        closeModal();
+        // Show custom confirmation modal
+        const confirmModal = document.getElementById('final-cancel-confirm-modal');
+        const confirmMsg = document.getElementById('final-cancel-confirm-message');
+        const noBtn = document.getElementById('final-cancel-no-btn');
+        const yesBtn = document.getElementById('final-cancel-yes-btn');
+        confirmMsg.textContent = `Cancel order ${orderId}? This cannot be undone.`;
+        confirmModal.classList.remove('hidden');
+        document.body.classList.add('modal-open');
+
+        // Helper to close confirm modal
+        function closeConfirmModal() {
+          confirmModal.classList.add('hidden');
+          document.body.classList.remove('modal-open');
+        }
+
+        // No button closes modal
+        noBtn.onclick = () => {
+          closeConfirmModal();
+        };
+
+        // Yes button proceeds with cancellation
+        yesBtn.onclick = async () => {
+          closeConfirmModal();
+          try {
+            await supabase
+              .from('orders')
+              .update({ status: 'Cancelled' })
+              .eq('id', orderId);
+
+            // Save cancellation reason to order_cancellations
+            await supabase
+              .from('order_cancellations')
+              .insert([{
+                order_id: orderId,
+                reason: reason,
+                read: false,
+                created_at: new Date().toISOString()
+              }]);
+
+            // Notify user their order was cancelled, include reason
+            await supabase
+              .from('user_notifications')
+              .insert([{
+                user_id: order.user_id,
+                type: 'cancelled',
+                order_id: orderId,
+                message: 'Your order was cancelled by the admin.',
+                details: reason,
+                read: false
+              }]);
+
+            alert(`Order ${orderId} was cancelled.`);
+
+            const [updatedOrders, customers, shipmentLogs] = await Promise.all([
+              fetchOrders(),
+              fetchCustomers(),
+              fetchShipmentLogs()
+            ]);
+
+            allOrders = attachCustomerAndShipperNames(updatedOrders, customers, shipmentLogs);
+            populateOrdersTable(allOrders, adminEmail);
+          } catch (err) {
+            console.error('Cancel error:', err.message);
+            alert('Failed to cancel order.');
+          }
+        };
+      };
     });
   });
 }

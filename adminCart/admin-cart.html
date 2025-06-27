@@ -122,6 +122,40 @@
     </div>
   </div>
 
+  <div id="cancel-reason-modal-admin-custom" class="modal hidden">
+    <div class="modal-content" style="background: #fff4f1; border-radius: 18px; padding: 2rem; max-width: 400px; margin: auto; box-shadow: 0 4px 24px rgba(179,38,30,0.12); border: 2px solid #b3261e;">
+      <h3 style="color: #b3261e; font-size: 1.2rem; font-weight: 700; margin-bottom: 1.2rem;">Cancel Order</h3>
+      <label style="font-weight: 600; color: #b3261e;">Reason for cancellation:</label>
+      <textarea id="cancel-reason-input-admin" rows="4" style="width: 100%; border-radius: 8px; border: 1px solid #b3261e; margin: 12px 0; padding: 8px; font-size: 1rem;"></textarea>
+      <div style="display: flex; justify-content: flex-end; gap: 10px;">
+        <button id="cancel-reason-cancel-btn-admin" style="background: #fff; color: #b3261e; border: 1.5px solid #b3261e; border-radius: 8px; padding: 8px 18px; font-weight: 600; cursor: pointer;">Cancel</button>
+        <button id="cancel-reason-submit-btn-admin" style="background: #b3261e; color: #fff; border: none; border-radius: 8px; padding: 8px 18px; font-weight: 600; cursor: pointer;">Submit</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="final-cancel-confirm-modal" class="modal hidden">
+    <div class="modal-content" style="background: #fff4f1; border-radius: 18px; padding: 2rem; max-width: 400px; margin: auto; box-shadow: 0 4px 24px rgba(179,38,30,0.12); border: 2px solid #b3261e;">
+      <h3 style="color: #b3261e; font-size: 1.2rem; font-weight: 700; margin-bottom: 1.2rem;">Are you sure?</h3>
+      <p id="final-cancel-confirm-message" style="color: #b3261e; font-size: 1.05rem; margin-bottom: 1.5rem;">Cancel order? This cannot be undone.</p>
+      <div style="display: flex; justify-content: flex-end; gap: 10px;">
+        <button id="final-cancel-no-btn" style="background: #fff; color: #b3261e; border: 1.5px solid #b3261e; border-radius: 8px; padding: 8px 18px; font-weight: 600; cursor: pointer;">No</button>
+        <button id="final-cancel-yes-btn" style="background: #b3261e; color: #fff; border: none; border-radius: 8px; padding: 8px 18px; font-weight: 600; cursor: pointer;">Yes, Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="ship-confirm-modal" class="modal hidden">
+    <div class="modal-content" style="background: #fff4f1; border-radius: 18px; padding: 2rem; max-width: 400px; margin: auto; box-shadow: 0 4px 24px rgba(179,38,30,0.12); border: 2px solid #b3261e;">
+      <h3 style="color: #b3261e; font-size: 1.2rem; font-weight: 700; margin-bottom: 1.2rem;">Mark as Shipped?</h3>
+      <p id="ship-confirm-message" style="color: #b3261e; font-size: 1.05rem; margin-bottom: 1.5rem;">Are you sure you want to mark this order as shipped?</p>
+      <div style="display: flex; justify-content: flex-end; gap: 10px;">
+        <button id="ship-no-btn" style="background: #fff; color: #b3261e; border: 1.5px solid #b3261e; border-radius: 8px; padding: 8px 18px; font-weight: 600; cursor: pointer;">No</button>
+        <button id="ship-yes-btn" style="background: #b3261e; color: #fff; border: none; border-radius: 8px; padding: 8px 18px; font-weight: 600; cursor: pointer;">Yes, Ship</button>
+      </div>
+    </div>
+  </div>
+
   <script type="module" src="adminCart.js"></script>
 </body>
 </html>
