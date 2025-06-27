@@ -20,21 +20,35 @@ document.addEventListener('DOMContentLoaded', async () => {
       // Fetch recent unread cancellations (limit 10)
       const { data, error } = await supabase
         .from('order_cancellations')
-        .select('order_id, reason, details, created_at, read')
+        .select('id, order_id, reason, details, created_at, read')
+        .eq('read', false)
         .order('created_at', { ascending: false })
         .limit(10);
       notifDropdown.innerHTML = '';
       if (error || !data || data.length === 0) {
         notifDropdown.innerHTML = '<div class="notif-empty">No recent notifications.</div>';
       } else {
+        notifDropdown.innerHTML = '';
         data.forEach(item => {
           notifDropdown.innerHTML += `
-            <div class="notif-item${item.read ? '' : ' unread'}">
+            <div class="notif-item${item.read ? '' : ' unread'}" data-notif-id="${item.id}">
               <b>Order:</b> ${item.order_id}<br>
               <b>Reason:</b> ${item.reason || 'N/A'}<br>
               <small style="color:#888;">${new Date(item.created_at).toLocaleString()}</small>
             </div>
           `;
+        });
+        // Add click listeners to notif items
+        notifDropdown.querySelectorAll('.notif-item').forEach(div => {
+          div.addEventListener('click', async function() {
+            const notifId = this.getAttribute('data-notif-id');
+            // Mark as read in DB
+            await supabase.from('order_cancellations').update({ read: true }).eq('id', notifId);
+            // Remove from dropdown
+            this.remove();
+            // Update badge
+            updateNotifBadge();
+          });
         });
       }
       notifDropdown.classList.remove('hidden');
