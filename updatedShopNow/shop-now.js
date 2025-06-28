@@ -419,3 +419,64 @@ document.addEventListener('DOMContentLoaded', async () => {
   cartIconBtn?.addEventListener('click', goToCartPage);
   cartTextBtn?.addEventListener('click', goToCartPage);
 });
+
+document.addEventListener("DOMContentLoaded", async () => {
+  const { user, role } = await getCurrentUserWithRole();
+  console.log("Detected user role:", role);
+
+  const dashboardBtn1 = document.querySelector(".DashBtn1");
+  const dashboardBtn2 = document.querySelector(".DashBtn2");
+  const cartIconBtn = document.querySelector(".CartBtn1");
+  const cartTextBtn = document.querySelector(".CartBtn2");
+
+  // Show/hide buttons based on role
+  if (role === "guest") {
+    dashboardBtn1?.classList.add("hidden");
+    dashboardBtn2?.classList.add("hidden");
+    cartIconBtn?.classList.remove("hidden");
+    cartTextBtn?.classList.remove("hidden");
+  } else if (role === "admin") {
+    dashboardBtn1?.classList.remove("hidden");
+    dashboardBtn2?.classList.remove("hidden");
+    cartIconBtn?.classList.add("hidden");
+    cartTextBtn?.classList.add("hidden");
+  } else if (role === "customer") {
+    dashboardBtn1?.classList.add("hidden");
+    dashboardBtn2?.classList.add("hidden");
+    cartIconBtn?.classList.remove("hidden");
+    cartTextBtn?.classList.remove("hidden");
+  }
+
+  // Cart button functionality
+  cartIconBtn?.addEventListener("click", () => {
+    if (role === "customer") {
+      window.location.href = "../updatedCartPage/Cartpage.html";
+    } else {
+      alert("Please log in to view your cart.");
+      window.location.href = "../accountLogin/account-login.html";
+    }
+  });
+
+  cartTextBtn?.addEventListener("click", () => {
+    if (role === "customer") {
+      window.location.href = "../updatedCartPage/Cartpage.html";
+    } else {
+      alert("Please log in to view your cart.");
+      window.location.href = "../accountLogin/account-login.html";
+    }
+  });
+
+  // Dashboard button functionality
+  dashboardBtn1?.addEventListener("click", () => {
+    if (role === "admin") {
+      window.location.href = "../adminDashboard/admin-dashboard.html";
+    }
+  });
+
+  dashboardBtn2?.addEventListener("click", () => {
+    if (role === "admin") {
+      window.location.href = "../adminDashboard/admin-dashboard.html";
+    }
+  });
+});
+
