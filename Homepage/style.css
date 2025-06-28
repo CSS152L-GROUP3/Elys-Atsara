@@ -160,6 +160,18 @@
   z-index: 1;
 }
 
+.homepage .top-Nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 40px 20px;
+  background-color: white;
+  color: white;
+  position: fixed;
+  width: 100%;
+  z-index: 1000;
+  border-bottom: 2px solid #b7251d;
+}
 
 .homepage .About {
   position: absolute;
@@ -484,19 +496,6 @@
   height: 1px;
   left: 0;
   object-fit: cover;
-}
-
-.homepage .top-Nav {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 40px 20px;
-  background-color: white;
-  color: white;
-  position: fixed;
-  width: 100%;
-  z-index: 1000;
-  border-bottom: 2px solid #b7251d;
 }
 
 .slider-container {
