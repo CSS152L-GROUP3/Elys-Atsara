@@ -406,6 +406,40 @@
 .SignUpBtn {
   pointer-events: auto !important;
   cursor: pointer;
-  position: relative; /* if not already */
-  z-index: 10; /* bring to front */
+  position: relative; 
+  z-index: 10; 
 }
+
+
+.account-login .ForgotBtn {
+  position: absolute;
+  width: 150px;
+  height: 20px;
+  top: 600px;
+  left: 190px;
+  border: none;
+  cursor: pointer;
+  background-color: white;
+ 
+}
+
+.account-login .supporting-text-8 {
+  width: 200px;
+  top: -1px;
+  left: -20px;
+  height: 100px; 
+  color: black;
+  font-size: 15px;
+  position: absolute;
+  text-shadow: 0px 4px 4px #00000040;
+  font-family: "Alef", sans-serif;
+  font-weight: 200;
+  letter-spacing: 0.25px;
+  line-height: 20px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+}
+

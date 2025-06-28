@@ -245,3 +245,31 @@ async function handleLogin() {
     alert('Unexpected error: ' + err.message);
   }
 }
+
+const forgotPasswordBtn = document.getElementById('forgotPasswordBtn');
+
+if (forgotPasswordBtn) {
+  forgotPasswordBtn.addEventListener('click', async () => {
+    const email = document.getElementById('email').value.trim();
+
+    if (!email) {
+      showAlert('Missing Email', 'Please enter your email address to reset your password.');
+      return;
+    }
+
+    try {
+      const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: 'http://127.0.0.1:5500/forgotPassword/forgotPassword.html'  
+      });
+
+      if (error) {
+        showAlert('Error', error.message);
+      } else {
+        showAlert('Success', `Password reset email sent to ${email}. Please check your inbox.`);
+      }
+    } catch (err) {
+      showAlert('Error', 'Failed to send reset email. Please try again later.');
+      console.error('Reset password error:', err);
+    }
+  });
+}
