@@ -238,6 +238,7 @@ async function handleLogin() {
       sessionStorage.setItem('userType', role);
 
      
+      // AYUSIN MO TOH REMOQUILLO
       if (role === 'superadmin') {
         window.location.href = '../AdminDashboard/Dashboard.html';
         //  window.location.href = '../adminManagement/adminManagement.html';
