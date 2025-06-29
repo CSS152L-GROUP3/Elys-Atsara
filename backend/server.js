@@ -47,8 +47,8 @@ app.post("/create-paymongo-checkout", async (req, res) => {
                             quantity: item.quantity,
                             description: item.description || item.name // optional fallback
                         })),
-                        success_url: "http://localhost:5500/updatedCheckout/Checkout.html?status=success",
-                        cancel_url: "http://localhost:5500/updatedCheckout/Checkout.html?status=cancel"
+                        success_url: "http://127.0.0.1:5500/updatedCheckout/Checkout.html?status=success",
+                        cancel_url: "http://127.0.0.1:5500/updatedCheckout/Checkout.html?status=cancel"
                     }
                 }
             })
