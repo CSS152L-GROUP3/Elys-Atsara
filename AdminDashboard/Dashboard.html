@@ -264,7 +264,7 @@
   
   <div class="dashboard-cards">
     
-    <button class="dashboard-card">
+    <button class="dashboard-card1">
       <div class="card-icon">
         <svg width="126" height="121" viewBox="0 0 126 121" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M62.9994 121C97.7929 121 125.999 93.9132 125.999 60.5C125.999 27.0868 97.7929 0 62.9994 0C28.2058 0 0 27.0868 0 60.5C0 93.9132 28.2058 121 62.9994 121Z" fill="#B7251D"/>
@@ -275,7 +275,7 @@
       <p class="card-label">Sales</p>
     </button>
     
-    <button class="dashboard-card">
+    <button class="dashboard-card2">
       <div class="card-icon">
         <svg width="126" height="121" viewBox="0 0 126 121" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M62.9994 121C97.7929 121 125.999 93.9132 125.999 60.5C125.999 27.0868 97.7929 0 62.9994 0C28.2058 0 0 27.0868 0 60.5C0 93.9132 28.2058 121 62.9994 121Z" fill="#B7251D"/>
@@ -286,7 +286,7 @@
       <p class="card-label">Stock</p>
     </button>
     
-    <button class="dashboard-card">
+    <button class="dashboard-card3">
       <div class="card-icon">
       <svg width="126" height="121" viewBox="0 0 126 121" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M62.9994 121C97.7929 121 125.999 93.9132 125.999 60.5C125.999 27.0868 97.7929 0 62.9994 0C28.2058 0 0 27.0868 0 60.5C0 93.9132 28.2058 121 62.9994 121Z" fill="#B7251D"/>
@@ -301,7 +301,7 @@
       <p class="card-label">Data Analytics</p>
     </button>
     
-    <button class="dashboard-card">
+    <button class="dashboard-card4">
       <div class="card-icon">
       <svg width="119" height="121" viewBox="0 0 119 121" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M59.4994 121C92.36 121 118.999 93.9132 118.999 60.5C118.999 27.0868 92.36 0 59.4994 0C26.6388 0 0 27.0868 0 60.5C0 93.9132 26.6388 121 59.4994 121Z" fill="#B7251D"/>
@@ -312,8 +312,55 @@
 
 
       </div>
-      <p class="card-label">Inventory</p>
+      <p class="card-label">Orders</p>
     </button>
+
+   <button class="dashboard-card5 superadmin-only" style="display: none;">
+      <div class="card-icon">
+        <svg width="119" height="121" viewBox="0 0 119 121" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M59.4994 121C92.36 121 118.999 93.9132 118.999 60.5C118.999 27.0868 92.36 0 59.4994 0C26.6388 0 0 27.0868 0 60.5C0 93.9132 26.6388 121 59.4994 121Z" fill="#B7251D"/>
+          <path d="M54.6994 120.771C54.8976 120.797 55.0959 120.822 55.2944 120.845C56.6942 120.947 58.0971 120.998 59.5005 120.999C61.4829 121 63.4641 120.901 65.4367 120.701C67.4109 120.497 69.3738 120.193 71.318 119.789C73.2635 119.391 75.1882 118.894 77.0849 118.3C78.9789 117.704 80.8425 117.013 82.6687 116.229C84.4958 115.441 86.283 114.56 88.0236 113.59C89.7648 112.622 91.4574 111.566 93.0948 110.425C94.7327 109.289 96.3137 108.069 97.8319 106.772C99.3494 105.472 100.802 104.096 102.184 102.649C103.567 101.201 104.878 99.6833 106.111 98.1021C107.343 96.522 108.496 94.8802 109.567 93.183C110.639 91.486 111.628 89.7355 112.528 87.9381C113.428 86.1421 114.239 84.3016 114.959 82.4233C115.675 80.5419 116.298 78.6252 116.826 76.6804C117.359 74.7368 117.796 72.7673 118.135 70.7794C118.471 68.7915 118.709 66.7879 118.849 64.7759C118.949 63.3525 118.999 61.926 119 60.499C118.984 58.8628 118.903 57.228 118.757 55.5985L96.1155 32.5759H22.8855V88.4221L54.6994 120.771Z" fill="#B3261E"/>
+          <path d="M74.9507 60V30H40.6601V60H29.9443V95H85.6666V60H74.9507ZM44.9465 35H70.6644V60H44.9465V35ZM81.3802 90H34.2307V65H81.3802V90Z" fill="white"/>
+          <path d="M49.7778 44H66.7778V46.5H49.7778V44ZM49.7778 49H66.7778V51.5H49.7778V49ZM64.6528 76.5H51.9028V74H49.7778V79H66.7778V74H64.6528V76.5Z" fill="white"/>
+        </svg>
+      </div>
+      <p class="card-label">Admin Management</p>
+    </button>
+
+
+    <script>
+$(document).ready(function() {
+  const userType = sessionStorage.getItem('userType');
+  const currentUserJson = localStorage.getItem('currentUser');
+  const currentUser = currentUserJson ? JSON.parse(currentUserJson) : null;
+
+  // Show only for superadmin
+  if (userType === 'superadmin' || (currentUser && currentUser.role === 'superadmin')) {
+    $('.superadmin-only').show();
+  }
+
+  // Example click handlers
+  $('.dashboard-card1').on('click', function() {
+    window.location.href = '../sales/sales.html';
+  });
+
+  $('.dashboard-card2').on('click', function() {
+    window.location.href = '../stock/stock.html';
+  });
+
+  $('.dashboard-card3').on('click', function() {
+    window.location.href = '../analytics/data-analytics.html';
+  });
+
+  $('.dashboard-card4').on('click', function() {
+    window.location.href = '../inventory/inventory.html';
+  });
+
+  $('.dashboard-card5').on('click', function() {
+    window.location.href = '../adminManagement/admin-management.html';
+  });
+});
+</script>
     
   </div>
 </div>
