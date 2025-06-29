@@ -10,6 +10,7 @@ let shippingOptions = []; // Declare globally
 let defaultAddress = null; // ✅ global variable
 let shippingFee = 0;
 let deliveryDays = 2; // fallback value
+let selectedShippingOptionId = null; // For storing selected shipping option
 
 
 const urlParams = new URLSearchParams(window.location.search);
@@ -129,7 +130,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const priceSpan = document.querySelector('#shipping-price .value');
         const daysSpan = document.querySelector('.delivery-days');
 
-        if (nameSpan) nameSpan.textContent = "Dynamic Shipping";
+        if (nameSpan) nameSpan.textContent = "Pickup (in-store)";
         if (priceSpan) priceSpan.textContent = `₱${shippingFee.toFixed(2)}`;
         if (daysSpan) daysSpan.textContent = `${deliveryDays} day(s)`;
 
@@ -150,6 +151,116 @@ document.addEventListener('DOMContentLoaded', async () => {
         // 2. Fetch default address (this might later affect shippingFee)
         defaultAddress = await fetchDefaultAddress(user.id);
 
+        // ✅ Fetch and Display Shipping Options
+        const { data: shippingOptionsData, error: shippingOptionsError } = await supabase
+            .from('shipping_options')
+            .select('*');
+
+        if (shippingOptionsError) {
+            console.error("❌ Failed to fetch shipping options:", shippingOptionsError.message);
+            alert("Failed to load shipping methods.");
+            return;
+        }
+
+        shippingOptions = shippingOptionsData;
+
+        // ✅ Get stored shipping option or fallback to Pick-up
+        const storedOptionId = localStorage.getItem('selectedShippingOptionId');
+        let selectedOption = shippingOptions.find(opt => opt.id == storedOptionId);
+
+        if (!selectedOption) {
+            selectedOption = shippingOptions.find(opt => opt.name === 'Pick-up');
+            localStorage.setItem('selectedShippingOptionId', selectedOption.id);
+        }
+
+        selectedShippingOptionId = selectedOption.id;
+
+        // ✅ Set base fee and perKmRate
+        let baseFee = 0;
+        let perKmRate = 0;
+
+        if (selectedOption.name === 'LBC Express') {
+            baseFee = 60;
+            perKmRate = 12;
+        } else if (selectedOption.name === 'J&T Express') {
+            baseFee = 40;
+            perKmRate = 8;
+        }
+
+        try {
+            const customerCoords = {
+                lat: defaultAddress.latitude,
+                lon: defaultAddress.longitude
+            };
+
+            const response = await fetch('http://localhost:3000/calculate-distance', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    from: { lat: 14.5547, lon: 121.0244 },
+                    to: customerCoords
+                })
+            });
+
+            const result = await response.json();
+            const distance_km = result.distance_km;
+
+            if (distance_km <= 5) {
+                deliveryDays = 1;
+            } else if (distance_km <= 20) {
+                deliveryDays = 2;
+            } else if (distance_km <= 50) {
+                deliveryDays = 3;
+            } else if (distance_km <= 100) {
+                deliveryDays = 4;
+            } else if (distance_km <= 200) {
+                deliveryDays = 5;
+            } else {
+                deliveryDays = 6; // max cap
+            }
+
+            if (selectedOption.name === 'Pick-up') {
+                shippingFee = 0;
+            } else {
+                let maxRateKm = 100;
+                let discountedRate = perKmRate * 0.5;
+
+                let distanceCharge =
+                    distance_km <= maxRateKm
+                        ? perKmRate * distance_km
+                        : (perKmRate * maxRateKm) + ((distance_km - maxRateKm) * discountedRate);
+
+                shippingFee = baseFee + distanceCharge;
+            }
+
+        } catch (err) {
+            console.error("❌ Distance calc failed:", err);
+            shippingFee = 100;
+            deliveryDays = 3;
+        }
+
+        // ✅ Update UI
+        document.querySelector('#shipping-name .value').textContent = selectedOption.name;
+        document.querySelector('#shipping-price .value').textContent = `₱${shippingFee.toFixed(2)}`;
+        document.querySelector('.delivery-days').textContent = `${deliveryDays} day(s)`;
+
+
+        // Render shipping options in the UI
+        const list = document.getElementById('shipping-options-list');
+        if (list) {
+            list.innerHTML = '';
+
+            shippingOptions.forEach(option => {
+                const li = document.createElement('li');
+                li.textContent = option.name;
+                li.classList.add('shipping-option-item');
+                li.style.cursor = 'pointer';
+                li.dataset.optionId = option.id;
+                li.dataset.optionName = option.name;
+                list.appendChild(li);
+            });
+        }
+
         const sellerCoords = { lat: 14.5547, lon: 121.0244 };
         const customerCoords = {
             lat: defaultAddress?.latitude,
@@ -158,39 +269,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         console.log("📍 Coordinates:", { from: sellerCoords, to: customerCoords });
 
-        // 3. Calculate shipping fee using ORS
-        try {
-            const response = await fetch('http://localhost:3000/calculate-distance', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ from: sellerCoords, to: customerCoords })
-            });
-
-            const result = await response.json();
-
-            if (!response.ok || result.distance_km === undefined) {
-                throw new Error(result.error || "ORS response missing distance_km");
-            }
-
-            const distance_km = result.distance_km;
-            shippingFee = 50 + distance_km * 10;
-            deliveryDays = Math.ceil(distance_km / 10) + 1;
-
-            console.log(`📦 Distance: ${distance_km.toFixed(2)} km | Fee: ₱${shippingFee.toFixed(2)} | ETA: ${deliveryDays} day(s)`);
-        } catch (err) {
-            console.error("❌ Failed to calculate distance:", err);
-            shippingFee = 100;
-            deliveryDays = 3;
-        }
-
         // ✅ Now update checkout totals with final shippingFee
         updateCheckoutTotals(subtotal, shippingFee);
-
-        // ✅ Update display elements
-        document.querySelector('#shipping-name .value').textContent = "Dynamic Shipping";
-        document.querySelector('#shipping-price .value').textContent = `₱${shippingFee.toFixed(2)}`;
-        document.querySelector('.delivery-days').textContent = `${deliveryDays} day(s)`;
-
 
         console.log('Default address:', defaultAddress);
 
@@ -219,6 +299,113 @@ document.addEventListener('DOMContentLoaded', async () => {
                 form.style.display = form.style.display === 'block' ? 'none' : 'block';
             });
         }
+
+        // ✅ Toggle the Select Menu
+        const changeShippingBtn = document.getElementById('change-shipping-btn');
+        if (changeShippingBtn) {
+            changeShippingBtn.addEventListener('click', () => {
+                const dropdown = document.getElementById('shipping-options-select');
+                if (dropdown) {
+                    dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+                }
+            });
+        }
+
+        // ✅ Handle Selection + Dynamic Calculation
+        const shippingOptionsList = document.getElementById('shipping-options-list');
+        if (shippingOptionsList) {
+            shippingOptionsList.addEventListener('click', async (e) => {
+                if (!e.target.matches('.shipping-option-item')) return;
+
+                const selectedOptionId = e.target.dataset.optionId;
+                const selectedOptionName = e.target.dataset.optionName;
+
+                let baseFee = 0;
+                let perKmRate = 0;
+
+                if (selectedOptionName === 'LBC Express') {
+                    baseFee = 60;
+                    perKmRate = 12;
+                } else if (selectedOptionName === 'J&T Express') {
+                    baseFee = 40;
+                    perKmRate = 8;
+                }
+
+                try {
+                    const customerCoords = {
+                        lat: defaultAddress.latitude,
+                        lon: defaultAddress.longitude
+                    };
+
+                    const response = await fetch('http://localhost:3000/calculate-distance', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            from: { lat: 14.5547, lon: 121.0244 },
+                            to: customerCoords
+                        })
+                    });
+
+                    const result = await response.json();
+                    const distance_km = result.distance_km;
+
+                    // 📦 Calculate delivery days for all methods
+                    if (distance_km <= 5) {
+                        deliveryDays = 1;
+                    } else if (distance_km <= 20) {
+                        deliveryDays = 2;
+                    } else if (distance_km <= 50) {
+                        deliveryDays = 3;
+                    } else if (distance_km <= 100) {
+                        deliveryDays = 4;
+                    } else if (distance_km <= 200) {
+                        deliveryDays = 5;
+                    } else {
+                        deliveryDays = 6; // max cap
+                    }
+
+                    // 📦 Pick-up is free
+                    if (selectedOptionName === 'Pick-up') {
+                        shippingFee = 0;
+                    } else {
+                        let maxRateKm = 100;
+                        let discountedRate = perKmRate * 0.5;
+
+                        let distanceCharge =
+                            distance_km <= maxRateKm
+                                ? perKmRate * distance_km
+                                : (perKmRate * maxRateKm) + ((distance_km - maxRateKm) * discountedRate);
+
+                        shippingFee = baseFee + distanceCharge;
+                    }
+
+                } catch (err) {
+                    console.error("❌ Distance calculation failed:", err);
+                    shippingFee = 100;
+                    deliveryDays = 3;
+                }
+
+                // ✅ Update UI
+                document.querySelector('#shipping-name .value').textContent = selectedOptionName;
+                document.querySelector('#shipping-price .value').textContent = `₱${shippingFee.toFixed(2)}`;
+                document.querySelector('.delivery-days').textContent = `${deliveryDays} day(s)`;
+
+                // ✅ Store selection
+                selectedShippingOptionId = selectedOptionId;
+                localStorage.setItem('selectedShippingOptionId', selectedOptionId);
+
+                // ✅ Update total
+                updateCheckoutTotals(subtotal, shippingFee);
+
+                // ✅ Hide dropdown
+                const dropdown = document.getElementById('shipping-options-select');
+                if (dropdown) {
+                    dropdown.style.display = 'none';
+                }
+            });
+        }
+
+
         console.log("👤 User ID:", user.id);
         console.log("📦 Address Input:", address, city, zip);
 
@@ -370,11 +557,64 @@ document.addEventListener('DOMContentLoaded', async () => {
                 }
 
                 const distance_km = result.distance_km;
-                shippingFee = 50 + distance_km * 10;
-                deliveryDays = Math.ceil(distance_km / 10) + 1;
+
+                // Use selected shipping option pricing if available
+                if (selectedShippingOptionId) {
+                    const selectedOption = shippingOptions.find(opt => opt.id == selectedShippingOptionId);
+                    if (selectedOption) {
+                        let baseFee = 50;
+                        let perKmRate = 10;
+
+                        if (selectedOption.name === 'LBC Express') {
+                            baseFee = 60;
+                            perKmRate = 12;
+                        } else if (selectedOption.name === 'J&T Express') {
+                            baseFee = 40;
+                            perKmRate = 8;
+                        } else if (selectedOption.name === 'Pick-up') {
+                            shippingFee = 0;
+                            deliveryDays = 0;
+                        }
+
+                        if (selectedOption.name !== 'Pick-up') {
+                            let maxRateKm = 100;
+                            let discountedRate = perKmRate * 0.5;
+
+                            let distanceCharge =
+                                distance_km <= maxRateKm
+                                    ? perKmRate * distance_km
+                                    : (perKmRate * maxRateKm) + ((distance_km - maxRateKm) * discountedRate);
+
+                            shippingFee = baseFee + distanceCharge;
+                            if (distance_km <= 5) {
+                                deliveryDays = 1;
+                            } else if (distance_km <= 20) {
+                                deliveryDays = 2;
+                            } else if (distance_km <= 50) {
+                                deliveryDays = 3;
+                            } else if (distance_km <= 100) {
+                                deliveryDays = 4;
+                            } else if (distance_km <= 200) {
+                                deliveryDays = 5;
+                            } else {
+                                deliveryDays = 6; // max cap
+                            }
+                        }
+                    } else {
+                        // Fallback to pick-up (free)
+                        shippingFee = 0;
+                        deliveryDays = 0;
+                    }
+                } else {
+                    // Default to pick-up (free) if no option selected
+                    shippingFee = 0;
+                    deliveryDays = 0;
+                }
 
                 // ✅ Update shipping info in DOM
-                document.querySelector('#shipping-name .value').textContent = "Dynamic Shipping";
+                const selectedOption = shippingOptions.find(opt => opt.id == selectedShippingOptionId);
+                const shippingName = selectedOption ? selectedOption.name : "Pick-up";
+                document.querySelector('#shipping-name .value').textContent = shippingName;
                 document.querySelector('#shipping-price .value').textContent = `₱${shippingFee.toFixed(2)}`;
                 document.querySelector('.delivery-days').textContent = `${deliveryDays} day(s)`;
 
@@ -395,14 +635,15 @@ document.addEventListener('DOMContentLoaded', async () => {
                 console.log("📦 Shipping recalculated:", {
                     shippingFee,
                     deliveryDays,
-                    distance_km: distance_km.toFixed(2)
+                    distance_km: distance_km.toFixed(2),
+                    selectedOption: selectedOption?.name || 'Default'
                 });
             } catch (err) {
                 console.error("❌ Failed to recalculate shipping:", err);
                 alert("Shipping calculation failed. Please check your address.");
-                shippingFee = 100;
-                deliveryDays = 3;
-                updateCheckoutTotals(0, shippingFee); // Fallback
+                shippingFee = 0;
+                deliveryDays = 0;
+                updateCheckoutTotals(0, shippingFee); // Fallback to pick-up
             }
         }
 
@@ -576,7 +817,7 @@ document.getElementById('place-order').addEventListener('click', async () => {
     }
 
     const shippingPrice = shippingFee; // use previously calculated fee
-    const selectedShippingId = null; // optional, if not using shipping table
+    const selectedShippingId = selectedShippingOptionId; // Use the selected shipping option
 
     const estimatedDelivery = new Date();
     estimatedDelivery.setDate(estimatedDelivery.getDate() + deliveryDays);
@@ -606,6 +847,8 @@ document.getElementById('place-order').addEventListener('click', async () => {
             user_id: userId,
             address_id: selectedAddressId,
             shipping_option_id: selectedShippingId,
+            shipping_fee: shippingFee,
+            delivery_days: deliveryDays,
             payment_method: paymentMethod,
             subtotal_price: subtotal,
             total_price: total,
@@ -650,6 +893,9 @@ document.getElementById('place-order').addEventListener('click', async () => {
     } else {
         console.log("✅ Cart cleared.");
     }
+
+    // ✅ Clear localStorage after successful order
+    localStorage.removeItem('selectedShippingOptionId');
 
     alert("🎉 Order placed successfully!");
     window.location.href = "../Homepage/Homepage.html";
