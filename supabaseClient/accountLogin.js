@@ -239,7 +239,8 @@ async function handleLogin() {
 
      
       if (role === 'superadmin') {
-        window.location.href = '../AdminDashboard/Dashboard.html';
+        // window.location.href = '../AdminDashboard/Dashboard.html';
+         window.location.href = '../adminManagement/adminManagement.html';
       } else {
         window.location.href = '../homepage/homepage.html';
       }
