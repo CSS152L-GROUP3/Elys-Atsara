@@ -469,13 +469,13 @@ document.addEventListener("DOMContentLoaded", async () => {
   // Dashboard button functionality
   dashboardBtn1?.addEventListener("click", () => {
     if (role === "admin") {
-      window.location.href = "../adminDashboard/admin-dashboard.html";
+      window.location.href = "../AdminDashboard/Dashboard.html";
     }
   });
 
   dashboardBtn2?.addEventListener("click", () => {
     if (role === "admin") {
-      window.location.href = "../adminDashboard/admin-dashboard.html";
+      window.location.href = "../AdminDashboard/Dashboard.html";
     }
   });
 });

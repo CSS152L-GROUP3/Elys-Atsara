@@ -258,29 +258,60 @@
         }
 
         // Attach modal logic to both cart buttons
+        // $('.CartBtn1, .CartBtn2').on('click', function(e) {
+        //   const userType = sessionStorage.getItem('userType');
+        //   if (!userIsLoggedIn()) {
+        //     e.preventDefault();
+        //     $('#cartModal').css('display', 'flex');
+        //   } else if (userType === 'admin') {
+        //     window.location.href = '../adminCart/admin-cart.html';
+        //   } else {
+        //     window.location.href = '../updatedCartPage/Cartpage.html';
+        //   }
+        // });
+       
+        // $('#closeCartModal').on('click', function() {
+        //   $('#cartModal').css('display', 'none');
+        // });
+        // $('#loginRedirectBtn').on('click', function() {
+        //   window.location.href = '../accountLogin/account-login.html';
+        // });
+        // $(window).on('click', function(event) {
+        //   if (event.target === document.getElementById('cartModal')) {
+        //     $('#cartModal').css('display', 'none');
+        //   }
+        // });
+
         $('.CartBtn1, .CartBtn2').on('click', function(e) {
           const userType = sessionStorage.getItem('userType');
-          if (!userIsLoggedIn()) {
+
+          if (!userIsLoggedIn() || userType === 'guest') {
             e.preventDefault();
             $('#cartModal').css('display', 'flex');
-          } else if (userType === 'admin') {
-            window.location.href = '../adminCart/admin-cart.html';
-          } else {
+          } else if (userType === 'customer') {
             window.location.href = '../updatedCartPage/Cartpage.html';
+          } else {
+            e.preventDefault();
           }
         });
+
        
         $('#closeCartModal').on('click', function() {
           $('#cartModal').css('display', 'none');
         });
+
+    
         $('#loginRedirectBtn').on('click', function() {
           window.location.href = '../accountLogin/account-login.html';
         });
+
+       
         $(window).on('click', function(event) {
           if (event.target === document.getElementById('cartModal')) {
             $('#cartModal').css('display', 'none');
           }
         });
+
 
         // Modal logic for Account access
         $('.AccountBtn1, .AccountBtn2').on('click', function(e) {
@@ -417,62 +448,19 @@ $(document).ready(function() {
     $('.Dashboard').hide();
   }
 
-  // Cart Access Logic
-  function userIsLoggedIn() {
-    const userJson = localStorage.getItem('currentUser');
-    return userType && userType !== 'guest' && userJson;
+$(document).ready(function () {
+  const userType = sessionStorage.getItem('userType');
+  console.log("Loaded userType:", userType);
+
+  if (userType && userType.toLowerCase() === 'admin') {
+    $('.Cart').hide();
+    $('.Dashboard').show();
+  } else {
+    $('.Cart').show();
+    $('.Dashboard').hide();
   }
-
-  $('.CartBtn1, .CartBtn2').on('click', function(e) {
-    if (!userIsLoggedIn()) {
-      e.preventDefault();
-      $('#cartModal').css('display', 'flex');
-    } else if (userType === 'admin') {
-      window.location.href = '../adminCart/admin-cart.html';
-    } else {
-      window.location.href = '../updatedCartPage/Cartpage.html';
-    }
-  });
-
-  $('#closeCartModal').on('click', function() {
-    $('#cartModal').hide();
-  });
-
-  $('#loginRedirectBtn').on('click', function() {
-    window.location.href = '../accountLogin/account-login.html';
-  });
-
-  $(window).on('click', function(event) {
-    if (event.target === document.getElementById('cartModal')) {
-      $('#cartModal').hide();
-    }
-  });
-
-  // Account Access Logic
-  $('.AccountBtn1, .AccountBtn2').on('click', function(e) {
-    const userJson = localStorage.getItem('currentUser');
-    if (!userJson) {
-      e.preventDefault();
-      $('#accountModal').css('display', 'flex');
-    } else {
-      window.location.href = '../profile/UserProfile.html';
-    }
-  });
-
-  $('#closeAccountModal').on('click', function() {
-    $('#accountModal').hide();
-  });
-
-  $('#accountLoginRedirectBtn').on('click', function() {
-    window.location.href = '../accountLogin/account-login.html';
-  });
-
-  $(window).on('click', function(event) {
-    if (event.target === document.getElementById('accountModal')) {
-      $('#accountModal').hide();
-    }
-  });
+});
 });
 </script>
-  </body>
+</body>
 </html>
