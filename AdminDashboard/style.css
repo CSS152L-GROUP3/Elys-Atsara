@@ -634,4 +634,47 @@
   word-wrap: break-word;
 }
 
+.homepage .Dashboard {
+  position: absolute;
+  width: 60px;
+  height: 58px;
+  top: 10px;
+  left: 500px;
+  border-radius: 100px;
+}
+
+.homepage .DashBtn1 {
+  background: transparent; 
+  border: none; 
+  padding: 0; 
+  cursor: pointer;
+  z-index: 1;
+}
+
+.homepage .DashBtn1:hover svg rect {
+  fill: #9E1F19; 
+}
+
+.homepage .DashBtn2 {
+  width: 75px;
+  top: 18px;
+  left: -130px;
+  font-size: 20px;
+  position: absolute;
+  font-family: "Alef", sans-serif;
+  font-weight: 700;
+  color: #1d1b20;
+  letter-spacing: 0.25px;
+  line-height: 20px;
+  padding-right: 10px;
+  background-color: transparent;
+  border-color: transparent;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.homepage .DashBtn2:hover {
+  color: #b3261e;
+  background-color: transparent;
+}
 
