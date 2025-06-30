@@ -432,62 +432,62 @@ document.getElementById('place-order').addEventListener('click', async () => {
 
 
     //ITO CODE PARA SA ORDER CONFIRMATION EMAIL    
-    const { data: customer, error: customerError } = await supabase
-    .from('customer_accounts')
-    .select('name, email')
-    .eq('uuid', userId)
-    .single();
+    // const { data: customer, error: customerError } = await supabase
+    // .from('customer_accounts')
+    // .select('name, email')
+    // .eq('uuid', userId)
+    // .single();
 
-    if (customerError) {
-    console.error("Failed to fetch customer info:", customerError);
-    }
-
-   
-    const orderedProducts = newOrder.orders; 
-    const productIds = orderedProducts.map(item => item.product_id);
+    // if (customerError) {
+    // console.error("Failed to fetch customer info:", customerError);
+    // }
 
    
-    const { data: productsData, error: productError } = await supabase
-    .from('products')
-    .select('id, name')
-    .in('id', productIds);
-
-    if (productError) {
-    console.error("Failed to fetch product data:", productError);
-    }
+    // const orderedProducts = newOrder.orders; 
+    // const productIds = orderedProducts.map(item => item.product_id);
 
    
-    const productNameMap = {};
-    productsData.forEach(product => {
-    productNameMap[product.id] = product.name;
-    });
+    // const { data: productsData, error: productError } = await supabase
+    // .from('products')
+    // .select('id, name')
+    // .in('id', productIds);
+
+    // if (productError) {
+    // console.error("Failed to fetch product data:", productError);
+    // }
+
+   
+    // const productNameMap = {};
+    // productsData.forEach(product => {
+    // productNameMap[product.id] = product.name;
+    // });
 
   
-    const itemSummary = {};
-    orderedProducts.forEach(item => {
-    const name = productNameMap[item.product_id] || 'Item';
-    itemSummary[name] = (itemSummary[name] || 0) + item.quantity;
-    });
+    // const itemSummary = {};
+    // orderedProducts.forEach(item => {
+    // const name = productNameMap[item.product_id] || 'Item';
+    // itemSummary[name] = (itemSummary[name] || 0) + item.quantity;
+    // });
 
-    const itemDescriptions = Object.entries(itemSummary)
-    .map(([name, qty]) => `${qty}x ${name}`)
-    .join(', ');
+    // const itemDescriptions = Object.entries(itemSummary)
+    // .map(([name, qty]) => `${qty}x ${name}`)
+    // .join(', ');
 
   
-    try {
-    await emailjs.send("service_z4yifwn", "template_p4t0ftl", {
-        customer_name: customer?.name || "Customer",
-        customer_email: customer?.email || "no-reply@example.com",
-        order_id: newOrder.id,
-        order_total: `₱${total.toFixed(2)}`,
-        order_items: itemDescriptions,
+    // try {
+    // await emailjs.send("service_z4yifwn", "template_p4t0ftl", {
+    //     customer_name: customer?.name || "Customer",
+    //     customer_email: customer?.email || "no-reply@example.com",
+    //     order_id: newOrder.id,
+    //     order_total: `₱${total.toFixed(2)}`,
+    //     order_items: itemDescriptions,
       
-    });
+    // });
 
-    console.log("Confirmation email sent");
-    } catch (err) {
-    console.error(" Failed to send email:", err);
-    }
+    // console.log("Confirmation email sent");
+    // } catch (err) {
+    // console.error(" Failed to send email:", err);
+    // }
     // HANGGANG DITO
 
     const modal = document.getElementById('order-success-modal');
