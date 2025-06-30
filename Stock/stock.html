@@ -1,115 +1,129 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Stock Management</title>
-  <link rel="stylesheet" href="stock.css">
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Stock Management</title>
+    <link rel="stylesheet" href="stock.css" />
+  </head>
+  <body>
+    <main>
+      <h1>Stock</h1>
+      <table>
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="stock-table-body">
+          <!-- Product rows will be generated here dynamically -->
+        </tbody>
+      </table>
+    </main>
+    <script type="module">
+      import { supabase } from "../supabaseClient/supabase.js";
 
-<main>
-  <h1>Stock</h1>
-  <table>
-    <thead>
-      <tr>
-        <th>Product</th>
-        <th>Quantity</th>
-        <th>Status</th>
-        <th>Action</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>Small Ely's Atsara</td>
-        <td class="quantity-display">[0]</td>
-        <td><span class="status"></span></td>
-        <td class="action-container">
-          <button class="plus-btn">+</button>
-          <input type="number" min="0" class="quantity-input">
-          <button class="minus-btn">−</button>
-        </td>
-      </tr>
-      <tr>
-        <td>Small Ely's Atsara Ampalaya</td>
-        <td class="quantity-display">[20]</td>
-        <td><span class="status"></span></td>
-        <td class="action-container">
-          <button class="plus-btn">+</button>
-          <input type="number" min="0" class="quantity-input">
-          <button class="minus-btn">−</button>
-        </td>
-      </tr>
-      <tr>
-        <td>Big Ely's Atsara</td>
-        <td class="quantity-display">[14]</td>
-        <td><span class="status"></span></td>
-        <td class="action-container">
-          <button class="plus-btn">+</button>
-          <input type="number" min="0" class="quantity-input">
-          <button class="minus-btn">−</button>
-        </td>
-      </tr>
-      <tr>
-        <td>Big Ely's Atsara Ampalaya</td>
-        <td class="quantity-display">[15]</td>
-        <td><span class="status"></span></td>
-        <td class="action-container">
-          <button class="plus-btn">+</button>
-          <input type="number" min="0" class="quantity-input">
-          <button class="minus-btn">−</button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</main>
+      async function loadStockTable() {
+        const { data: products, error } = await supabase
+          .from("products")
+          .select("*");
 
-<script>
-  function updateStatus(row) {
-    const quantityCell = row.querySelector('.quantity-display');
-    const statusSpan = row.querySelector('.status');
-    const quantity = parseInt(quantityCell.textContent.replace(/[^\d]/g, '')) || 0;
+        if (error) {
+          console.error("Error fetching products:", error);
+          return;
+        }
 
-    if (quantity <= 0) {
-      statusSpan.textContent = "Out of Stock";
-      statusSpan.classList.remove('more');
-      statusSpan.classList.add('out');
-    } else {
-      statusSpan.textContent = "More Stock";
-      statusSpan.classList.remove('out');
-      statusSpan.classList.add('more');
-    }
-  }
+        const tbody = document.getElementById("stock-table-body");
+        tbody.innerHTML = "";
 
-  document.querySelectorAll('tbody tr').forEach(row => {
-    const plusBtn = row.querySelector('.plus-btn');
-    const minusBtn = row.querySelector('.minus-btn');
-    const input = row.querySelector('.quantity-input');
-    const quantityCell = row.querySelector('.quantity-display');
+        products.forEach((product) => {
+          const quantity = product.stock_quantity || 0;
 
-    plusBtn.addEventListener('click', () => {
-      let currentQuantity = parseInt(quantityCell.textContent.replace(/[^\d]/g, '')) || 0;
-      quantityCell.textContent = `[${currentQuantity + 1}]`;
-      updateStatus(row);
-    });
+          const row = document.createElement("tr");
+          row.setAttribute("data-product-id", product.id); // Store product id safely
 
-    minusBtn.addEventListener('click', () => {
-      let currentQuantity = parseInt(quantityCell.textContent.replace(/[^\d]/g, '')) || 0;
-      quantityCell.textContent = `[${Math.max(0, currentQuantity - 1)}]`;
-      updateStatus(row);
-    });
+          row.innerHTML = `
+      <td>${product.description}</td>
+      <td class="quantity-display">${quantity}</td>
+      <td><span class="status"></span></td>
+      <td class="action-container">
+        <button class="plus-btn">+</button>
+        <input type="number" min="0" class="quantity-input">
+        <button class="minus-btn">−</button>
+        <button class="save-btn">Save</button>
+      </td>
+    `;
+          tbody.appendChild(row);
 
-    input.addEventListener('change', () => {
-      let addAmount = parseInt(input.value) || 0;
-      let currentQuantity = parseInt(quantityCell.textContent.replace(/[^\d]/g, '')) || 0;
-      quantityCell.textContent = `[${currentQuantity + addAmount}]`;
-      input.value = '';
-      updateStatus(row);
-    });
+          const plusBtn = row.querySelector(".plus-btn");
+          const minusBtn = row.querySelector(".minus-btn");
+          const input = row.querySelector(".quantity-input");
+          const quantityCell = row.querySelector(".quantity-display");
+          const statusSpan = row.querySelector(".status");
+          const saveBtn = row.querySelector(".save-btn");
 
-    updateStatus(row); // Initialize status on load
-  });
-</script>
+          function updateStatus() {
+            const qty = parseInt(quantityCell.textContent) || 0;
+            if (qty <= 0) {
+              statusSpan.textContent = "Out of Stock";
+              statusSpan.classList.remove("more");
+              statusSpan.classList.add("out");
+            } else {
+              statusSpan.textContent = "More Stock";
+              statusSpan.classList.remove("out");
+              statusSpan.classList.add("more");
+            }
+          }
 
-</body>
+          plusBtn.addEventListener("click", () => {
+            let currentQty = parseInt(quantityCell.textContent) || 0;
+            const newQty = currentQty + 1;
+            quantityCell.textContent = newQty;
+            updateStatus();
+          });
+
+          minusBtn.addEventListener("click", () => {
+            let currentQty = parseInt(quantityCell.textContent) || 0;
+            const newQty = Math.max(0, currentQty - 1);
+            quantityCell.textContent = newQty;
+            updateStatus();
+          });
+
+          input.addEventListener("change", () => {
+            const addAmount = parseInt(input.value) || 0;
+            let currentQty = parseInt(quantityCell.textContent) || 0;
+            const newQty = currentQty + addAmount;
+            quantityCell.textContent = newQty;
+            input.value = "";
+            updateStatus();
+          });
+
+          saveBtn.addEventListener("click", async () => {
+            const quantity = parseInt(quantityCell.textContent) || 0;
+            const productId = row.getAttribute("data-product-id");
+
+            const { error } = await supabase
+              .from("products")
+              .update({ stock_quantity: quantity })
+              .eq("id", productId)
+              .select(); // Optional, helps debug by returning updated row
+
+            if (error) {
+              console.error("Failed to update stock:", error);
+              alert("Failed to update stock.");
+            } else {
+              alert(`Stock saved: ${quantity} for ${product.description}`);
+            }
+          });
+
+          updateStatus();
+        });
+      }
+
+      document.addEventListener("DOMContentLoaded", loadStockTable);
+    </script>
+  </body>
 </html>
