@@ -525,7 +525,8 @@
 .dashboard-card2,
 .dashboard-card3, 
 .dashboard-card4,
-.dashboard-card5 {
+.dashboard-card5,
+.dashboard-card6 {
   border: 2px solid #b32d2d;
   border-radius: 12px;
   text-align: center;
@@ -581,6 +582,14 @@
   margin-top: -10%;
 }
 
+.dashboard-card6:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  max-height: 70%;
+  margin-bottom: 10%;
+  margin-top: -10%;
+}
+
 @media (max-width: 600px) {
   .dashboard-title {
     font-size: 1.5rem;
@@ -594,8 +603,9 @@
   .dashboard-card1,
   .dashboard-card2,
   .dashboard-card3,
-  .dashboard-card4
-  .dashboard-card5 {
+  .dashboard-card4,
+  .dashboard-card5,
+  .dashboard-card6 {
     padding: 15px;
     min-height: 120px;
   }
