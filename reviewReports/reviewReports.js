@@ -1,6 +1,7 @@
+
 import { supabase } from '../supabaseClient/supabase.js';
 
-let allReviews = []; 
+let allReviews = [];
 
 document.addEventListener('DOMContentLoaded', async () => {
   const reviewTableBody = document.querySelector('#reviewTable tbody');
@@ -12,30 +13,38 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   if (error) {
     console.error('Error loading reviews:', error.message);
+    reviewTableBody.innerHTML = '<tr><td colspan="6">Failed to load reviews.</td></tr>';
     return;
   }
 
-  allReviews = await Promise.all(
-    reviews.map(async (review) => {
-      const [customerRes, productRes, orderRes] = await Promise.all([
-        supabase.from('customer_accounts').select('name').eq('uuid', review.user_id).single(),
-        supabase.from('products').select('name, image_url').eq('id', review.product_id).single(),
-        supabase.from('orders').select('id').eq('id', review.order_id).single()
-      ]);
+  const [{ data: products }, { data: customers }, { data: orders }] = await Promise.all([
+    supabase.from('products').select('id, name'),
+    supabase.from('customer_accounts').select('uuid, name'),
+    supabase.from('orders').select('id, orders')
+  ]);
 
-      return {
-        ...review,
-        customer_name: customerRes.data?.name || 'Unknown User',
-        product_name: productRes.data?.name || 'N/A',
-        product_image: productRes.data?.image_url || 'https://via.placeholder.com/50',
-        order_id: orderRes.data?.id || 'N/A'
-      };
-    })
-  );
+  const productMap = Object.fromEntries((products || []).map(p => [p.id, p.name]));
+  const customerMap = Object.fromEntries((customers || []).map(c => [c.uuid, c.name]));
+  const orderMap = Object.fromEntries((orders || []).map(o => [o.id, o.orders]));
+
+  allReviews = reviews.map((review) => {
+    const customerName = customerMap[review.user_id] || 'Unknown User';
+    const orderedItems = orderMap[review.order_id] || [];
+
+    const productList = orderedItems.map(item => {
+      const productName = productMap[item.product_id] || 'Unknown Product';
+      return `${productName} (x${item.quantity})`;
+    });
+
+    return {
+      ...review,
+      customer_name: customerName,
+      product_lines: productList.join('\n')  // newline-separated text
+    };
+  });
 
   renderTable(allReviews);
 
-  // Add filter listeners
   document.getElementById('rating-filter')?.addEventListener('change', applyFilters);
   document.getElementById('product-search')?.addEventListener('input', applyFilters);
   document.getElementById('customer-search')?.addEventListener('input', applyFilters);
@@ -47,17 +56,14 @@ function renderTable(reviews) {
   reviewTableBody.innerHTML = '';
 
   if (reviews.length === 0) {
-    reviewTableBody.innerHTML = '<tr><td colspan="6">No reviews found.</td></tr>';
+    reviewTableBody.innerHTML = '<tr><td colspan="6" class="no-reviews">No reviews found.</td></tr>';
     return;
   }
 
   for (const r of reviews) {
     const row = document.createElement('tr');
     row.innerHTML = `
-      <td>
-        <img src="${r.product_image}" alt="Product Image" width="50" height="50"><br>
-        ${r.product_name}
-      </td>
+      <td style="white-space: pre-line;">${r.product_lines}</td>
       <td>${r.customer_name}</td>
       <td>${r.order_id}</td>
       <td>${r.rating}/5</td>
@@ -81,7 +87,7 @@ function applyFilters() {
   }
 
   if (productSearch) {
-    filtered = filtered.filter(r => r.product_name.toLowerCase().includes(productSearch));
+    filtered = filtered.filter(r => r.product_lines.toLowerCase().includes(productSearch));
   }
 
   if (customerSearch) {
@@ -96,7 +102,3 @@ function applyFilters() {
 
   renderTable(filtered);
 }
-
-
-console.log('Fetched reviews:', reviews);
-console.log('Supabase error:', error);

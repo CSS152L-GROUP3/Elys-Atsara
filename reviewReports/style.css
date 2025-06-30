@@ -1,19 +1,19 @@
-/* Global Styles */
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #ffffff;
+  background-color: #fff;
   margin: 0;
   padding: 2rem;
-  color: black;
+  color: #333;
 }
 
 /* Heading */
 h1 {
   text-align: center;
   color: #9E1F19;
-  font-size: 2rem;
+  font-size: 2.2rem;
   margin-top: 8rem;
   margin-bottom: 2rem;
+  font-weight: 600;
 }
 
 /* Top Navigation Bar */
@@ -26,7 +26,7 @@ h1 {
   top: 0;
   left: 0;
   width: 100%;
-  background-color: white;
+  background-color: #fff;
   border-bottom: 2px solid #b7251d;
   z-index: 1000;
   height: 12%;
@@ -39,63 +39,69 @@ h1 {
   flex-wrap: wrap;
   gap: 1rem;
   justify-content: center;
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
 }
 
 .filters select,
 .filters input {
-  padding: 0.6rem 1rem;
+  padding: 0.7rem 1rem;
   border-radius: 6px;
   border: 1px solid #ccc;
   font-size: 1rem;
   min-width: 180px;
+  transition: 0.3s ease;
+}
+
+.filters input:focus,
+.filters select:focus {
+  border-color: #9E1F19;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(158, 31, 25, 0.15);
 }
 
 /* Table Styles */
 table {
   width: 100%;
   border-collapse: collapse;
-  overflow: hidden;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
   background-color: #fff;
   border-radius: 12px;
+  overflow: hidden;
 }
 
 thead {
   background-color: #9E1F19;
-  color: white;
+  color: #fff;
+  font-size: 1rem;
+  letter-spacing: 0.5px;
 }
 
 th, td {
-  padding: 1rem;
+  padding: 1.2rem 1rem;
   text-align: left;
-  border-bottom: 1px solid #fff;
-  vertical-align: middle;
+  border-bottom: 1px solid #eee;
+  vertical-align: top;
+  font-size: 0.95rem;
+}
+
+td:first-child {
+  white-space: pre-line;
 }
 
 tbody tr:nth-child(even) {
-  background-color: #f7f3f0;
+  background-color: #fdf9f7;
+}
+
+tbody tr:hover {
+  background-color: #fbeceb;
+  transition: 0.3s ease;
 }
 
 .no-reviews {
   text-align: center;
   padding: 2rem;
-  color: #888;
-}
-
-/* Product Cell with Image */
-img {
-  border-radius: 6px;
-  width: 50px;
-  height: 50px;
-  object-fit: cover;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  margin-right: 0.5rem;
-}
-
-.product-cell {
-  display: flex;
-  align-items: center;
+  color: #999;
+  font-style: italic;
 }
 
 /* Responsive Table Design */
@@ -106,7 +112,7 @@ img {
 
   tr {
     margin-bottom: 1rem;
-    background-color: white;
+    background-color: #fff;
     border-radius: 10px;
     padding: 1rem;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
@@ -128,13 +134,14 @@ img {
     position: absolute;
     left: 1rem;
     top: 1rem;
-    font-weight: bold;
+    font-weight: 600;
     color: #9E1F19;
   }
 }
 
-/* Optional: Button Hover Styles */
+
 button:hover {
   cursor: pointer;
   opacity: 0.9;
+  transition: 0.2s ease;
 }
