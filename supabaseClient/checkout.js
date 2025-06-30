@@ -21,7 +21,7 @@ export async function fetchDefaultAddress(userId) {
     .from('customer_addresses')
     .select('*');
     
-  console.log('All addresses in table:', allAddresses);
+
   if (allAddressesError) {
     console.error('Error fetching all addresses:', allAddressesError);
   }
