@@ -1,4 +1,3 @@
-
 // import { supabase } from './supabase.js';
 
 // document.addEventListener('DOMContentLoaded', () => {
@@ -10,17 +9,17 @@
 
 //     const name = signupForm.name.value.trim();
 //     const email = signupForm.email.value.trim();
-//     const password = signupForm.password.value.trim(); // optional: trim for consistency
+//     const password = signupForm.password.value.trim(); // for testing
 //     const mobile_no = signupForm.mobile_no.value.trim();
 //     const role = signupForm.role.value;
 
-//   
+    
 //     if (!name || !email || !password || !mobile_no || !role) {
 //       alert('All fields are required.');
 //       return;
 //     }
 
-// 
+  
 //     const allowedDomains = ['gmail.com', 'yahoo.com', 'outlook.com'];
 //     const emailParts = email.split('@');
 //     if (
@@ -31,7 +30,6 @@
 //       return;
 //     }
 
-//    
 //     const mobilePattern = /^09\d{9}$/;
 //     if (!mobilePattern.test(mobile_no)) {
 //       alert('Please enter a valid 11-digit mobile number starting with 09 (e.g., 09123456789).');
@@ -39,12 +37,12 @@
 //     }
 
 //     try {
-//  
+    
 //       const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
 //         email,
 //         password,
 //         options: {
-//           emailRedirectTo: 'http://127.0.0.1:5500/Verify/verify.html', // 
+//           emailRedirectTo: 'http://127.0.0.1:5500/Verify/verify.html', 
 //           data: {
 //             name,
 //             mobile_no,
@@ -54,7 +52,7 @@
 //         }
 //       });
 
-//    
+     
 //       if (signUpError) {
 //         if (signUpError.message.includes('User already registered')) {
 //           alert('Email already registered. Please log in.');
@@ -66,8 +64,8 @@
 //         return;
 //       }
 
-
-//       alert('Signup successful! A confirmation email has been sent to your inbox. Please verify your email before logging in.');
+    
+//       alert('Signup successful! A confirmation email has been sent. Please verify your email before logging in.');
 //       window.location.href = '../accountLogin/account-login.html';
 
 //     } catch (err) {
@@ -76,6 +74,7 @@
 //     }
 //   });
 // });
+
 
 import { supabase } from './supabase.js';
 
@@ -88,17 +87,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const name = signupForm.name.value.trim();
     const email = signupForm.email.value.trim();
-    const password = signupForm.password.value.trim(); // for testing
+    const password = signupForm.password.value.trim();
     const mobile_no = signupForm.mobile_no.value.trim();
-    const role = signupForm.role.value;
 
-    
-    if (!name || !email || !password || !mobile_no || !role) {
+  
+    const role = 'customer';
+
+    if (!name || !email || !password || !mobile_no) {
       alert('All fields are required.');
       return;
     }
 
-  
     const allowedDomains = ['gmail.com', 'yahoo.com', 'outlook.com'];
     const emailParts = email.split('@');
     if (
@@ -116,22 +115,20 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     try {
-    
       const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
         email,
         password,
         options: {
-          emailRedirectTo: 'http://127.0.0.1:5500/Verify/verify.html', 
+          emailRedirectTo: 'http://127.0.0.1:5500/Verify/verify.html',
           data: {
             name,
             mobile_no,
             role,
-            password 
+            password
           }
         }
       });
 
-     
       if (signUpError) {
         if (signUpError.message.includes('User already registered')) {
           alert('Email already registered. Please log in.');
@@ -143,7 +140,6 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-    
       alert('Signup successful! A confirmation email has been sent. Please verify your email before logging in.');
       window.location.href = '../accountLogin/account-login.html';
 

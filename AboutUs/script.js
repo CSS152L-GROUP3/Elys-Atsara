@@ -124,3 +124,73 @@ document.getElementById('go-back-btn').addEventListener('click', function() {
       }
     }
   }
+
+
+$(document).ready(function() {
+  // Cart/Dashboard Visibility
+  const userType = sessionStorage.getItem('userType');
+
+  if (userType === 'admin') {
+    $('.Cart').hide();
+    $('.Dashboard').show();
+  } else {
+    $('.Cart').show();
+    $('.Dashboard').hide();
+  }
+
+  // Cart Access Logic
+  function userIsLoggedIn() {
+    const userJson = localStorage.getItem('currentUser');
+    return userType && userType !== 'guest' && userJson;
+  }
+
+  $('.CartBtn1, .CartBtn2').on('click', function(e) {
+    if (!userIsLoggedIn()) {
+      e.preventDefault();
+      $('#cartModal').css('display', 'flex');
+    } else if (userType === 'admin') {
+      window.location.href = '../adminCart/admin-cart.html';
+    } else {
+      window.location.href = '../updatedCartPage/Cartpage.html';
+    }
+  });
+
+  $('#closeCartModal').on('click', function() {
+    $('#cartModal').hide();
+  });
+
+  $('#loginRedirectBtn').on('click', function() {
+    window.location.href = '../accountLogin/account-login.html';
+  });
+
+  $(window).on('click', function(event) {
+    if (event.target === document.getElementById('cartModal')) {
+      $('#cartModal').hide();
+    }
+  });
+
+  // Account Access Logic
+  $('.AccountBtn1, .AccountBtn2').on('click', function(e) {
+    const userJson = localStorage.getItem('currentUser');
+    if (!userJson) {
+      e.preventDefault();
+      $('#accountModal').css('display', 'flex');
+    } else {
+      window.location.href = '../profile/UserProfile.html';
+    }
+  });
+
+  $('#closeAccountModal').on('click', function() {
+    $('#accountModal').hide();
+  });
+
+  $('#accountLoginRedirectBtn').on('click', function() {
+    window.location.href = '../accountLogin/account-login.html';
+  });
+
+  $(window).on('click', function(event) {
+    if (event.target === document.getElementById('accountModal')) {
+      $('#accountModal').hide();
+    }
+  });
+});
