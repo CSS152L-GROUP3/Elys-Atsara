@@ -83,16 +83,16 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
 
         // Populate shipping dropdown
-        console.log('Fetching shipping options...');
+     
         shippingOptions = await fetchShippingOptions();
-        console.log('Shipping options:', shippingOptions);
+      
 
         const selectedShipping = shippingOptions[0];
         updateCheckoutTotals(subtotal, parseFloat(selectedShipping.price));
         const { total: initialTotal } = calculateTotals(cartItems, selectedShipping.price);
         const deliveryDays = parseInt(selectedShipping.estimated_time.match(/\d+/)?.[0]);
 
-        console.log("Estimated delivery days:", deliveryDays);
+     
 
         const nameSpan = document.querySelector('#shipping-name .value');
         const priceSpan = document.querySelector('#shipping-price .value');
@@ -130,7 +130,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         console.log('Fetching customer info...');
         const customerInfo = await fetchCustomerInfo(user.id);
-        console.log('Customer info:', customerInfo);
+        
 
         const nameElement = document.getElementById('customer-name');
         const mobileElement = document.getElementById('customer-mobile');
@@ -138,9 +138,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (nameElement) nameElement.textContent = customerInfo.name || 'No name';
         if (mobileElement) mobileElement.textContent = customerInfo.mobile_no || 'No mobile number';
 
-        console.log('Fetching default address...');
+      
         defaultAddress = await fetchDefaultAddress(user.id);
-        console.log('Default address:', defaultAddress);
+        
 
         const addressElement = document.getElementById('address');
         const cityElement = document.getElementById('city');
@@ -326,6 +326,204 @@ confirmEwalletBtn.addEventListener('click', async () => {
     }
 });
 
+// document.getElementById('place-order').addEventListener('click', async () => {
+//     const { data: { user }, error: userError } = await supabase.auth.getUser();
+//     if (userError || !user) {
+//         alert("Please log in to place your order.");
+//         return;
+//     }
+
+//     const userId = user.id;
+//     const selectedAddressId = defaultAddress?.id;
+//     if (!selectedAddressId) {
+//         alert("Please select a delivery address.");
+//         return;
+//     }
+
+//     const selectedShippingName = document.querySelector('#shipping-name .value').textContent;
+//     const selectedShipping = shippingOptions.find(opt => opt.name === selectedShippingName);
+//     let deliveryDays = parseInt(selectedShipping.estimated_time.match(/\d+/)?.[0]);
+
+//     if (isNaN(deliveryDays)) {
+//         alert("Invalid delivery time format. Please check the shipping option.");
+//         return;
+//     }
+
+//     const selectedShippingId = selectedShipping.id;
+//     const shippingPrice = Number(selectedShipping.price);
+
+//     deliveryDays = parseInt(selectedShipping.estimated_time);
+//     if (isNaN(deliveryDays)) {
+//         alert("Invalid delivery time format. Please check shipping options.");
+//         return;
+//     }
+
+//     const estimatedDelivery = new Date();
+//     estimatedDelivery.setDate(estimatedDelivery.getDate() + deliveryDays);
+
+//     const paymentMethod = document.querySelector('#payment-method .value').textContent.trim();
+
+//     const { data: cartItems, error: cartError } = await supabase
+//         .from('cart_items')
+//         .select('product_id, quantity, products(price)')
+//         .eq('user_id', userId);
+
+//     const { subtotal, total } = calculateTotals(cartItems, shippingPrice);
+
+//     if (cartError || !cartItems.length) {
+//         alert("Your cart is empty.");
+//         return;
+//     }
+//     const orderItemsJson = cartItems.map(item => ({
+//         product_id: item.product_id,
+//         quantity: item.quantity
+//     }));
+
+//     const { data: newOrder, error: orderError } = await supabase
+//         .from('orders')
+//         .insert([{
+//             user_id: userId,
+//             address_id: selectedAddressId,
+//             shipping_option_id: selectedShippingId,
+//             payment_method: paymentMethod,
+//             subtotal_price: subtotal,
+//             total_price: total,
+//             delivery_date: estimatedDelivery.toISOString(),
+//             orders: orderItemsJson
+//         }])
+//         .select()
+//         .single();
+
+//     if (orderError) {
+//         alert("Failed to place order.");
+//         console.error(orderError);
+//         return;
+//     }
+
+//     const orderId = newOrder.id;
+
+//     const orderItems = cartItems.map(item => ({
+//         order_id: orderId,
+//         product_id: item.product_id,
+//         quantity: item.quantity
+//     }));
+
+//     const { error: itemsError } = await supabase
+//         .from('order_items')
+//         .insert(orderItems);
+
+//     if (itemsError) {
+//         alert("Order created but failed to save items.");
+//         console.error(itemsError);
+//         return;
+//     }
+
+//     const { error: clearError } = await supabase
+//         .from('cart_items')
+//         .delete()
+//         .eq('user_id', userId);
+
+//     if (clearError) {
+//         console.warn("Order placed, but failed to clear cart.");
+//         console.error(clearError);
+//     } else {
+//         console.log("✅ Cart cleared.");
+//     }
+
+
+//     //ITO CODE PARA SA ORDER CONFIRMATION EMAIL    
+//     // const { data: customer, error: customerError } = await supabase
+//     // .from('customer_accounts')
+//     // .select('name, email')
+//     // .eq('uuid', userId)
+//     // .single();
+
+//     // if (customerError) {
+//     // console.error("Failed to fetch customer info:", customerError);
+//     // }
+
+   
+//     // const orderedProducts = newOrder.orders; 
+//     // const productIds = orderedProducts.map(item => item.product_id);
+
+   
+//     // const { data: productsData, error: productError } = await supabase
+//     // .from('products')
+//     // .select('id, name')
+//     // .in('id', productIds);
+
+//     // if (productError) {
+//     // console.error("Failed to fetch product data:", productError);
+//     // }
+
+   
+//     // const productNameMap = {};
+//     // productsData.forEach(product => {
+//     // productNameMap[product.id] = product.name;
+//     // });
+
+  
+//     // const itemSummary = {};
+//     // orderedProducts.forEach(item => {
+//     // const name = productNameMap[item.product_id] || 'Item';
+//     // itemSummary[name] = (itemSummary[name] || 0) + item.quantity;
+//     // });
+
+//     // const itemDescriptions = Object.entries(itemSummary)
+//     // .map(([name, qty]) => `${qty}x ${name}`)
+//     // .join(', ');
+
+  
+//     // try {
+//     // await emailjs.send("service_z4yifwn", "template_p4t0ftl", {
+//     //     customer_name: customer?.name || "Customer",
+//     //     customer_email: customer?.email || "no-reply@example.com",
+//     //     order_id: newOrder.id,
+//     //     order_total: `₱${total.toFixed(2)}`,
+//     //     order_items: itemDescriptions,
+      
+//     // });
+
+//     // console.log("Confirmation email sent");
+//     // } catch (err) {
+//     // console.error(" Failed to send email:", err);
+//     // }
+//     // HANGGANG DITO
+
+//     const modal = document.getElementById('order-success-modal');
+//     const okBtn = document.getElementById('order-success-ok-btn');
+//     modal.classList.remove('hidden');
+//     document.body.classList.add('modal-open');
+//     okBtn.onclick = () => {
+//         modal.classList.add('hidden');
+//         document.body.classList.remove('modal-open');
+//         window.location.href = '../Homepage/Homepage.html';
+//     };
+// });
+
+// async function insertOrderItems(orderId, cartItems) {
+//     const itemsToInsert = cartItems.map(item => ({
+//         order_id: orderId,
+//         product_id: item.product_id,
+//         quantity: item.quantity
+//     }));
+
+//     const { data, error } = await supabase
+//         .from('order_items')
+//         .insert(itemsToInsert);
+
+//     if (error) {
+//         console.error("❌ Failed to insert order items:", error);
+//         alert("Order was created, but we couldn't save the items.");
+//         return false;
+//     }
+
+//     console.log("✅ Order items inserted:", data);
+//     return true;
+// }
+
+// ... [Your existing imports and functions above remain unchanged] ...
+
 document.getElementById('place-order').addEventListener('click', async () => {
     const { data: { user }, error: userError } = await supabase.auth.getUser();
     if (userError || !user) {
@@ -352,12 +550,6 @@ document.getElementById('place-order').addEventListener('click', async () => {
     const selectedShippingId = selectedShipping.id;
     const shippingPrice = Number(selectedShipping.price);
 
-    deliveryDays = parseInt(selectedShipping.estimated_time);
-    if (isNaN(deliveryDays)) {
-        alert("Invalid delivery time format. Please check shipping options.");
-        return;
-    }
-
     const estimatedDelivery = new Date();
     estimatedDelivery.setDate(estimatedDelivery.getDate() + deliveryDays);
 
@@ -368,12 +560,13 @@ document.getElementById('place-order').addEventListener('click', async () => {
         .select('product_id, quantity, products(price)')
         .eq('user_id', userId);
 
-    const { subtotal, total } = calculateTotals(cartItems, shippingPrice);
-
     if (cartError || !cartItems.length) {
         alert("Your cart is empty.");
         return;
     }
+
+    const { subtotal, total } = calculateTotals(cartItems, shippingPrice);
+
     const orderItemsJson = cartItems.map(item => ({
         product_id: item.product_id,
         quantity: item.quantity
@@ -418,78 +611,60 @@ document.getElementById('place-order').addEventListener('click', async () => {
         return;
     }
 
+    // 🔧 Deduct stock quantity
+    for (const item of cartItems) {
+        console.log(" Checking item:", item);
+
+        const { data: productData, error: fetchError } = await supabase
+            .from('products')
+            .select('stock_quantity')
+            .eq('id', item.product_id)
+            .maybeSingle();
+
+        if (fetchError) {
+            console.error(` Fetch error for product ${item.product_id}:`, fetchError);
+            continue;
+        }
+
+        if (!productData) {
+            console.error(` No product found for ID: ${item.product_id}`);
+            continue;
+        }
+
+        if (typeof productData.stock_quantity !== 'number') {
+            console.error(` Invalid stock quantity for product ${item.product_id}:`, productData.stock_quantity);
+            continue;
+        }
+
+        const newStock = productData.stock_quantity - item.quantity;
+        console.log(` Updating stock: Product ${item.product_id} from ${productData.stock_quantity} → ${newStock}`);
+
+        const { error: updateError } = await supabase
+            .from('products')
+            .update({ stock_quantity: newStock })
+            .eq('id', item.product_id);
+
+        if (updateError) {
+            console.error(`Failed to update stock for product ${item.product_id}:`, updateError);
+        } else {
+            console.log(` Stock updated for product ${item.product_id}`);
+        }
+    }
+
+    // 🧹 Clear cart
     const { error: clearError } = await supabase
         .from('cart_items')
         .delete()
         .eq('user_id', userId);
 
     if (clearError) {
-        console.warn("Order placed, but failed to clear cart.");
+        console.warn(" Order placed, but failed to clear cart.");
         console.error(clearError);
     } else {
-        console.log("✅ Cart cleared.");
+        console.log(" Cart cleared.");
     }
 
-
-    //ITO CODE PARA SA ORDER CONFIRMATION EMAIL    
-    // const { data: customer, error: customerError } = await supabase
-    // .from('customer_accounts')
-    // .select('name, email')
-    // .eq('uuid', userId)
-    // .single();
-
-    // if (customerError) {
-    // console.error("Failed to fetch customer info:", customerError);
-    // }
-
-   
-    // const orderedProducts = newOrder.orders; 
-    // const productIds = orderedProducts.map(item => item.product_id);
-
-   
-    // const { data: productsData, error: productError } = await supabase
-    // .from('products')
-    // .select('id, name')
-    // .in('id', productIds);
-
-    // if (productError) {
-    // console.error("Failed to fetch product data:", productError);
-    // }
-
-   
-    // const productNameMap = {};
-    // productsData.forEach(product => {
-    // productNameMap[product.id] = product.name;
-    // });
-
-  
-    // const itemSummary = {};
-    // orderedProducts.forEach(item => {
-    // const name = productNameMap[item.product_id] || 'Item';
-    // itemSummary[name] = (itemSummary[name] || 0) + item.quantity;
-    // });
-
-    // const itemDescriptions = Object.entries(itemSummary)
-    // .map(([name, qty]) => `${qty}x ${name}`)
-    // .join(', ');
-
-  
-    // try {
-    // await emailjs.send("service_z4yifwn", "template_p4t0ftl", {
-    //     customer_name: customer?.name || "Customer",
-    //     customer_email: customer?.email || "no-reply@example.com",
-    //     order_id: newOrder.id,
-    //     order_total: `₱${total.toFixed(2)}`,
-    //     order_items: itemDescriptions,
-      
-    // });
-
-    // console.log("Confirmation email sent");
-    // } catch (err) {
-    // console.error(" Failed to send email:", err);
-    // }
-    // HANGGANG DITO
-
+    // ✅ Success modal
     const modal = document.getElementById('order-success-modal');
     const okBtn = document.getElementById('order-success-ok-btn');
     modal.classList.remove('hidden');
@@ -500,24 +675,3 @@ document.getElementById('place-order').addEventListener('click', async () => {
         window.location.href = '../Homepage/Homepage.html';
     };
 });
-
-async function insertOrderItems(orderId, cartItems) {
-    const itemsToInsert = cartItems.map(item => ({
-        order_id: orderId,
-        product_id: item.product_id,
-        quantity: item.quantity
-    }));
-
-    const { data, error } = await supabase
-        .from('order_items')
-        .insert(itemsToInsert);
-
-    if (error) {
-        console.error("❌ Failed to insert order items:", error);
-        alert("Order was created, but we couldn't save the items.");
-        return false;
-    }
-
-    console.log("✅ Order items inserted:", data);
-    return true;
-}
