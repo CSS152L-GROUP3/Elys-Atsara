@@ -50,6 +50,7 @@ const currentMonth = formatYearMonth(today);
         document.getElementById("averageOrderValue").textContent = `₱${avgOrderValue.toFixed(2)}`;
 
         // === AOV TREND VS LAST MONTH ===
+        let lastAvg;
         const lastMonthStart = new Date(year, month - 1, 1).toISOString();
         const lastMonthEnd = new Date(year, month, 0).toISOString();
 
@@ -62,7 +63,7 @@ const currentMonth = formatYearMonth(today);
 
         if (lastMonthOrders.length > 0) {
             const lastTotal = lastMonthOrders.reduce((sum, o) => sum + o.total_price, 0);
-            lastAvg = lastTotal / lastMonthOrders.length; // ✅ Remove `const` here
+            lastAvg = lastTotal / lastMonthOrders.length;
             const diff = avgOrderValue - lastAvg;
             const percent = ((diff / lastAvg) * 100).toFixed(1);
             const trendElement = document.getElementById("aovTrend");
@@ -203,7 +204,7 @@ const currentMonth = formatYearMonth(today);
         // 🛍️ TOP PRODUCTS SOLD (HORIZONTAL BAR) - SHOW TRUNCATED DESCRIPTIONS & IMPROVED LAYOUT
         // Set canvas height BEFORE creating the chart
         const chartEl = document.getElementById("topProductsChart");
-        chartEl.style.height = "100%"; // Let container control the height
+        chartEl.style.height = "300px"; // Ensure the chart has a fixed height for proper rendering
         const productSales = {};
         for (const order of orders) {
             if (Array.isArray(order.orders)) {
@@ -277,33 +278,6 @@ const currentMonth = formatYearMonth(today);
             </span>
             <span style='font-size:1rem; color:#555; font-weight:500;'>Avg. Order Value</span>`;
         }
-
-        const aovChartEl = document.getElementById("aovChart");
-        if (aovChartEl) {
-            new Chart(aovChartEl, {
-                type: "bar",
-                data: {
-                    labels: ["Last Month", "This Month"],
-                    datasets: [{
-                        label: "AOV",
-                        data: [lastAvg, avgOrderValue],
-                        backgroundColor: ["#6c757d", "#fd7e14"]
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { display: false }
-                    },
-                    scales: {
-                        y: { beginAtZero: true }
-                    }
-                }
-            });
-        }
-
-
 
     } catch (err) {
         console.error("Failed to load sales report:", err.message);
