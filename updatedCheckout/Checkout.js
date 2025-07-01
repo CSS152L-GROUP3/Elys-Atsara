@@ -156,6 +156,10 @@ document.addEventListener('DOMContentLoaded', async () => {
             .from('shipping_options')
             .select('*');
 
+        // Debug logging
+        console.log('Fetched shipping options:', shippingOptionsData);
+        console.log('Fetch error:', shippingOptionsError);
+
         if (shippingOptionsError) {
             console.error("❌ Failed to fetch shipping options:", shippingOptionsError.message);
             alert("Failed to load shipping methods.");
@@ -169,8 +173,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         let selectedOption = shippingOptions.find(opt => opt.id == storedOptionId);
 
         if (!selectedOption) {
-            selectedOption = shippingOptions.find(opt => opt.name === 'Pick-up');
-            localStorage.setItem('selectedShippingOptionId', selectedOption.id);
+            selectedOption = shippingOptions.find(opt => opt.name === 'Pickup (in-store)');
+            if (selectedOption) {
+                localStorage.setItem('selectedShippingOptionId', selectedOption.id);
+            } else {
+                alert("No available shipping options. Please contact support.");
+                throw new Error("No available shipping options.");
+            }
         }
 
         selectedShippingOptionId = selectedOption.id;
