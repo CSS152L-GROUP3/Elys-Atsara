@@ -1,13 +1,20 @@
 // backend/server.js
 const express = require("express");
-const fetch = require("node-fetch"); // make sure this is installed: npm install node-fetch
+const fetch = require("node-fetch");
 const cors = require("cors");
+require('dotenv').config();
+
+const PAYMONGO_SECRET_KEY = process.env.PAYMONGO_SECRET_KEY;
+
+if (!PAYMONGO_SECRET_KEY) {
+    console.error("🔑 PAYMONGO_SECRET_KEY is missing!");
+} else {
+    console.log("🔑 Using PayMongo key:", PAYMONGO_SECRET_KEY?.slice(0, 10) + "...");
+}
 
 const app = express();
 app.use(cors());
 app.use(express.json());
-
-const PAYMONGO_SECRET = "sk_test_3zgmJysSqCF1Fhim4grdLKup"; // ✅ use your working secret key
 
 app.post("/create-paymongo-checkout", async (req, res) => {
     try {
@@ -21,7 +28,7 @@ app.post("/create-paymongo-checkout", async (req, res) => {
         const response = await fetch("https://api.paymongo.com/v1/checkout_sessions", {
             method: "POST",
             headers: {
-                Authorization: `Basic ${Buffer.from("sk_test_3zgmJysSqCF1Fhim4grdLKup" + ":").toString("base64")}`,
+                Authorization: `Basic ${Buffer.from(PAYMONGO_SECRET_KEY + ":").toString("base64")}`,
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
@@ -50,14 +57,53 @@ app.post("/create-paymongo-checkout", async (req, res) => {
         const result = await response.json();
 
         if (!response.ok) {
-            console.error("❌ PayMongo API Error:", result);
-            return res.status(500).json({ error: "PayMongo failed", details: result });
+            const text = await response.text(); // fallback from .json()
+            console.error("❌ PayMongo raw error:", text);
+            return res.status(500).json({ error: "PayMongo failed", details: text });
         }
+
 
         res.json({ checkout_url: result.data.attributes.checkout_url });
     } catch (error) {
         console.error("❌ Server crashed:", error);
         res.status(500).json({ error: "Internal server error", message: error.message });
+    }
+});
+
+app.post('/calculate-distance', async (req, res) => {
+    const { from, to } = req.body;
+
+    if (!from || !to || !from.lon || !from.lat || !to.lon || !to.lat) {
+        console.error("🚫 Invalid coordinates received:", { from, to });
+        return res.status(400).json({ error: "Invalid coordinates" });
+    }
+
+    try {
+        const response = await fetch('https://api.openrouteservice.org/v2/directions/driving-car', {
+            method: 'POST',
+            headers: {
+                'Authorization': process.env.ORS_API_KEY,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                coordinates: [[from.lon, from.lat], [to.lon, to.lat]]
+            })
+        });
+
+        const data = await response.json();
+
+        if (!data.routes || !data.routes[0] || !data.routes[0].summary) {
+            console.error("❌ ORS response invalid or empty:", data);
+            return res.status(500).json({ error: "Invalid ORS response" });
+        }
+
+        const distanceMeters = data.routes[0].summary.distance;
+        const distanceKm = distanceMeters / 1000;
+
+        res.json({ distance_km: distanceKm });
+    } catch (err) {
+        console.error("ORS error:", err);
+        res.status(500).json({ error: "Failed to calculate distance." });
     }
 });
 

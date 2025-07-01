@@ -15,23 +15,12 @@ export async function fetchShippingOptions() {
 
 export async function fetchDefaultAddress(userId) {
   console.log('Fetching address for user:', userId);
-  
-  // First, let's check all addresses in the table
-  const { data: allAddresses, error: allAddressesError } = await supabase
-    .from('customer_addresses')
-    .select('*');
-    
-
-  if (allAddressesError) {
-    console.error('Error fetching all addresses:', allAddressesError);
-  }
-  
-  // Now try to get default address
   const { data: defaultAddress, error: defaultError } = await supabase
     .from('customer_addresses')
     .select('*')
     .eq('user_id', userId)
     .eq('is_default', true)
+    .order('created_at', { ascending: false })
     .limit(1);
 
   if (defaultError) {
@@ -39,32 +28,24 @@ export async function fetchDefaultAddress(userId) {
     throw defaultError;
   }
 
-  console.log('Default address result:', defaultAddress);
-  
-  if (!defaultAddress || defaultAddress.length === 0) {
-    console.log('No default address found, trying to get any address');
-    // If no default address exists, try to get any address for the user
-    const { data: anyAddress, error: anyAddressError } = await supabase
-      .from('customer_addresses')
-      .select('*')
-      .eq('user_id', userId)
-      .limit(1);
-      
-    if (anyAddressError) {
-      console.error('Error fetching any address:', anyAddressError);
-      throw anyAddressError;
-    }
-    
-    console.log('Any address result:', anyAddress);
-    
-    if (!anyAddress || anyAddress.length === 0) {
-      console.log('No addresses found at all');
-      return null; // No addresses found at all
-    }
-    return anyAddress[0]; // Return the first address found
+  if (defaultAddress && defaultAddress.length > 0) {
+    return defaultAddress[0];
   }
-  
-  return defaultAddress[0]; // Return the first default address found
+
+  // fallback if no default
+  const { data: anyAddress, error: anyError } = await supabase
+    .from('customer_addresses')
+    .select('*')
+    .eq('user_id', userId)
+    .order('created_at', { ascending: false })
+    .limit(1);
+
+  if (anyError) {
+    console.error('Error fetching fallback address:', anyError);
+    throw anyError;
+  }
+
+  return anyAddress?.[0] || null;
 }
 
 export async function fetchCustomerInfo(userId) {

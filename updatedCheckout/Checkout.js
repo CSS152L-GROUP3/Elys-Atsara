@@ -1,6 +1,5 @@
 import {
     getCurrentUser,
-    fetchShippingOptions,
     fetchDefaultAddress,
     fetchCustomerInfo
 } from '../supabaseClient/checkout.js';
@@ -9,6 +8,10 @@ import { supabase } from '../supabaseClient/supabase.js';
 
 let shippingOptions = []; // Declare globally
 let defaultAddress = null; // ✅ global variable
+let shippingFee = 0;
+let deliveryDays = 2; // fallback value
+let selectedShippingOptionId = null; // For storing selected shipping option
+
 
 const urlParams = new URLSearchParams(window.location.search);
 const status = urlParams.get('status');
@@ -31,6 +34,41 @@ async function getCurrentUserWithRetry(retries = 5, delay = 300) {
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
+    // --- Debug: Log Supabase session info in localStorage ---
+    for (let key in localStorage) {
+        if (key.startsWith('sb-') && key.endsWith('-auth-token')) {
+            console.log('🔑 Supabase session key:', key, localStorage.getItem(key));
+        }
+    }
+
+    // --- Robust session restoration and user check ---
+    try {
+        const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+        if (sessionError) {
+            console.error('Supabase session fetch error:', sessionError);
+        }
+        if (!session) {
+            alert('Session expired or missing. Please log in again.');
+            window.location.href = '../accountLogin/account-login.html'; // Change to your login page if needed
+            return;
+        }
+        const { data: { user }, error: userError } = await supabase.auth.getUser();
+        if (userError) {
+            console.error('Supabase user fetch error:', userError);
+        }
+        if (!user) {
+            alert('User not found. Please log in again.');
+            window.location.href = '../accountLogin/account-login.html';
+            return;
+        }
+        console.log('✅ Session and user found:', { session, user });
+    } catch (err) {
+        console.error('Error during session/user check:', err);
+        alert('Unexpected error. Please log in again.');
+        window.location.href = '/accountlogin/account-login.html';
+        return;
+    }
+
     const savedMethod = localStorage.getItem('selected_payment_method');
     if (savedMethod) {
         document.querySelector('#payment-method .value').textContent = savedMethod.charAt(0).toUpperCase() + savedMethod.slice(1);
@@ -39,6 +77,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const session = await supabase.auth.getSession();
     console.log("🔍 Supabase session on load:", session);
+
     try {
         console.log('Starting to load checkout data...');
         const user = await getCurrentUserWithRetry();
@@ -48,7 +87,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             throw new Error('No user found. Please log in.');
         }
 
-        // ✅ Fetch and display cart items
         const { data: cartItems, error: cartError } = await supabase
             .from('cart_items')
             .select('quantity, products(name, price, image_url)')
@@ -82,55 +120,22 @@ document.addEventListener('DOMContentLoaded', async () => {
             tableBody.appendChild(row);
         });
 
-        // Populate shipping dropdown
-     
-        shippingOptions = await fetchShippingOptions();
-      
+        subtotal = cartItems.reduce((acc, item) => acc + item.quantity * item.products.price, 0);
+        updateCheckoutTotals(subtotal, shippingFee);
 
-        const selectedShipping = shippingOptions[0];
-        updateCheckoutTotals(subtotal, parseFloat(selectedShipping.price));
-        const { total: initialTotal } = calculateTotals(cartItems, selectedShipping.price);
-        const deliveryDays = parseInt(selectedShipping.estimated_time.match(/\d+/)?.[0]);
 
-     
 
         const nameSpan = document.querySelector('#shipping-name .value');
         const priceSpan = document.querySelector('#shipping-price .value');
         const daysSpan = document.querySelector('.delivery-days');
 
-        if (nameSpan) nameSpan.textContent = selectedShipping.name;
-        if (priceSpan) priceSpan.textContent = `₱${selectedShipping.price}`;
-        if (daysSpan) daysSpan.textContent = selectedShipping.estimated_time;
-
-        const changeBtn = document.getElementById('change-shipping-btn');
-        changeBtn.addEventListener('click', () => {
-            const optionsDiv = document.getElementById('shipping-options-select');
-            const isVisible = optionsDiv.style.display === 'block';
-            optionsDiv.style.display = isVisible ? 'none' : 'block';
-        });
-
-        const shippingList = document.getElementById('shipping-options-list');
-        const optionsDiv = document.getElementById('shipping-options-select');
-
-        shippingOptions.forEach(option => {
-            const li = document.createElement('li');
-            li.textContent = `${option.name} - ₱${option.price} (${option.estimated_time})`;
-            li.style.cursor = 'pointer';
-            li.onclick = () => {
-                nameSpan.textContent = option.name;
-                priceSpan.textContent = `₱${option.price}`;
-                daysSpan.textContent = option.estimated_time;
-                optionsDiv.style.display = 'none';
-
-                calculateTotals(cartItems, option.price);
-            };
-
-            shippingList.appendChild(li);
-        });
+        if (nameSpan) nameSpan.textContent = "Pickup (in-store)";
+        if (priceSpan) priceSpan.textContent = `₱${shippingFee.toFixed(2)}`;
+        if (daysSpan) daysSpan.textContent = `${deliveryDays} day(s)`;
 
         console.log('Fetching customer info...');
         const customerInfo = await fetchCustomerInfo(user.id);
-        
+
 
         const nameElement = document.getElementById('customer-name');
         const mobileElement = document.getElementById('customer-mobile');
@@ -138,9 +143,144 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (nameElement) nameElement.textContent = customerInfo.name || 'No name';
         if (mobileElement) mobileElement.textContent = customerInfo.mobile_no || 'No mobile number';
 
-      
+        console.log('Fetching default address...');
+        // 1. Get Cart Subtotal
+        subtotal = cartItems.reduce((acc, item) => acc + item.quantity * item.products.price, 0);
+
+        // 2. Fetch default address (this might later affect shippingFee)
         defaultAddress = await fetchDefaultAddress(user.id);
-        
+
+        // ✅ Fetch and Display Shipping Options
+        const { data: shippingOptionsData, error: shippingOptionsError } = await supabase
+            .from('shipping_options')
+            .select('*');
+
+        // Debug logging
+        console.log('Fetched shipping options:', shippingOptionsData);
+        console.log('Fetch error:', shippingOptionsError);
+
+        if (shippingOptionsError) {
+            console.error("❌ Failed to fetch shipping options:", shippingOptionsError.message);
+            alert("Failed to load shipping methods.");
+            return;
+        }
+
+        shippingOptions = shippingOptionsData;
+
+        // ✅ Get stored shipping option or fallback to Pick-up
+        const storedOptionId = localStorage.getItem('selectedShippingOptionId');
+        let selectedOption = shippingOptions.find(opt => opt.id == storedOptionId);
+
+        if (!selectedOption) {
+            selectedOption = shippingOptions.find(opt => opt.name === 'Pickup (in-store)');
+            if (selectedOption) {
+                localStorage.setItem('selectedShippingOptionId', selectedOption.id);
+            } else {
+                alert("No available shipping options. Please contact support.");
+                throw new Error("No available shipping options.");
+            }
+        }
+
+        selectedShippingOptionId = selectedOption.id;
+
+        // ✅ Set base fee and perKmRate
+        let baseFee = 0;
+        let perKmRate = 0;
+
+        if (selectedOption.name === 'LBC Express') {
+            baseFee = 60;
+            perKmRate = 12;
+        } else if (selectedOption.name === 'J&T Express') {
+            baseFee = 40;
+            perKmRate = 8;
+        }
+
+        try {
+            const customerCoords = {
+                lat: defaultAddress.latitude,
+                lon: defaultAddress.longitude
+            };
+
+            const response = await fetch('http://localhost:3000/calculate-distance', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    from: { lat: 14.5547, lon: 121.0244 },
+                    to: customerCoords
+                })
+            });
+
+            const result = await response.json();
+            const distance_km = result.distance_km;
+
+            if (distance_km <= 5) {
+                deliveryDays = 1;
+            } else if (distance_km <= 20) {
+                deliveryDays = 2;
+            } else if (distance_km <= 50) {
+                deliveryDays = 3;
+            } else if (distance_km <= 100) {
+                deliveryDays = 4;
+            } else if (distance_km <= 200) {
+                deliveryDays = 5;
+            } else {
+                deliveryDays = 6; // max cap
+            }
+
+            if (selectedOption.name === 'Pick-up') {
+                shippingFee = 0;
+            } else {
+                let maxRateKm = 100;
+                let discountedRate = perKmRate * 0.5;
+
+                let distanceCharge =
+                    distance_km <= maxRateKm
+                        ? perKmRate * distance_km
+                        : (perKmRate * maxRateKm) + ((distance_km - maxRateKm) * discountedRate);
+
+                shippingFee = baseFee + distanceCharge;
+            }
+
+        } catch (err) {
+            console.error("❌ Distance calc failed:", err);
+            shippingFee = 100;
+            deliveryDays = 3;
+        }
+
+        // ✅ Update UI
+        document.querySelector('#shipping-name .value').textContent = selectedOption.name;
+        document.querySelector('#shipping-price .value').textContent = `₱${shippingFee.toFixed(2)}`;
+        document.querySelector('.delivery-days').textContent = `${deliveryDays} day(s)`;
+
+
+        // Render shipping options in the UI
+        const list = document.getElementById('shipping-options-list');
+        if (list) {
+            list.innerHTML = '';
+
+            shippingOptions.forEach(option => {
+                const li = document.createElement('li');
+                li.textContent = option.name;
+                li.classList.add('shipping-option-item');
+                li.style.cursor = 'pointer';
+                li.dataset.optionId = option.id;
+                li.dataset.optionName = option.name;
+                list.appendChild(li);
+            });
+        }
+
+        const sellerCoords = { lat: 14.5547, lon: 121.0244 };
+        const customerCoords = {
+            lat: defaultAddress?.latitude,
+            lon: defaultAddress?.longitude
+        };
+
+        console.log("📍 Coordinates:", { from: sellerCoords, to: customerCoords });
+
+        // ✅ Now update checkout totals with final shippingFee
+        updateCheckoutTotals(subtotal, shippingFee);
+
+        console.log('Default address:', defaultAddress);
 
         const addressElement = document.getElementById('address');
         const cityElement = document.getElementById('city');
@@ -168,36 +308,381 @@ document.addEventListener('DOMContentLoaded', async () => {
             });
         }
 
+        // ✅ Toggle the Select Menu
+        const changeShippingBtn = document.getElementById('change-shipping-btn');
+        if (changeShippingBtn) {
+            changeShippingBtn.addEventListener('click', () => {
+                const dropdown = document.getElementById('shipping-options-select');
+                if (dropdown) {
+                    dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+                }
+            });
+        }
+
+        // ✅ Handle Selection + Dynamic Calculation
+        const shippingOptionsList = document.getElementById('shipping-options-list');
+        if (shippingOptionsList) {
+            shippingOptionsList.addEventListener('click', async (e) => {
+                if (!e.target.matches('.shipping-option-item')) return;
+
+                const selectedOptionId = e.target.dataset.optionId;
+                const selectedOptionName = e.target.dataset.optionName;
+
+                let baseFee = 0;
+                let perKmRate = 0;
+
+                if (selectedOptionName === 'LBC Express') {
+                    baseFee = 60;
+                    perKmRate = 12;
+                } else if (selectedOptionName === 'J&T Express') {
+                    baseFee = 40;
+                    perKmRate = 8;
+                }
+
+                try {
+                    const customerCoords = {
+                        lat: defaultAddress.latitude,
+                        lon: defaultAddress.longitude
+                    };
+
+                    const response = await fetch('http://localhost:3000/calculate-distance', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            from: { lat: 14.5547, lon: 121.0244 },
+                            to: customerCoords
+                        })
+                    });
+
+                    const result = await response.json();
+                    const distance_km = result.distance_km;
+
+                    // 📦 Calculate delivery days for all methods
+                    if (distance_km <= 5) {
+                        deliveryDays = 1;
+                    } else if (distance_km <= 20) {
+                        deliveryDays = 2;
+                    } else if (distance_km <= 50) {
+                        deliveryDays = 3;
+                    } else if (distance_km <= 100) {
+                        deliveryDays = 4;
+                    } else if (distance_km <= 200) {
+                        deliveryDays = 5;
+                    } else {
+                        deliveryDays = 6; // max cap
+                    }
+
+                    // 📦 Pick-up is free
+                    if (selectedOptionName === 'Pick-up') {
+                        shippingFee = 0;
+                    } else {
+                        let maxRateKm = 100;
+                        let discountedRate = perKmRate * 0.5;
+
+                        let distanceCharge =
+                            distance_km <= maxRateKm
+                                ? perKmRate * distance_km
+                                : (perKmRate * maxRateKm) + ((distance_km - maxRateKm) * discountedRate);
+
+                        shippingFee = baseFee + distanceCharge;
+                    }
+
+                } catch (err) {
+                    console.error("❌ Distance calculation failed:", err);
+                    shippingFee = 100;
+                    deliveryDays = 3;
+                }
+
+                // ✅ Update UI
+                document.querySelector('#shipping-name .value').textContent = selectedOptionName;
+                document.querySelector('#shipping-price .value').textContent = `₱${shippingFee.toFixed(2)}`;
+                document.querySelector('.delivery-days').textContent = `${deliveryDays} day(s)`;
+
+                // ✅ Store selection
+                selectedShippingOptionId = selectedOptionId;
+                localStorage.setItem('selectedShippingOptionId', selectedOptionId);
+
+                // ✅ Update total
+                updateCheckoutTotals(subtotal, shippingFee);
+
+                // ✅ Hide dropdown
+                const dropdown = document.getElementById('shipping-options-select');
+                if (dropdown) {
+                    dropdown.style.display = 'none';
+                }
+            });
+        }
+
+
+        console.log("👤 User ID:", user.id);
+        console.log("📦 Address Input:", address, city, zip);
+
+        // ✅ Save Address with Geocoding
         document.getElementById('save-address-btn').addEventListener('click', async () => {
-            const newAddress = {
-                user_id: user.id,
-                address: document.getElementById('new-address').value,
-                city: document.getElementById('new-city').value,
-                zip_code: document.getElementById('new-zip').value,
-                is_default: true
-            };
+            console.log('Save address button clicked');
 
-            const { data, error } = await supabase
-                .from('customer_addresses')
-                .insert([newAddress]);
+            const address = document.getElementById('new-address').value.trim();
+            const city = document.getElementById('new-city').value.trim();
+            const zip = document.getElementById('new-zip').value.trim();
 
-            if (error) {
-                console.error("Failed to add address:", error.message);
-                alert("Failed to add address.");
-            } else {
-                alert("New address added!");
-                document.getElementById('address').textContent = newAddress.address;
-                document.getElementById('city').textContent = newAddress.city;
-                document.getElementById('zip').textContent = newAddress.zip_code;
+            if (!address || !city || !zip) {
+                alert("Please complete the address fields.");
+                return;
+            }
+
+            const fullAddress = `${address}, ${city}, ${zip}`;
+            let coords;
+
+            try {
+                coords = await geocodeAddress(fullAddress);
+                console.log("📍 Geocoded coords:", coords);
+
+                const { data: { user }, error: userError } = await supabase.auth.getUser();
+                if (userError || !user) throw new Error("User not found");
+
+                // ✅ Check if this address already exists for the user
+                const { data: matches, error: existingError } = await supabase
+                    .from('customer_addresses')
+                    .select('*')
+                    .eq('user_id', user.id)
+                    .eq('address', address)
+                    .eq('city', city)
+                    .eq('zip_code', zip)
+                    .limit(1);
+
+                if (existingError) {
+                    console.error("❌ Supabase error when checking address:", existingError);
+                    alert("Something went wrong when checking address.");
+                    return;
+                }
+
+                const existing = matches && matches.length > 0 ? matches[0] : null;
+
+
+
+                if (existing) {
+                    // ✅ Update that existing address and set as default
+                    const { error: updateError } = await supabase
+                        .from('customer_addresses')
+                        .update({
+                            is_default: true,
+                            latitude: coords.latitude,
+                            longitude: coords.longitude
+                        })
+                        .eq('id', existing.id);
+
+                    if (updateError) {
+                        console.error("❌ Failed to update address:", updateError);
+                        alert("Failed to update address.");
+                        return;
+                    }
+
+                    // ✅ Unset others
+                    await supabase
+                        .from('customer_addresses')
+                        .update({ is_default: false })
+                        .eq('user_id', user.id)
+                        .neq('id', existing.id);
+
+                    console.log("✅ Address updated as default");
+                } else {
+                    // ✅ Unset previous defaults first
+                    await supabase
+                        .from('customer_addresses')
+                        .update({ is_default: false })
+                        .eq('user_id', user.id)
+                        .eq('is_default', true);
+
+                    // ✅ Insert new address
+                    const { error: insertError } = await supabase
+                        .from('customer_addresses')
+                        .insert([{
+                            user_id: user.id,
+                            address,
+                            city,
+                            zip_code: zip,
+                            is_default: true,
+                            latitude: coords.latitude,
+                            longitude: coords.longitude
+                        }]);
+
+                    if (insertError) {
+                        console.error("❌ Failed to insert address:", insertError);
+                        alert("Failed to insert address.");
+                        return;
+                    }
+
+                    console.log("✅ New address inserted and set as default");
+                }
+
+                // ✅ Fetch new default and update UI
+                defaultAddress = await fetchDefaultAddress(user.id);
+                document.getElementById('address').textContent = defaultAddress.address;
+                document.getElementById('city').textContent = defaultAddress.city;
+                document.getElementById('zip').textContent = defaultAddress.zip_code;
                 document.getElementById('new-address-form').style.display = 'none';
+
+                // ✅ Refresh shipping
+                await recalculateShipping();
+
+                alert("✅ Address saved and applied!");
+                location.reload();
+
+            } catch (err) {
+                console.error("❌ Address saving failed:", err);
+                alert("Failed to save address.");
             }
         });
+
+
+
+        async function recalculateShipping() {
+            try {
+                const { data: { user }, error: userError } = await supabase.auth.getUser();
+                if (userError || !user) throw new Error("User not found");
+
+                // ⏬ Always refetch the latest default address
+                defaultAddress = await fetchDefaultAddress(user.id);
+                if (!defaultAddress || !defaultAddress.latitude || !defaultAddress.longitude) {
+                    throw new Error("Missing or invalid coordinates for address.");
+                }
+
+                const sellerCoords = { lat: 14.5547, lon: 121.0244 }; // Makati
+                const customerCoords = {
+                    lat: defaultAddress.latitude,
+                    lon: defaultAddress.longitude
+                };
+
+                const response = await fetch('http://localhost:3000/calculate-distance', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ from: sellerCoords, to: customerCoords })
+                });
+
+                const result = await response.json();
+                if (!response.ok || result.distance_km === undefined) {
+                    throw new Error(result.error || "Invalid response from ORS.");
+                }
+
+                const distance_km = result.distance_km;
+
+                // Use selected shipping option pricing if available
+                if (selectedShippingOptionId) {
+                    const selectedOption = shippingOptions.find(opt => opt.id == selectedShippingOptionId);
+                    if (selectedOption) {
+                        let baseFee = 50;
+                        let perKmRate = 10;
+
+                        if (selectedOption.name === 'LBC Express') {
+                            baseFee = 60;
+                            perKmRate = 12;
+                        } else if (selectedOption.name === 'J&T Express') {
+                            baseFee = 40;
+                            perKmRate = 8;
+                        } else if (selectedOption.name === 'Pick-up') {
+                            shippingFee = 0;
+                            deliveryDays = 0;
+                        }
+
+                        if (selectedOption.name !== 'Pick-up') {
+                            let maxRateKm = 100;
+                            let discountedRate = perKmRate * 0.5;
+
+                            let distanceCharge =
+                                distance_km <= maxRateKm
+                                    ? perKmRate * distance_km
+                                    : (perKmRate * maxRateKm) + ((distance_km - maxRateKm) * discountedRate);
+
+                            shippingFee = baseFee + distanceCharge;
+                            if (distance_km <= 5) {
+                                deliveryDays = 1;
+                            } else if (distance_km <= 20) {
+                                deliveryDays = 2;
+                            } else if (distance_km <= 50) {
+                                deliveryDays = 3;
+                            } else if (distance_km <= 100) {
+                                deliveryDays = 4;
+                            } else if (distance_km <= 200) {
+                                deliveryDays = 5;
+                            } else {
+                                deliveryDays = 6; // max cap
+                            }
+                        }
+                    } else {
+                        // Fallback to pick-up (free)
+                        shippingFee = 0;
+                        deliveryDays = 0;
+                    }
+                } else {
+                    // Default to pick-up (free) if no option selected
+                    shippingFee = 0;
+                    deliveryDays = 0;
+                }
+
+                // ✅ Update shipping info in DOM
+                const selectedOption = shippingOptions.find(opt => opt.id == selectedShippingOptionId);
+                const shippingName = selectedOption ? selectedOption.name : "Pick-up";
+                document.querySelector('#shipping-name .value').textContent = shippingName;
+                document.querySelector('#shipping-price .value').textContent = `₱${shippingFee.toFixed(2)}`;
+                document.querySelector('.delivery-days').textContent = `${deliveryDays} day(s)`;
+
+                // ✅ Recalculate subtotal and total
+                const { data: cartItems } = await supabase
+                    .from('cart_items')
+                    .select('quantity, products(price)')
+                    .eq('user_id', user.id);
+
+                const subtotal = cartItems.reduce((acc, item) => acc + item.quantity * item.products.price, 0);
+                updateCheckoutTotals(subtotal, shippingFee);
+
+                // ✅ Update address display
+                document.getElementById('address').textContent = defaultAddress.address || 'No address';
+                document.getElementById('city').textContent = defaultAddress.city || 'No city';
+                document.getElementById('zip').textContent = defaultAddress.zip_code || 'No zip';
+
+                console.log("📦 Shipping recalculated:", {
+                    shippingFee,
+                    deliveryDays,
+                    distance_km: distance_km.toFixed(2),
+                    selectedOption: selectedOption?.name || 'Default'
+                });
+            } catch (err) {
+                console.error("❌ Failed to recalculate shipping:", err);
+                alert("Shipping calculation failed. Please check your address.");
+                shippingFee = 0;
+                deliveryDays = 0;
+                updateCheckoutTotals(0, shippingFee); // Fallback to pick-up
+            }
+        }
+
 
     } catch (error) {
         console.error('Error loading checkout:', error);
         alert(`Error: ${error.message}`);
     }
 });
+
+
+async function geocodeAddress(fullAddress) {
+    const apiKey = 'YOUR_OPENCAGE_API_KEY'; // Replace with your real key
+    const encodedAddress = encodeURIComponent(fullAddress);
+
+    const response = await fetch(`https://api.opencagedata.com/geocode/v1/json?q=${encodedAddress}&key=${'1d3b7d2cf3ec4c03b40581da61813a6f'}`);
+
+    if (!response.ok) {
+        throw new Error("Failed to geocode address");
+    }
+
+    const data = await response.json();
+    if (data.results.length === 0) {
+        throw new Error("No location found for the address.");
+    }
+
+    const { lat, lng } = data.results[0].geometry;
+    return { latitude: lat, longitude: lng };
+}
+
+
 
 const methodDisplay = document.querySelector('#payment-method .value');
 const changeBtn = document.getElementById('change-payment-btn');
@@ -238,7 +723,6 @@ function updateCheckoutTotals(subtotal, shipping) {
     if (shippingElem) shippingElem.textContent = `₱${shipping.toFixed(2)}`;
     if (totalElem) totalElem.textContent = `₱${total.toFixed(2)}`;
 }
-
 function calculateTotals(cartItems, shippingPrice) {
     const subtotal = cartItems.reduce((acc, item) => {
         return acc + item.quantity * item.products.price;
@@ -277,8 +761,6 @@ confirmEwalletBtn.addEventListener('click', async () => {
             return;
         }
 
-        // Assume shipping is fixed (e.g. 100 PHP) — replace with your logic if dynamic
-        const shippingFee = 100;
         const shippingAmount = Math.round(shippingFee * 100);
 
         const formattedItems = cartItems.map(item => ({
@@ -293,7 +775,7 @@ confirmEwalletBtn.addEventListener('click', async () => {
             name: "Shipping Fee",
             quantity: 1,
             amount: shippingAmount,
-            description: "Standard Shipping"
+            description: `Shipping (ETA: ${deliveryDays} day${deliveryDays > 1 ? 's' : ''})`
         });
 
         // ✅ Total includes shipping
@@ -442,11 +924,11 @@ confirmEwalletBtn.addEventListener('click', async () => {
 //     // console.error("Failed to fetch customer info:", customerError);
 //     // }
 
-   
+
 //     // const orderedProducts = newOrder.orders; 
 //     // const productIds = orderedProducts.map(item => item.product_id);
 
-   
+
 //     // const { data: productsData, error: productError } = await supabase
 //     // .from('products')
 //     // .select('id, name')
@@ -456,13 +938,13 @@ confirmEwalletBtn.addEventListener('click', async () => {
 //     // console.error("Failed to fetch product data:", productError);
 //     // }
 
-   
+
 //     // const productNameMap = {};
 //     // productsData.forEach(product => {
 //     // productNameMap[product.id] = product.name;
 //     // });
 
-  
+
 //     // const itemSummary = {};
 //     // orderedProducts.forEach(item => {
 //     // const name = productNameMap[item.product_id] || 'Item';
@@ -473,7 +955,7 @@ confirmEwalletBtn.addEventListener('click', async () => {
 //     // .map(([name, qty]) => `${qty}x ${name}`)
 //     // .join(', ');
 
-  
+
 //     // try {
 //     // await emailjs.send("service_z4yifwn", "template_p4t0ftl", {
 //     //     customer_name: customer?.name || "Customer",
@@ -481,7 +963,7 @@ confirmEwalletBtn.addEventListener('click', async () => {
 //     //     order_id: newOrder.id,
 //     //     order_total: `₱${total.toFixed(2)}`,
 //     //     order_items: itemDescriptions,
-      
+
 //     // });
 
 //     // console.log("Confirmation email sent");
@@ -523,7 +1005,6 @@ confirmEwalletBtn.addEventListener('click', async () => {
 // }
 
 // ... [Your existing imports and functions above remain unchanged] ...
-
 document.getElementById('place-order').addEventListener('click', async () => {
     const { data: { user }, error: userError } = await supabase.auth.getUser();
     if (userError || !user) {
@@ -538,17 +1019,8 @@ document.getElementById('place-order').addEventListener('click', async () => {
         return;
     }
 
-    const selectedShippingName = document.querySelector('#shipping-name .value').textContent;
-    const selectedShipping = shippingOptions.find(opt => opt.name === selectedShippingName);
-    let deliveryDays = parseInt(selectedShipping.estimated_time.match(/\d+/)?.[0]);
-
-    if (isNaN(deliveryDays)) {
-        alert("Invalid delivery time format. Please check the shipping option.");
-        return;
-    }
-
-    const selectedShippingId = selectedShipping.id;
-    const shippingPrice = Number(selectedShipping.price);
+    const shippingPrice = shippingFee;
+    const selectedShippingId = selectedShippingOptionId;
 
     const estimatedDelivery = new Date();
     estimatedDelivery.setDate(estimatedDelivery.getDate() + deliveryDays);
@@ -578,6 +1050,8 @@ document.getElementById('place-order').addEventListener('click', async () => {
             user_id: userId,
             address_id: selectedAddressId,
             shipping_option_id: selectedShippingId,
+            shipping_fee: shippingFee,
+            delivery_days: deliveryDays,
             payment_method: paymentMethod,
             subtotal_price: subtotal,
             total_price: total,
@@ -611,33 +1085,19 @@ document.getElementById('place-order').addEventListener('click', async () => {
         return;
     }
 
-    // 🔧 Deduct stock quantity
     for (const item of cartItems) {
-        console.log(" Checking item:", item);
-
         const { data: productData, error: fetchError } = await supabase
             .from('products')
             .select('stock_quantity')
             .eq('id', item.product_id)
             .maybeSingle();
 
-        if (fetchError) {
-            console.error(` Fetch error for product ${item.product_id}:`, fetchError);
-            continue;
-        }
-
-        if (!productData) {
-            console.error(` No product found for ID: ${item.product_id}`);
-            continue;
-        }
-
-        if (typeof productData.stock_quantity !== 'number') {
-            console.error(` Invalid stock quantity for product ${item.product_id}:`, productData.stock_quantity);
+        if (fetchError || !productData || typeof productData.stock_quantity !== 'number') {
+            console.error(`Failed to fetch stock for product ${item.product_id}`);
             continue;
         }
 
         const newStock = productData.stock_quantity - item.quantity;
-        console.log(` Updating stock: Product ${item.product_id} from ${productData.stock_quantity} → ${newStock}`);
 
         const { error: updateError } = await supabase
             .from('products')
@@ -646,25 +1106,21 @@ document.getElementById('place-order').addEventListener('click', async () => {
 
         if (updateError) {
             console.error(`Failed to update stock for product ${item.product_id}:`, updateError);
-        } else {
-            console.log(` Stock updated for product ${item.product_id}`);
         }
     }
 
-    // 🧹 Clear cart
     const { error: clearError } = await supabase
         .from('cart_items')
         .delete()
         .eq('user_id', userId);
 
     if (clearError) {
-        console.warn(" Order placed, but failed to clear cart.");
+        console.warn("Order placed, but failed to clear cart.");
         console.error(clearError);
-    } else {
-        console.log(" Cart cleared.");
     }
 
-    // ✅ Success modal
+    localStorage.removeItem('selectedShippingOptionId');
+
     const modal = document.getElementById('order-success-modal');
     const okBtn = document.getElementById('order-success-ok-btn');
     modal.classList.remove('hidden');
@@ -674,4 +1130,26 @@ document.getElementById('place-order').addEventListener('click', async () => {
         document.body.classList.remove('modal-open');
         window.location.href = '../Homepage/Homepage.html';
     };
-});
+}); // ← only one closing brace here
+
+
+async function insertOrderItems(orderId, cartItems) {
+    const itemsToInsert = cartItems.map(item => ({
+        order_id: orderId,
+        product_id: item.product_id,
+        quantity: item.quantity
+    }));
+
+    const { data, error } = await supabase
+        .from('order_items')
+        .insert(itemsToInsert);
+
+    if (error) {
+        console.error("❌ Failed to insert order items:", error);
+        alert("Order was created, but we couldn't save the items.");
+        return false;
+    }
+
+    console.log("✅ Order items inserted:", data);
+    return true;
+}
