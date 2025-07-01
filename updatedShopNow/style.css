@@ -631,3 +631,57 @@ body {
 .hidden {
   display: none;
 }
+
+/* Out of Stock Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(179, 38, 30, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  transition: background 0.3s;
+}
+.modal-content {
+  background: #fff8f3;
+  border-radius: 24px;
+  box-shadow: 0 8px 32px rgba(179, 38, 30, 0.15);
+  padding: 32px 32px 24px 32px;
+  min-width: 320px;
+  max-width: 90vw;
+  text-align: center;
+  border: 2px solid #b3261e;
+}
+.modal-title {
+  color: #b3261e;
+  font-size: 2rem;
+  margin-bottom: 12px;
+  font-family: 'Alef', sans-serif;
+  font-weight: 700;
+}
+.modal-text {
+  color: #1d1b20;
+  font-size: 1.1rem;
+  margin-bottom: 24px;
+  font-family: 'Alef', sans-serif;
+}
+.modal-actions {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+}
+#close-out-of-stock.btn-primary {
+  background: #b3261e;
+  color: #fff8f3;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 32px;
+  font-size: 1rem;
+  font-family: 'Alef', sans-serif;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+#close-out-of-stock.btn-primary:hover {
+  background: #9e1f19;
+}
