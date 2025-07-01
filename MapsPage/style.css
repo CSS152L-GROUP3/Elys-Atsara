@@ -16,6 +16,8 @@
   width: 1440px;
   min-height: 80vh;
   position: relative;
+  margin: 0 auto;
+  box-sizing: border-box;
 }
 
 .AboutUs .top-Nav {
@@ -511,14 +513,21 @@
     background-color: #9E1F19 !important;
   }
 
+  /* Footer at the bottom */
   .AboutUs .footer {
-    position: relative;
-    width: 100%;
-    top: 100px;
-    height: 80px;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100vw;
+    height: 100px;
+    background: #fff;
     border-top: #9E1F19 solid 2px;
-    margin-top: 40px;
-    background-color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+    margin: 0;
+    box-shadow: 0 -2px 8px rgba(0,0,0,0.04);
   }
 
   .AboutUs .tiktokbtn {
@@ -554,37 +563,35 @@
   }
 
   .AboutUs .BackBtn {
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    width: 200px;
+    position: static;
+    margin: 0 auto;
+    left: unset;
+    top: unset;
+    bottom: unset;
+    width: 220px;
     height: 70px;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    position: absolute;
-    top: 10px;
-    left: 5%;  
-    background-color: #b3261e;
-    overflow: hidden;
+    font-size: 25px;
+    border-radius: 18px;
+    background: #b3261e;
+    color: #fff;
     font-family: "Alef", sans-serif, Arial, sans-serif;
     font-weight: 700;
-    color: #ffffff;
-    font-size: 25px;
-    text-align: center;
-    letter-spacing: 0.10px;
-    line-height: 20px;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    pointer-events: auto;
-    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(179, 38, 30, 0.10);
+    transition: background 0.3s;
+    text-decoration: none !important;
   }
   
-  .AboutUs .LearnMoreBtn:hover {
-    background-color: #9E1F19 !important;
+  .AboutUs .BackBtn:hover {
+    background: #9E1F19;
   }
   
+  .AboutUs .BackBtn * {
+    text-decoration: none !important;
+  }
+
 .AboutUs .Carousel {
   position: relative;
   width: 100%;
@@ -710,5 +717,30 @@
   box-shadow: 0 2px 6px rgba(179, 38, 30, 0.15);
   z-index: 2;
   border: 2px solid #fff8f3;
+}
+
+.map-center-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+  margin: 100px 0 40px 0;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+@media (max-width: 900px) {
+  .AboutUs .div {
+    width: 100vw;
+    min-width: 0;
+    padding: 0 8px;
+  }
+  .map-center-section {
+    flex-direction: column;
+    gap: 24px;
+    margin: 40px 0 24px 0;
+    max-width: 98vw;
+  }
 }
 
