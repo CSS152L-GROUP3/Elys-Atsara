@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
         // Add click listeners to notif items
         notifDropdown.querySelectorAll('.notif-item').forEach(div => {
-          div.addEventListener('click', async function() {
+          div.addEventListener('click', async function () {
             const notifId = this.getAttribute('data-notif-id');
             // Mark as read in DB
             await supabase.from('order_cancellations').update({ read: true }).eq('id', notifId);
@@ -305,7 +305,7 @@ function addActionListeners(adminEmail) {
               shipper_name: shipperName
             }]);
 
-          // Notify user their order was shipped
+          // Notify user in app
           await supabase
             .from('user_notifications')
             .insert([{
@@ -316,6 +316,58 @@ function addActionListeners(adminEmail) {
               details: '',
               read: false
             }]);
+
+          // ✅ EmailJS: Send shipping email
+          try {
+            const { data: customerData, error: customerError } = await supabase
+              .from('customer_accounts')
+              .select('name, email')
+              .eq('uuid', order.user_id)
+              .single();
+
+            if (customerError || !customerData) {
+              console.warn('Failed to fetch customer info for email.');
+            } else {
+              const { name: customerName, email: customerEmail } = customerData;
+
+              // Get product names
+              let itemDescriptions = '';
+              if (Array.isArray(order.orders)) {
+                const { data: productData } = await supabase
+                  .from('products')
+                  .select('id, name');
+
+                const productMap = new Map();
+                productData?.forEach(p => productMap.set(p.id, p.name));
+
+                itemDescriptions = order.orders.map(item => {
+                  const productName = productMap.get(item.product_id) || 'Unknown Item';
+                  return `${item.quantity}x ${productName}`;
+                }).join(', ');
+              }
+
+              const templateParams = {
+                customer_name: customerName,
+                customer_email: customerEmail,
+                order_id: order.id,
+                order_items: itemDescriptions,
+                order_total: `₱${Number(order.total_price).toFixed(2)}`,
+                courier_name: shipperName,
+                estimated_delivery: '5–7 business days'
+              };
+
+              await emailjs.send(
+                'service_mcoaibi',         // Replace with your EmailJS Service ID
+                'template_e8myudk',        // Your shipping email template ID
+                templateParams,
+                'JI6yF58k0ZqbJRKPv'        // Your public key
+              );
+
+              console.log('📦 Shipping email sent to customer:', customerEmail);
+            }
+          } catch (emailErr) {
+            console.error('❌ Failed to send shipping email:', emailErr);
+          }
 
           alert(`Order ${orderId} marked as shipped.`);
 
@@ -343,12 +395,69 @@ function addActionListeners(adminEmail) {
       if (!confirm(`Mark order ${orderId} as completed?`)) return;
 
       try {
+        // 1. Mark as completed
         await supabase
           .from('orders')
           .update({ status: 'Completed' })
           .eq('id', orderId);
 
-        alert(`Order ${orderId} marked as completed.`);
+        // 2. Fetch full order info
+        const { data: orderData } = await supabase
+          .from('orders')
+          .select('id, user_id, orders, total_price')
+          .eq('id', orderId)
+          .single();
+
+        // 3. Fetch customer info
+        const { data: customer } = await supabase
+          .from('customer_accounts')
+          .select('name, email')
+          .eq('uuid', orderData.user_id)
+          .single();
+
+        // 4. Get product names
+        const productIds = orderData.orders.map(item => item.product_id);
+        const { data: productsData } = await supabase
+          .from('products')
+          .select('id, name')
+          .in('id', productIds);
+
+        const productMap = {};
+        productsData.forEach(p => productMap[p.id] = p.name);
+
+        const itemSummary = {};
+        orderData.orders.forEach(item => {
+          const name = productMap[item.product_id] || "Item";
+          itemSummary[name] = (itemSummary[name] || 0) + item.quantity;
+        });
+
+        const itemDescriptions = Object.entries(itemSummary)
+          .map(([name, qty]) => `${qty}x ${name}`)
+          .join(', ');
+        console.log({
+          customer_name: customer?.name || "Customer",
+          customer_email: customer?.email || "no-reply@example.com",
+          order_id: orderData.id,
+          order_items: itemDescriptions,
+          order_total: `₱${orderData.total_price?.toFixed(2)}`
+        });
+
+        // 5. Send Email
+        try {
+          await emailjs.send("service_mcoaibi", "template_yvfiwpl", {
+            customer_name: customer?.name || "Customer",
+            customer_email: customer?.email || "no-reply@example.com",
+            order_id: orderData.id,
+            order_items: itemDescriptions,
+            order_total: `₱${orderData.total_price?.toFixed(2)}`
+          });
+          console.log("✅ Completion email sent");
+        } catch (err) {
+          console.error("❌ Failed to send completion email:", err);
+        }
+
+        alert(`Order ${orderId} marked as completed and email sent.`);
+
 
         const [updatedOrders, customers, shipmentLogs] = await Promise.all([
           fetchOrders(),
@@ -359,8 +468,8 @@ function addActionListeners(adminEmail) {
         allOrders = attachCustomerAndShipperNames(updatedOrders, customers, shipmentLogs);
         populateOrdersTable(allOrders, adminEmail);
       } catch (err) {
-        console.error('Complete error:', err.message);
-        alert('Failed to complete order.');
+        console.error("❌ Failed to send completion email:", err);
+        alert(`Failed to send email: ${err?.text || err?.message || 'Unknown error'}`);
       }
     });
   });
