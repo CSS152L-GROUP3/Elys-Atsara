@@ -196,7 +196,6 @@ if (isPlus) {
   );
 
   if (quantity >= maxStock) {
-    alert("Cannot add more than available stock.");
     return;
   }
 
