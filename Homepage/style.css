@@ -31,23 +31,15 @@
   height: auto;
   aspect-ratio: 4 / 3;
   top: 15%;
-  right: 10%; 
+  right: 10%; /* Adjust to control horizontal position inside wrapper */
 }
 
 @media (max-width: 768px) {
   .homepage .overlap {
-    width: 80%;
+    width:auto;
     right: 10%;
     top: 10%;
   }
-}
-
-.homepage .group {
-  position: absolute;
-  width: 619px;
-  height: 97px;
-  top: 224px;
-  left: 0;
 }
 
 .homepage .icon {
@@ -58,19 +50,32 @@
   top: 0;
 }
 
-.homepage .img {
-  left: 0;
-  position: absolute;
-  width: 71px;
-  height: 97px;
-  top: 0;
+.wrapper {
+  position: relative;
+  width: 90%;
+  max-width: 90%;
+  min-height: 80vh;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  padding: clamp(10px, 3vw, 20px);
+  box-sizing: border-box;
+}
+
+@media (max-width: 600px) {
+  .wrapper {
+    padding: 10px;
+    flex-direction: column;
+  }
 }
 
 .homepage .headline {
   position: absolute;
   width: clamp(200px, 40%, 523px);
   height: auto;
-  top: 15%;
+  top: 22%;
   left: 15%;
   -webkit-text-stroke: 2px #ac2626;
   font-family: "Allura", cursive;
@@ -84,10 +89,20 @@
 
 @media (max-width: 600px) {
   .homepage .headline {
-    top: 10%;
+    top: 20%;
     left: 15%;
   }
 }
+
+@media (min-width: 1600px) {
+  .homepage .headline {
+    top: 20%;
+    left: 18%; /* Slightly more to the right for wide screens */
+    font-size: 95px;
+    letter-spacing: 7px;
+  }
+}
+
 
 .homepage .ShopNow {
   position: absolute;
@@ -110,7 +125,7 @@
   justify-content: center;
   gap: 8px;
   position: absolute;
-  top: 0;
+  top: 10%;
   left: 0;
   background-color: #b3261e;
   border-radius: 100px;
@@ -137,27 +152,11 @@
   }
 }
 
-
-/* .homepage .description {
-  width: 500px;
-  top: 330px;
-  left: 100px;
-  font-size: 18px;
-  -webkit-line-clamp: 6;
-  position: absolute;
-  font-family: "Alef", sans-serif;
-  font-weight: 700;
-  color: #1d1b20;
-  letter-spacing: 0.25px;
-  line-height: 24px;
-  z-index: 1;
-} */
-
 .homepage .description {
   position: absolute;
   width: clamp(250px, 40%, 500px);
-  top: 35%;
-  left: 15.8%;
+  top: 38%;
+  left: 19.5%;
   font-size: clamp(14px, 1.8vw, 18px);
   -webkit-line-clamp: 6;
   font-family: "Alef", sans-serif;
@@ -173,6 +172,7 @@
     top: 30%;
     left: 5%;
     width: 90%;
+    font-size: 12px !important;   
   }
 }
 
@@ -180,270 +180,175 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 40px 20px;
+  padding: clamp(20px, 4vw, 40px) clamp(10px, 3vw, 20px);
   background-color: white;
   color: white;
   position: fixed;
   width: 100%;
   z-index: 1000;
   border-bottom: 2px solid #b7251d;
+  box-sizing: border-box;
+}
+
+/* Icon Buttons */
+.homepage .About,
+.homepage .Cart,
+.homepage .Dashboard,
+.homepage .Account,
+.homepage .group1,
+.homepage .group2,
+.homepage .group3,
+.homepage .group4 {
+  position: absolute;
+  width: clamp(40px, 4vw, 60px);
+  height: auto;
+  border-radius: 50%;
 }
 
 .homepage .About {
-  position: absolute;
-  width: 60px;
-  height: 58px;
-  top: -21%;
-  left: 123px;
-  border-radius: 100px;
+  top: -20%;
+  left: 8%;
 }
 
 .homepage .Cart {
-  position: absolute;
-  width: 60px;
-  height: 58px;
   top: 10px;
-  left: 430px;
-  border-radius: 100px;
+  left: 30%;
 }
 
 .homepage .Dashboard {
-  position: absolute;
-  width: 60px;
-  height: 58px;
   top: 10px;
-  left: 500px;
-  border-radius: 100px;
+  left: 35%;
 }
 
 .homepage .Account {
-  position: absolute;
-  width: 60px;
-  height: 58px;
   top: 12px;
-  left: 1342px;
-  border-radius: 100px;
+  right: 5%;
 }
 
-.homepage .AccountBtn1 {
-  background: transparent; 
-  border: none; 
-  padding: 0; 
-  cursor: pointer;
-  z-index: 1;
+.homepage .group1 {
+  top: 25px;
+  left: 1%;
 }
 
-.homepage .AccountBtn1:hover svg rect {
-  fill: #9E1F19; 
+.homepage .group2 {
+  top: -1px;
+  left: 4%;
 }
 
-.homepage .AboutUsBtn2 {
-  position: absolute;
-  width: 160px;
-  top: 19px;
-  left: -130px;
-  font-family: "Alef", sans-serif;
-  font-weight: 700;
-  color: #1d1b20;
-  font-size: 20px;
-  letter-spacing: 0.25px;
-  line-height: 20px;
-  background-color: transparent;
-  border-color: transparent;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  padding-right: 20px;
+.homepage .group3 {
+  top: 8px;
+  left: 65%;
 }
 
-.homepage .AboutUsBtn2:hover {
-  color: #b3261e;
-  background-color: transparent;
+.homepage .group4 {
+  top: -3px;
+  left: -6%;
 }
 
-.homepage .AboutUsBtn1 {
-  background: transparent; 
-  border: none; 
-  padding: 0; 
-  cursor: pointer;
-  z-index: 1;
-}
-.homepage .AboutUsBtn1:hover svg rect {
-  fill: #9E1F19; 
-}
-
-.homepage .AccountBtn2 {
-  position: absolute;
-  width: 120px;
-  height: 30px;
-  top: 17px;
-  left: -100px;
-  font-size: 20px;
-  font-family: "Alef", sans-serif;
-  font-weight: 700;
-  color: #1d1b20;
-  letter-spacing: 0.25px;
-  line-height: 20px;
-  background-color: transparent;
-  border-color: transparent;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  padding-right: 25px;
-}
-
-.homepage .AccountBtn2:hover {
-  color: #b3261e;
-  background-color: transparent;
-}
-
-.homepage .CartBtn1 {
-  background: transparent; 
-  border: none; 
-  padding: 0; 
-  cursor: pointer;
-  z-index: 1;
-}
-
-.homepage .CartBtn1:hover svg rect {
-  fill: #9E1F19; 
-}
-
-.homepage .CartBtn2 {
-  width: 75px;
-  top: 18px;
-  left: -70px;
-  font-size: 20px;
-  position: absolute;
-  font-family: "Alef", sans-serif;
-  font-weight: 700;
-  color: #1d1b20;
-  letter-spacing: 0.25px;
-  line-height: 20px;
-  padding-right: 10px;
-  background-color: transparent;
-  border-color: transparent;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.homepage .CartBtn2:hover {
-  color: #b3261e;
-  background-color: transparent;
-}
-
-.homepage .DashBtn1 {
-  background: transparent; 
-  border: none; 
-  padding: 0; 
-  cursor: pointer;
-  z-index: 1;
-}
-
-.homepage .DashBtn1:hover svg rect {
-  fill: #9E1F19; 
-}
-
-.homepage .DashBtn2 {
-  width: 75px;
-  top: 18px;
-  left: -130px;
-  font-size: 20px;
-  position: absolute;
-  font-family: "Alef", sans-serif;
-  font-weight: 700;
-  color: #1d1b20;
-  letter-spacing: 0.25px;
-  line-height: 20px;
-  padding-right: 10px;
-  background-color: transparent;
-  border-color: transparent;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.homepage .DashBtn2:hover {
-  color: #b3261e;
-  background-color: transparent;
-}
-
+/* Primary Button Styles (Icon Containers) */
+.homepage .AboutUsBtn1,
+.homepage .AccountBtn1,
+.homepage .CartBtn1,
+.homepage .DashBtn1,
 .homepage .MapBtn1 {
-  background: transparent; 
-  border: none; 
-  padding: 0; 
+  background: transparent;
+  border: none;
+  padding: 0;
   cursor: pointer;
   z-index: 1;
+}
+
+/* Hover Effects for Icons */
+.homepage .AboutUsBtn1:hover svg rect,
+.homepage .AccountBtn1:hover svg rect,
+.homepage .CartBtn1:hover svg rect,
+.homepage .DashBtn1:hover svg rect {
+  fill: #9E1F19;
 }
 
 .homepage .MapBtn1:hover svg ellipse {
-  fill: #9E1F19; 
+  fill: #9E1F19;
 }
 
+/* Text Buttons */
+.homepage .AboutUsBtn2,
+.homepage .AccountBtn2,
+.homepage .CartBtn2,
+.homepage .DashBtn2,
 .homepage .MapBtn2 {
-  width: 85px;
-  top: 18px;
-  left: -70px;
-  padding-right: 30px;
-  font-size: 20px;
-  position: absolute;
+  position: relative;
   font-family: "Alef", sans-serif;
   font-weight: 700;
   color: #1d1b20;
-  letter-spacing: 0.25px;
-  line-height: 20px;
+  font-size: clamp(14px, 2vw, 20px);
   background-color: transparent;
   border-color: transparent;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
 
+.homepage .AboutUsBtn2 {
+  width: clamp(100px, 10vw, 160px);
+  top: -45px;
+  right: 225%;
+}
+
+.homepage .AccountBtn2 {
+  width: clamp(80px, 8vw, 120px);
+  top: -45px;
+  right: 190%;
+}
+
+.homepage .CartBtn2 {
+  width: clamp(50px, 6vw, 75px);
+  top: -45px;
+  right: 190%;
+}
+
+.homepage .DashBtn2 {
+  width: clamp(50px, 6vw, 75px);
+  top: -45px;
+  right: 200%;
+}
+
+.homepage .MapBtn2 {
+  width: clamp(60px, 7vw, 85px);
+  top: -45px;
+  right: 140%;
+}
+
+/* Hover Effects for Text Buttons */
+.homepage .AboutUsBtn2:hover,
+.homepage .AccountBtn2:hover,
+.homepage .CartBtn2:hover,
+.homepage .DashBtn2:hover,
 .homepage .MapBtn2:hover {
   color: #b3261e;
   background-color: transparent;
 }
 
-.homepage .group1 {
-  position: absolute;
-  width: 60px;
-  height: 58px;
-  top: 25px;
-  left: 5px;
-  border-radius: 30px / 29px;
+@media (max-width: 600px) {
+  .homepage .About,
+  .homepage .Cart,
+  .homepage .Dashboard,
+  .homepage .Account,
+  .homepage .group1,
+  .homepage .group2,
+  .homepage .group3,
+  .homepage .group4 {
+    width: 35px;
+    height: 35px;
+  }
+
+  .homepage .AboutUsBtn2,
+  .homepage .AccountBtn2,
+  .homepage .CartBtn2,
+  .homepage .DashBtn2,
+  .homepage .MapBtn2 {
+    font-size: 10px;
+  }
 }
 
-.homepage .group2 {
-  position: absolute;
-  width: 60px;
-  height: 58px;
-  top: -1px;
-  left: 50px;
-  border-radius: 30px / 29px;
-}
-
-.homepage .group3 {
-  position: absolute;
-  width: 60px;
-  height: 58px;
-  top: 8px;
-  left: 900px;
-  border-radius: 30px / 29px;
-}
-
-.homepage .group2 {
-  position: absolute;
-  width: 60px;
-  height: 58px;
-  top: -1px;
-  left: 50px;
-  border-radius: 30px / 29px;
-}
-
-.homepage .group4 {
-  position: absolute;
-  width: 60px;
-  height: 58px;
-  top: -3px;
-  left: -80px;
-  border-radius: 30px / 29px;
-}
 
 .homepage .supporting-text-6 {
   width: 196px;
@@ -489,42 +394,18 @@
   transform: scale(1.05);
 }
 
-.homepage .element-privacy {
-  position: absolute;
-  width: 60px;
-  height: 58px;
-  top: 910px;
-  left: 416px;
-}
-
-.homepage .group-2 {
-  position: absolute;
-  width: 60px;
-  height: 58px;
-  top: 910px;
-  left: 911px;
-}
-
-.homepage .line-2 {
-  top: 882px;
-  position: absolute;
-  width: 1440px;
-  height: 1px;
-  left: 0;
-  object-fit: cover;
-}
-
 .slider-container {
   position: relative;
   width: 90%;
   max-width: 650px;
   height: auto;
-  aspect-ratio: 13 / 10; /* Keeps similar proportions to 650 x 500 */
+  aspect-ratio: 13 / 10; 
   margin: 0 auto;
   overflow: hidden;
   border-radius: 28px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   background-color: #ffffff;
+  z-index: 1;
 }
 
 .slider {
@@ -533,6 +414,7 @@
   width: 100%;
   height: 100%;
   left: 0;
+  z-index: 1;
 }
 
 @media (max-width: 400px) {
@@ -551,6 +433,7 @@
   opacity: 0;
   transition: opacity 0.5s ease-in-out;
   padding: 20px;
+  z-index: 1;
 }
 
 .slide.active {
@@ -624,4 +507,17 @@
   box-shadow: 0 2px 6px rgba(179, 38, 30, 0.15);
   z-index: 2;
   border: 2px solid #fff8f3;
+}
+
+.Privacy {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: "Alef", sans-serif;
+  font-weight: 700;
+  color: #1d1b20;
+  font-size: clamp(12px, 2vw, 16px);
+  text-decoration: none;
+  z-index: 1;
 }
