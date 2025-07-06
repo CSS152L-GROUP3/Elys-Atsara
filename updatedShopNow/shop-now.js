@@ -97,36 +97,82 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }
 
+  // products.forEach((product) => {
+  //   const cartItem = cartItems.find((item) => item.product_id === product.id);
+  //   const quantity = cartItem ? cartItem.quantity : 0;
+
+  //   const productCard = document.createElement("div");
+  //   productCard.className = "product-card";
+  //   productCard.innerHTML = `
+  //     <img src="${product.image_url}" alt="${
+  //     product.name
+  //   }" class="product-image" />
+  //     <div class="product-info">
+  //       <div class="product-title">${product.name}</div>
+  //       <div class="product-desc">${product.description}</div>
+  //       <div class="product-price">₱${product.price.toFixed(2)}</div>
+  //       <div class="product-variation">Variation: ${product.variation}</div>
+  //       <div class="product-stock" data-id="${product.id}">
+  //       Stock: ${product.stock_quantity - quantity}
+  //     </div>
+
+  //       ${
+  //         role === "guest"
+  //           ? '<div class="guest-message" style="color: #B3261E; margin-top: 10px; font-weight: bold;">Please log in to add items to cart</div>'
+  //           : `<div class="counter">
+  //           <button class="minus" data-id="${product.id}">–</button>
+  //           <span class="quantity" data-id="${product.id}">${quantity}</span>
+  //           <button class="plus" data-id="${product.id}" data-stock="${product.stock_quantity}">+</button>
+  //         </div>`
+  //       }
+  //     </div>
+  //   `;
+
+  //   productList.appendChild(productCard);
+  // });
+
   products.forEach((product) => {
-    const cartItem = cartItems.find((item) => item.product_id === product.id);
-    const quantity = cartItem ? cartItem.quantity : 0;
+  // Check if product is already in the cart
+  const cartItem = cartItems.find((item) => item.product_id === product.id);
+  const quantity = cartItem ? cartItem.quantity : 0;
 
-    const productCard = document.createElement("div");
-    productCard.className = "product-card";
-    productCard.innerHTML = `
-      <img src="${product.image_url}" alt="${
-      product.name
-    }" class="product-image" />
-      <div class="product-info">
-        <div class="product-title">${product.name}</div>
-        <div class="product-desc">${product.description}</div>
-        <div class="product-price">₱${product.price.toFixed(2)}</div>
-        <div class="product-variation">Variation: ${product.variation}</div>
-        <div class="product-stock">Stock: ${product.stock_quantity}</div>
-        ${
-          role === "guest"
-            ? '<div class="guest-message" style="color: #B3261E; margin-top: 10px; font-weight: bold;">Please log in to add items to cart</div>'
-            : `<div class="counter">
-            <button class="minus" data-id="${product.id}">–</button>
-            <span class="quantity" data-id="${product.id}">${quantity}</span>
-            <button class="plus" data-id="${product.id}" data-stock="${product.stock_quantity}">+</button>
-          </div>`
-        }
+  // Compute the available stock for display
+  const availableStock = product.stock_quantity - quantity;
+
+  // Create product card container
+  const productCard = document.createElement("div");
+  productCard.className = "product-card";
+
+  // Fill product card with content
+  productCard.innerHTML = `
+    <img src="${product.image_url}" alt="${product.name}" class="product-image" />
+    <div class="product-info">
+      <div class="product-title">${product.name}</div>
+      <div class="product-desc">${product.description}</div>
+      <div class="product-price">₱${product.price.toFixed(2)}</div>
+      <div class="product-variation">Variation: ${product.variation}</div>
+      <div class="product-stock" data-id="${product.id}">
+        Stock: ${availableStock}
       </div>
-    `;
 
-    productList.appendChild(productCard);
-  });
+      ${
+        role === "guest"
+          ? `<div class="guest-message" style="color: #B3261E; margin-top: 10px; font-weight: bold;">
+              Please log in to add items to cart
+            </div>`
+          : `<div class="counter">
+              <button class="minus" data-id="${product.id}">–</button>
+              <span class="quantity" data-id="${product.id}">${quantity}</span>
+              <button class="plus" data-id="${product.id}" data-stock="${product.stock_quantity}">+</button>
+            </div>`
+      }
+    </div>
+  `;
+
+  // Append the card to the product list
+  productList.appendChild(productCard);
+});
+
 
   if (role !== "guest") {
     productList.addEventListener("click", async (event) => {
@@ -142,32 +188,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       let quantity = parseInt(quantityElem.textContent);
       const maxStock = parseInt(event.target.dataset.stock) || 0;
 
-      // const { data: existingItems } = await supabase
-      //   .from("cart_items")
-      //   .select("*")
-      //   .eq("user_id", user.id)
-      //   .eq("product_id", productId);
 
-      // const item = existingItems?.[0];
-
-      // // Fetch latest stock from the database
-      // const { data: productData, error: stockError } = await supabase
-      //   .from("products")
-      //   .select("stock_quantity")
-      //   .eq("id", productId)
-      //   .maybeSingle();
-
-      // if (stockError || !productData) {
-      //   alert("Error retrieving product stock.");
-      //   return;
-      // }
-
-      // let currentStock = productData.stock_quantity;
-
-      // if (isPlus) {
-      //   if (quantity >= currentStock) {
-      //     return;
-      //   }
   const { data: existingItems } = await supabase
     .from("cart_items")
     .select("*")
