@@ -4,37 +4,42 @@
 .homepage {
   background-color: #ffffff;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: center;
+  align-items: center;
   width: 100%;
-  height: 100vh;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  position: relative;
 }
 
 .homepage .div {
   background-color: #ffffff;
-  width: 1440px;
-  height: 1024px;
+  width: 100%;
+  max-width: 100%; 
+  min-height: 100vh;
   position: relative;
+  box-sizing: border-box;
 }
 
 .homepage .overlap {
   position: absolute;
-  width: 800px;
-  height: 600px;
-  top: 180px;
-  left: 650px;
+  width: 40%;
+  max-width: 800px;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  top: 15%;
+  right: 10%; 
 }
 
-.homepage .image {
-  position: absolute;
-  width: 459px;
-  height: 545px;
-  top: 0;
-  left: 80px;
-  border-radius: 28px;
-  background-image: url(./img/image.png);
-  background-size: cover;
-  background-position: 50% 50%;
+@media (max-width: 768px) {
+  .homepage .overlap {
+    width: 80%;
+    right: 10%;
+    top: 10%;
+  }
 }
 
 .homepage .group {
@@ -63,26 +68,33 @@
 
 .homepage .headline {
   position: absolute;
-  width: 523px;
-  height: 100px;
-  top: 200px;
-  left: 100px;
+  width: clamp(200px, 40%, 523px);
+  height: auto;
+  top: 15%;
+  left: 15%;
   -webkit-text-stroke: 2px #ac2626;
   font-family: "Allura", cursive;
   font-weight: 400;
   color: #b3261e;
-  font-size: 85px;
-  letter-spacing: 6.00px;
-  line-height: 85px;
+  font-size: clamp(32px, 6vw, 85px);
+  letter-spacing: 0.5vw;
+  line-height: 1.1;
   z-index: 1;
+}
+
+@media (max-width: 600px) {
+  .homepage .headline {
+    top: 10%;
+    left: 15%;
+  }
 }
 
 .homepage .ShopNow {
   position: absolute;
-  width: 287px;
-  height: 96px;
-  top: 500px;
-  left: 100px;
+  width: clamp(150px, 20%, 287px);
+  height: clamp(50px, 8vh, 96px);
+  top: 60%;
+  left: 22%;
   border-radius: 100px;
   z-index: 1;
 }
@@ -92,8 +104,8 @@
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  width: 287px;
-  height: 96px;
+  width: 100%;
+  height: 100%;
   align-items: center;
   justify-content: center;
   gap: 8px;
@@ -106,10 +118,10 @@
   font-family: "Alef", sans-serif;
   font-weight: 700;
   color: #ffffff;
-  font-size: 25px;
+  font-size: clamp(14px, 2vw, 25px);
   text-align: center;
-  letter-spacing: 0.10px;
-  line-height: 20px;
+  letter-spacing: 0.1px;
+  line-height: 1.2;
   transition: all 0.3s ease;
 }
 
@@ -118,34 +130,15 @@
   transform: scale(1.05);
 }
 
-.homepage .state-layer {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 10px 24px;
-  position: relative;
-  flex: 1;
-  align-self: stretch;
-  width: 100%;
-  flex-grow: 1;
+@media (max-width: 600px) {
+  .homepage .ShopNow {
+    top: 80%;
+    left: 22%;
+  }
 }
 
-.homepage .label-text {
-  position: relative;
-  width: fit-content;
-  font-family: var(--m3-label-large-font-family);
-  font-weight: var(--m3-label-large-font-weight);
-  color: #ffffff;
-  font-size: var(--m3-label-large-font-size);
-  text-align: center;
-  letter-spacing: var(--m3-label-large-letter-spacing);
-  line-height: var(--m3-label-large-line-height);
-  white-space: nowrap;
-  font-style: var(--m3-label-large-font-style);
-}
 
-.homepage .description {
+/* .homepage .description {
   width: 500px;
   top: 330px;
   left: 100px;
@@ -158,6 +151,29 @@
   letter-spacing: 0.25px;
   line-height: 24px;
   z-index: 1;
+} */
+
+.homepage .description {
+  position: absolute;
+  width: clamp(250px, 40%, 500px);
+  top: 35%;
+  left: 15.8%;
+  font-size: clamp(14px, 1.8vw, 18px);
+  -webkit-line-clamp: 6;
+  font-family: "Alef", sans-serif;
+  font-weight: 700;
+  color: #1d1b20;
+  letter-spacing: 0.25px;
+  line-height: 1.5;
+  z-index: 1;
+}
+
+@media (max-width: 480px) {
+  .homepage .description {
+    top: 30%;
+    left: 5%;
+    width: 90%;
+  }
 }
 
 .homepage .top-Nav {
@@ -500,8 +516,10 @@
 
 .slider-container {
   position: relative;
-  width: 650px;
-  height: 500px;
+  width: 90%;
+  max-width: 650px;
+  height: auto;
+  aspect-ratio: 13 / 10; /* Keeps similar proportions to 650 x 500 */
   margin: 0 auto;
   overflow: hidden;
   border-radius: 28px;
@@ -516,6 +534,14 @@
   height: 100%;
   left: 0;
 }
+
+@media (max-width: 400px) {
+  .slider-container {
+    aspect-ratio: 1 / 1;
+    border-radius: 16px;
+  }
+}
+
 
 .slide {
   position: absolute;
