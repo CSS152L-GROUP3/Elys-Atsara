@@ -14,6 +14,13 @@ const currentMonth = formatYearMonth(today);
 
 // === MAIN FUNCTION ===
 (async function generateSalesReport() {
+    // Define topCustomers as empty array for scope
+    let topCustomers = [];
+    let totalSales = 0;
+    let totalOrders = 0;
+    let avgOrderValue = 0;
+    let lastAvg = 0;
+
     try {
         const today = new Date();
         const year = today.getFullYear();
@@ -41,9 +48,9 @@ const currentMonth = formatYearMonth(today);
         if (!orders || orders.length === 0) return;
 
         // === TOTAL METRICS ===
-        const totalSales = orders.reduce((sum, order) => sum + order.total_price, 0);
-        const totalOrders = orders.length;
-        const avgOrderValue = totalSales / totalOrders;
+        totalSales = orders.reduce((sum, order) => sum + order.total_price, 0);
+        totalOrders = orders.length;
+        avgOrderValue = totalSales / totalOrders;
 
         document.getElementById("totalSalesValue").textContent = `₱${totalSales.toFixed(2)}`;
         document.getElementById("totalOrdersValue").textContent = totalOrders;
@@ -59,7 +66,6 @@ const currentMonth = formatYearMonth(today);
             .select("total_price")
             .gte("created_at", lastMonthStart)
             .lte("created_at", lastMonthEnd);
-
 
         if (lastMonthOrders.length > 0) {
             const lastTotal = lastMonthOrders.reduce((sum, o) => sum + o.total_price, 0);
@@ -279,7 +285,272 @@ const currentMonth = formatYearMonth(today);
             <span style='font-size:1rem; color:#555; font-weight:500;'>Avg. Order Value</span>`;
         }
 
+        const aovChartEl = document.getElementById("aovChart");
+        if (aovChartEl) {
+            new Chart(aovChartEl, {
+                type: "bar",
+                data: {
+                    labels: ["Last Month", "This Month"],
+                    datasets: [{
+                        label: "AOV",
+                        data: [lastAvg, avgOrderValue],
+                        backgroundColor: ["#6c757d", "#fd7e14"]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
+        }
+
+        // === TOP CUSTOMERS ===
+        // Calculate topCustomers array here (if not already in your code)
+        // Example placeholder:
+        // topCustomers = [
+        //   { name: 'Customer A', totalOrders: 3, totalSpent: 1000, lastOrder: '2024-06-01' },
+        //   ...
+        // ];
+        // TODO: Populate topCustomers with real data from orders
+
     } catch (err) {
         console.error("Failed to load sales report:", err.message);
     }
+
+    // Move export event listeners here so they have access to the variables
+    document.getElementById("exportCSV").addEventListener("click", () => {
+        // Create comprehensive CSV content
+        let csvContent = "data:text/csv;charset=utf-8,\uFEFF";
+        
+        // === REPORT HEADER ===
+        csvContent += "ELY'S ATSARA - SALES REPORT\n";
+        csvContent += `Generated: ${new Date().toLocaleDateString()}\n`;
+        csvContent += `Reporting Period: ${document.getElementById("monthSelector")?.value || "Current Month"}\n\n`;
+
+        // === SUMMARY METRICS ===
+        csvContent += "SUMMARY METRICS\n";
+        csvContent += "Metric,Value\n";
+        csvContent += `Total Sales,₱${totalSales.toFixed(2)}\n`;
+        csvContent += `Total Orders,${totalOrders}\n`;
+        csvContent += `Average Order Value,₱${avgOrderValue.toFixed(2)}\n`;
+        csvContent += `Last Month AOV,₱${lastAvg.toFixed(2)}\n`;
+        csvContent += `AOV Change,${((avgOrderValue - lastAvg) / lastAvg * 100).toFixed(1)}%\n\n`;
+
+        // === DAILY SALES BREAKDOWN ===
+        if (typeof salesPerDay !== 'undefined') {
+            csvContent += "DAILY SALES BREAKDOWN\n";
+            csvContent += "Date,Sales (₱),Orders,Average Daily Order Value\n";
+            Object.keys(salesPerDay).sort().forEach(date => {
+                const dailyOrders = ordersPerDay[date] || 0;
+                const dailyAvg = dailyOrders > 0 ? (salesPerDay[date] / dailyOrders).toFixed(2) : '0.00';
+                csvContent += `${date},${salesPerDay[date].toFixed(2)},${dailyOrders},₱${dailyAvg}\n`;
+            });
+            csvContent += "\n";
+        }
+
+        // === PAYMENT METHOD ANALYSIS ===
+        if (typeof methodCounts !== 'undefined') {
+            csvContent += "PAYMENT METHOD ANALYSIS\n";
+            csvContent += "Payment Method,Orders,Percentage of Total Orders\n";
+            const totalOrderCount = Object.values(methodCounts).reduce((sum, count) => sum + count, 0);
+            Object.entries(methodCounts).forEach(([method, count]) => {
+                const percentage = ((count / totalOrderCount) * 100).toFixed(1);
+                csvContent += `${method},${count},${percentage}%\n`;
+            });
+            csvContent += "\n";
+        }
+
+        // === CITY ANALYSIS ===
+        if (typeof cityStats !== 'undefined') {
+            csvContent += "CITY ANALYSIS\n";
+            csvContent += "City,Total Orders,Payment Methods\n";
+            Object.entries(cityStats).forEach(([city, methods]) => {
+                const totalCityOrders = Object.values(methods).reduce((sum, count) => sum + count, 0);
+                const methodBreakdown = Object.entries(methods)
+                    .filter(([method, count]) => count > 0)
+                    .map(([method, count]) => `${method}:${count}`)
+                    .join('; ');
+                csvContent += `${city},${totalCityOrders},"${methodBreakdown}"\n`;
+            });
+            csvContent += "\n";
+        }
+
+        // === TOP PRODUCTS ANALYSIS ===
+        if (typeof sortedProducts !== 'undefined' && sortedProducts.length > 0) {
+            csvContent += "TOP PRODUCTS ANALYSIS\n";
+            csvContent += "Rank,Product ID,Units Sold,Product Description\n";
+            sortedProducts.forEach((product, index) => {
+                const rank = index + 1;
+                const productId = product[0];
+                const unitsSold = product[1];
+                // Try to get product description if available
+                const description = idToDescription && idToDescription[productId]
+                    ? idToDescription[productId].replace(/"/g, '""') // Escape quotes for CSV
+                    : 'N/A';
+                csvContent += `${rank},${productId},${unitsSold},"${description}"\n`;
+            });
+            csvContent += "\n";
+        }
+
+        // === ORDER DETAILS (if orders data is available) ===
+        if (typeof orders !== 'undefined' && orders.length > 0) {
+            csvContent += "DETAILED ORDER DATA\n";
+            csvContent += "Order ID,Date,Total Price (₱),Payment Method,Address ID,Items Count\n";
+            orders.forEach(order => {
+                const orderDate = new Date(order.created_at).toISOString().slice(0, 10);
+                const itemsCount = Array.isArray(order.orders) ? order.orders.length : 0;
+                csvContent += `${order.id},${orderDate},${order.total_price.toFixed(2)},${order.payment_method},${order.address_id || 'N/A'},${itemsCount}\n`;
+            });
+        }
+
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", `sales_report_${new Date().toISOString().slice(0, 10)}.csv`);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    });
+    document.getElementById("exportPDF").addEventListener("click", async () => {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+
+        // --- HEADER TEMPLATE ---
+        function addHeader(doc, pageWidth) {
+            // Placeholder for logo (replace with your logo image)
+            // Example: doc.addImage(logoImg, 'PNG', 14, 8, 24, 24);
+            doc.setFillColor(230, 230, 230);
+            doc.rect(14, 8, 24, 24, 'F'); // Placeholder rectangle for logo
+            doc.setFontSize(18);
+            doc.setFont('helvetica', 'bold');
+            doc.text("Sales Report", pageWidth / 2, 20, { align: 'center' });
+            doc.setFontSize(10);
+            doc.setFont('helvetica', 'normal');
+            doc.text(`Prepared by: Ely's Atsara`, pageWidth - 14, 15, { align: 'right' });
+            doc.text(`Generated: ${new Date().toLocaleDateString()}`, pageWidth - 14, 25, { align: 'right' });
+            doc.setDrawColor(180);
+            doc.line(14, 34, pageWidth - 14, 34); // horizontal line
+        }
+
+        // --- FOOTER TEMPLATE (pagination) ---
+        function addFooter(doc, pageNumber, totalPages, pageWidth, pageHeight) {
+            doc.setFontSize(10);
+            doc.setTextColor(150);
+            doc.text(`Page ${pageNumber} of ${totalPages}`, pageWidth / 2, pageHeight - 10, { align: 'center' });
+        }
+
+        // --- MAIN PDF CONTENT ---
+        const pageWidth = doc.internal.pageSize.getWidth();
+        const pageHeight = doc.internal.pageSize.getHeight();
+        addHeader(doc, pageWidth);
+        let y = 40;
+
+        // --- STYLISH SUMMARY METRICS SECTION ---
+        doc.setFontSize(16);
+        doc.setFont('helvetica', 'bold');
+        doc.setTextColor(51, 51, 51);
+        doc.text("SALES SUMMARY", 14, y);
+        y += 12;
+
+        // Create a styled metrics box
+        const metricsBoxY = y;
+        const metricsBoxHeight = 60;
+
+        // Draw background box for metrics
+        doc.setFillColor(248, 249, 250);
+        doc.rect(14, y, pageWidth - 28, metricsBoxHeight, 'F');
+        doc.setDrawColor(220, 220, 220);
+        doc.rect(14, y, pageWidth - 28, metricsBoxHeight, 'S');
+
+        y += 8;
+
+        // Month indicator
+        doc.setFontSize(10);
+        doc.setFont('helvetica', 'bold');
+        doc.setTextColor(108, 117, 125);
+        doc.text("REPORTING PERIOD:", 20, y);
+        doc.setFont('helvetica', 'normal');
+        doc.setTextColor(51, 51, 51);
+        doc.text(`${document.getElementById("monthSelector")?.value || "Current Month"}`, 70, y);
+        y += 12;
+
+        // Total Sales
+        doc.setFontSize(11);
+        doc.setFont('helvetica', 'bold');
+        doc.setTextColor(40, 167, 69);
+        doc.text("TOTAL SALES:", 20, y);
+        doc.setFont('helvetica', 'normal');
+        doc.setTextColor(51, 51, 51);
+        doc.text(`₱${totalSales.toFixed(2)}`, 70, y);
+        y += 12;
+
+        // Total Orders
+        doc.setFontSize(11);
+        doc.setFont('helvetica', 'bold');
+        doc.setTextColor(0, 123, 255);
+        doc.text("TOTAL ORDERS:", 20, y);
+        doc.setFont('helvetica', 'normal');
+        doc.setTextColor(51, 51, 51);
+        doc.text(`${totalOrders}`, 70, y);
+        y += 12;
+
+        // Average Order Value
+        doc.setFontSize(11);
+        doc.setFont('helvetica', 'bold');
+        doc.setTextColor(253, 126, 20);
+        doc.text("AVERAGE ORDER VALUE:", 20, y);
+        doc.setFont('helvetica', 'normal');
+        doc.setTextColor(51, 51, 51);
+        doc.text(`₱${avgOrderValue.toFixed(2)}`, 70, y);
+
+        y = metricsBoxY + metricsBoxHeight + 20;
+
+        // --- CHARTS AS IMAGES WITH HEADERS ---
+        const chartConfigs = [
+            { id: "salesTrendChart", title: "Daily Sales Trend", height: 90 },
+            { id: "ordersBarChart", title: "Daily Orders Count", height: 90 },
+            { id: "paymentChart", title: "Payment Method Distribution", height: 140 },
+            { id: "cityStackedBarChart", title: "Orders by City and Payment Method", height: 110 },
+            { id: "topProductsChart", title: "Top Products Sold", height: 120 }
+        ];
+
+        for (const config of chartConfigs) {
+            const canvas = document.getElementById(config.id);
+            if (canvas) {
+                // Check if we need a new page
+                if (y > pageHeight - (config.height + 30)) {
+                    doc.addPage();
+                    addHeader(doc, pageWidth);
+                    y = 40;
+                }
+
+                // Add chart title
+                doc.setFontSize(12);
+                doc.setFont('helvetica', 'bold');
+                doc.text(config.title, 14, y);
+                y += 8;
+
+                // Add chart image
+                const imgData = canvas.toDataURL("image/png", 1.0);
+                doc.addImage(imgData, "PNG", 14, y, 180, config.height);
+                y += config.height + 15;
+            }
+        }
+
+        // --- PAGINATION (after all pages are added) ---
+        const pageCount = doc.internal.getNumberOfPages();
+        for (let i = 1; i <= pageCount; i++) {
+            doc.setPage(i);
+            addFooter(doc, i, pageCount, pageWidth, pageHeight);
+        }
+
+        doc.save("sales_report.pdf");
+    });
+
 })();

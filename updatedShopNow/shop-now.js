@@ -81,6 +81,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
 
+  products.sort((a, b) => a.variation.localeCompare(b.variation)); 
+
   let cartItems = [];
   if (role !== "guest" && user) {
     const { data: userCartItems, error: cartError } = await supabase
@@ -140,32 +142,111 @@ document.addEventListener("DOMContentLoaded", async () => {
       let quantity = parseInt(quantityElem.textContent);
       const maxStock = parseInt(event.target.dataset.stock) || 0;
 
-      const { data: existingItems } = await supabase
-        .from("cart_items")
-        .select("*")
-        .eq("user_id", user.id)
-        .eq("product_id", productId);
+      // const { data: existingItems } = await supabase
+      //   .from("cart_items")
+      //   .select("*")
+      //   .eq("user_id", user.id)
+      //   .eq("product_id", productId);
 
-      const item = existingItems?.[0];
+      // const item = existingItems?.[0];
 
-      // Fetch latest stock from the database
-      const { data: productData, error: stockError } = await supabase
-        .from("products")
-        .select("stock_quantity")
-        .eq("id", productId)
-        .maybeSingle();
+      // // Fetch latest stock from the database
+      // const { data: productData, error: stockError } = await supabase
+      //   .from("products")
+      //   .select("stock_quantity")
+      //   .eq("id", productId)
+      //   .maybeSingle();
 
-      if (stockError || !productData) {
-        alert("Error retrieving product stock.");
-        return;
-      }
+      // if (stockError || !productData) {
+      //   alert("Error retrieving product stock.");
+      //   return;
+      // }
 
-      let currentStock = productData.stock_quantity;
+      // let currentStock = productData.stock_quantity;
 
-      if (isPlus) {
-        if (quantity >= currentStock) {
-          return;
-        }
+      // if (isPlus) {
+      //   if (quantity >= currentStock) {
+      //     return;
+      //   }
+  const { data: existingItems } = await supabase
+    .from("cart_items")
+    .select("*")
+    .eq("user_id", user.id)
+    .eq("product_id", productId);
+
+  const item = existingItems?.[0];
+
+  // Fetch latest stock from the database
+  const { data: productData, error: stockError } = await supabase
+    .from("products")
+    .select("stock_quantity")
+    .eq("id", productId)
+    .maybeSingle();
+
+  if (stockError || !productData) {
+    alert("Error retrieving product stock.");
+    return;
+  }
+
+  let currentStock = productData.stock_quantity;
+  
+if (isPlus) {
+  const maxStock = parseInt(
+    event.target.dataset.stock
+  );
+
+  if (quantity >= maxStock) {
+    alert("Cannot add more than available stock.");
+    return;
+  }
+
+  quantity += 1;
+  quantityElem.textContent = quantity;
+
+  const newDisplayStock = maxStock - quantity;
+  stockElem.textContent = `Stock: ${newDisplayStock}`;
+
+  if (item) {
+    await supabase
+      .from("cart_items")
+      .update({ quantity })
+      .eq("id", item.id);
+  } else {
+    await supabase.from("cart_items").insert({
+      user_id: user.id,
+      product_id: productId,
+      quantity: 1,
+    });
+  }
+}
+
+if (isMinus) {
+  if (quantity === 0) return;
+
+  quantity -= 1;
+  quantityElem.textContent = quantity;
+
+  const maxStockFromPlus = parseInt(
+    event.target.parentElement.querySelector(".plus").dataset.stock
+  );
+
+  const newDisplayStock = maxStockFromPlus - quantity;
+  stockElem.textContent = `Stock: ${newDisplayStock}`;
+
+  if (quantity === 0 && item) {
+    await supabase.from("cart_items").delete().eq("id", item.id);
+  } else if (item) {
+    await supabase
+      .from("cart_items")
+      .update({ quantity })
+      .eq("id", item.id);
+  }
+}
+
+
+await updateCartBadgeCount(user);
+
+});
 
         quantity += 1;
         currentStock -= 1;
@@ -216,7 +297,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       await updateCartBadgeCount(user);
     });
-  }
+  
 
   const cartIconBtn = document.getElementById("cart-icon-btn");
   const cartTextBtn = document.getElementById("cart-text-btn");
@@ -234,7 +315,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   cartIconBtn?.addEventListener("click", goToCartPage);
   cartTextBtn?.addEventListener("click", goToCartPage);
-});
 
 document.addEventListener("DOMContentLoaded", async () => {
   const { user, role } = await getCurrentUserWithRole();

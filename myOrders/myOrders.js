@@ -234,6 +234,7 @@ document.getElementById('cancel-reason-form').onsubmit = async e => {
     details = f.other_reason.value.trim();
     if (!details) details = 'Other';
   }
+
   // Insert into order_cancellations
   const { error: insertError } = await supabase.from('order_cancellations').insert([
     { order_id: orderId, reason, details }
@@ -242,68 +243,68 @@ document.getElementById('cancel-reason-form').onsubmit = async e => {
     alert('Failed to record cancellation reason.');
     return;
   }
-  // Update order status only
-  const { error } = await supabase.from('orders').update({ status: 'Cancelled' }).eq('id', orderId);
-  if (error) alert('Cancel failed');
-  else {
-    cancelModal.classList.add('hidden');
-    loadOrders();
-  
-  // const { data: orderData } = await supabase
-  //   .from('orders')
-  //   .select('id, user_id, orders, total_price')
-  //   .eq('id', orderId)
-  //   .single();
 
-  // const { data: customer } = await supabase
-  //   .from('customer_accounts')
-  //   .select('name, email')
-  //   .eq('uuid', orderData.user_id)
-  //   .single();
+  // Update order status
+  const { error: updateError } = await supabase.from('orders').update({ status: 'Cancelled' }).eq('id', orderId);
+  if (updateError) {
+    alert('Cancel failed');
+    return;
+  }
 
- 
-  // const productIds = orderData.orders.map(item => item.product_id);
-  // const { data: productsData } = await supabase
-  //   .from('products')
-  //   .select('id, name')
-  //   .in('id', productIds);
+  // Fetch order and customer info
+  const { data: orderData } = await supabase
+    .from('orders')
+    .select('id, user_id, orders, total_price')
+    .eq('id', orderId)
+    .single();
 
-  // const productMap = {};
-  // productsData.forEach(p => productMap[p.id] = p.name);
+  const { data: customer } = await supabase
+    .from('customer_accounts')
+    .select('name, email')
+    .eq('uuid', orderData.user_id)
+    .single();
 
-  // const itemSummary = {};
-  // orderData.orders.forEach(item => {
-  //   const name = productMap[item.product_id] || "Item";
-  //   itemSummary[name] = (itemSummary[name] || 0) + item.quantity;
-  // });
+  // Map product IDs to names
+  const productIds = orderData.orders.map(item => item.product_id);
+  const { data: productsData } = await supabase
+    .from('products')
+    .select('id, name')
+    .in('id', productIds);
 
-  // const itemDescriptions = Object.entries(itemSummary)
-  //   .map(([name, qty]) => `${qty}x ${name}`)
-  //   .join(', ');
+  const productMap = {};
+  productsData.forEach(p => productMap[p.id] = p.name);
 
-  // try {
-  //   await emailjs.send("service_z4yifwn", "template_vq55ywl", {
-  //     customer_name: customer?.name || "Customer",
-  //     customer_email: customer?.email || "no-reply@example.com",
-  //     order_id: orderData.id,
-  //     order_items: itemDescriptions,
-  //     order_total: `₱${orderData.total_price?.toFixed(2)}`,
-  //     order_status: "Cancelled",
-  //     cancel_reason: `${reason}${details ? ` - ${details}` : ''}`
-  //   });
-  //   console.log("Cancellation email sent.");
-  // } catch (err) {
-  //   console.error("Failed to send cancellation email:", err);
-  // }
+  const itemSummary = {};
+  orderData.orders.forEach(item => {
+    const name = productMap[item.product_id] || "Item";
+    itemSummary[name] = (itemSummary[name] || 0) + item.quantity;
+  });
 
-  // cancelModal.classList.add('hidden');
-  // loadOrders();
-}
+  const itemDescriptions = Object.entries(itemSummary)
+    .map(([name, qty]) => `${qty}x ${name}`)
+    .join(', ');
 
+  try {
+    await emailjs.send("service_z4yifwn", "template_vq55ywl", {
+      customer_name: customer?.name || "Customer",
+      customer_email: customer?.email || "no-reply@example.com",
+      order_id: orderData.id,
+      order_items: itemDescriptions,
+      order_total: `₱${orderData.total_price?.toFixed(2)}`,
+      order_status: "Cancelled",
+      cancel_reason: `${reason}${details ? ` - ${details}` : ''}`
+    });
+    console.log("Cancellation email sent.");
+  } catch (err) {
+    console.error("Failed to send cancellation email:", err);
+  }
+
+  cancelModal.classList.add('hidden');
+  loadOrders();
 };
 
 document.querySelector('.close-modal').onclick = () => {
-  document.getElementById('review-modal').classList.add('hidden');
+document.getElementById('review-modal').classList.add('hidden');
 };
 
 document.getElementById('review-form').onsubmit = async e => {
