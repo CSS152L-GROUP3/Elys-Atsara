@@ -176,8 +176,11 @@
       </script>
 
       <div class="sales-container">
+        <div class="export-buttons">
+          <button id="exportCSV">Export CSV</button>
+          <button id="exportPDF">Export PDF</button>
+        </div>
         <h1 class="sales-title">Sales Report</h1>
-
         <div class="sales-grid">
 
           <!-- Total Sales with Sparkline -->
@@ -201,9 +204,7 @@
               <div class="average-value-display" id="averageOrderValue">₱0.00</div>
               <div class="aov-trend" id="aovTrend"></div>
             </div>
-            <canvas id="aovChart" height="80"></canvas>
           </div>
-
 
           <!-- Payment Method Preference (Doughnut + Hover) -->
           <div class="sales-card">
@@ -238,5 +239,6 @@
 <script type="module" src="../supabaseClient/homepage.js"></script>
 <script type="module" src="../Sales/Sales.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 </html>

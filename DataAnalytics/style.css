@@ -649,6 +649,41 @@
   font-family: 'Alef', sans-serif;
 }
 
+.export-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+  margin-top: 130px;
+  margin-bottom: 2rem;
+  z-index: 10;
+}
+
+.export-buttons button {
+  background-color: #B3261E;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-family: "Alef", sans-serif;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.export-buttons button:hover {
+  background-color: #9E1F19;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.export-buttons button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
 .analytics-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
@@ -852,6 +887,12 @@
 
 /* Responsive Design */
 @media (max-width: 768px) {
+  .export-buttons {
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 110px;
+  }
+
   .analytics-title {
     font-size: 2rem;
     margin-bottom: 20px;
