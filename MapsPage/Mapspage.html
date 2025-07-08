@@ -5,7 +5,8 @@
     <meta charset="utf-8" />
     <link rel="stylesheet" href="globals.css" />
     <link rel="stylesheet" href="style.css" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet"/>
+    <link href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.1.1/mapbox-gl-directions.css" rel="stylesheet"/>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   </head>
   <body>
@@ -77,21 +78,72 @@
           <button class="MapBtn2" onclick="window.location.href='../MapsPage/Mapspage.html'">Maps</button>
           </div>   
         </div>
-        
+        </div>
+
+<div id="map" style="width: 100%; height: 80%; top: 10%; position: fixed; right: 0%;"></div>
+
+<link
+  rel="stylesheet"
+  href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css"
+/>
+<link
+  rel="stylesheet"
+  href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.1.1/mapbox-gl-directions.css"
+/>
+<script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
+<script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.1.1/mapbox-gl-directions.js"></script>
+
+<script>
+  window.addEventListener('load', function () {
+  mapboxgl.accessToken = 'pk.eyJ1IjoibnlzdXMiLCJhIjoiY21jdWc0M3ZhMDB3ODJqcnoycW1nZXd4cSJ9.76M0v18aAvXk8aEM4scB5w';
+
+  navigator.geolocation.getCurrentPosition(successLocation, errorLocation, {
+    enableHighAccuracy: true,
+    timeout: 8000,
+    maximumAge: 10000,
+  });
+
+  function successLocation(position) {
+    initMap([position.coords.longitude, position.coords.latitude]);
+  }
+
+  function errorLocation() {
+    initMap([121.0851, 14.6794]); // Fallback to Quezon City
+  }
+
+  function initMap(start) {
+    const map = new mapboxgl.Map({
+      container: 'map',
+      style: 'mapbox://styles/mapbox/streets-v11',
+      center: start,
+      zoom: 13,
+      maxZoom: 22, // allow max zoom in
+      attributionControl: false,
+    });
+
+    map.addControl(new mapboxgl.NavigationControl(), 'top-right');
+
+    const directions = new MapboxDirections({
+      accessToken: mapboxgl.accessToken,
+      unit: 'metric',
+      profile: 'mapbox/driving',
+      controls: {
+        inputs: false,
+        instructions: true,
+      },
+    });
+
+    map.addControl(directions, 'top-left');
+    directions.setOrigin(start);
+    directions.setDestination('171-425 Tandang Sora Ave, Quezon City, Metro Manila');
+  }
+});
+</script>
+
 
         </div>
-         
-        </div>
-        
-        <div class="map-center-section">
-          <div style="box-shadow: 0 2px 8px rgba(0,0,0,0.04); border-radius: 8px; overflow: hidden;">
-            <div id="map" style="width: 420px; height: 260px; border-radius: 8px;"></div>
-          </div>
-          <div style="background: #B3261E; color: white; border-radius: 24px; padding: 32px 36px; font-size: 2rem; font-weight: bold; font-family: inherit; display: flex; align-items: center; text-align: center; min-width: 340px;">
-            <svg style="margin-right: 12px;" width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="white"/></svg>
-            Click The Icon to find the branch!
-          </div>
-        </div>
+
+
 
       <div class= "footer">
         <a href="../Homepage/Homepage.html" class="BackBtn">
@@ -182,93 +234,6 @@ document.addEventListener('DOMContentLoaded', () => {
     </button>
   </div>
 </div>
-
-<style>
-.modal {
-  display: none;
-  position: fixed;
-  z-index: 1000;
-  left: 0; top: 0; width: 100%; height: 100%;
-  background: rgba(0,0,0,0.5);
-  justify-content: center; align-items: center;
-  animation: fadeInBg 0.3s;
-}
-@keyframes fadeInBg {
-  from { background: rgba(0,0,0,0); }
-  to { background: rgba(0,0,0,0.5); }
-}
-.modal-content.enhanced-modal {
-  background: #fff8f3;
-  color: #7a1c1c;
-  border-radius: 20px;
-  padding: 40px 32px 32px 32px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
-  text-align: center;
-  min-width: 320px;
-  max-width: 90vw;
-  position: relative;
-  font-family: 'Segoe UI', 'Arial', sans-serif;
-  animation: popIn 0.35s cubic-bezier(.68,-0.55,.27,1.55);
-}
-@keyframes popIn {
-  0% { transform: scale(0.85); opacity: 0; }
-  100% { transform: scale(1); opacity: 1; }
-}
-.modal-icon {
-  margin-bottom: 0.5em;
-}
-.close-btn {
-  position: absolute;
-  top: 16px; right: 20px;
-  font-size: 28px;
-  color: #7a1c1c;
-  cursor: pointer;
-  transition: color 0.2s;
-}
-.close-btn:hover {
-  color: #a83232;
-}
-#loginRedirectBtn {
-  background: #b3261e;
-  color: #fff8f3;
-  border: none;
-  border-radius: 8px;
-  padding: 12px 36px;
-  font-size: 1.1rem;
-  margin-top: 10px;
-  cursor: pointer;
-  font-weight: 600;
-  box-shadow: 0 2px 8px rgba(179,38,30,0.08);
-  transition: background 0.2s, transform 0.2s;
-}
-#loginRedirectBtn:hover {
-  background: #a83232;
-  transform: translateY(-2px) scale(1.04);
-}
-#accountLoginRedirectBtn, .modal-login-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  background: linear-gradient(90deg, #b3261e 80%, #c84c3a 100%);
-  color: #fff8f3;
-  border: none;
-  border-radius: 999px;
-  padding: 14px 38px;
-  font-size: 1.1rem;
-  margin-top: 10px;
-  cursor: pointer;
-  font-weight: 700;
-  font-family: 'Alef', sans-serif;
-  box-shadow: 0 4px 16px rgba(179,38,30,0.13);
-  transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
-}
-#accountLoginRedirectBtn:hover, .modal-login-btn:hover {
-  background: linear-gradient(90deg, #a83232 80%, #b3261e 100%);
-  transform: translateY(-2px) scale(1.05);
-  box-shadow: 0 8px 24px rgba(179,38,30,0.18);
-}
-</style>
 
 <script type="module" src="../updatedShopNow/shop-now.js"></script>
 <script>
