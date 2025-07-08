@@ -96,30 +96,57 @@
 <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.1.1/mapbox-gl-directions.js"></script>
 
 <script>
-  window.addEventListener('load', function () {
-  mapboxgl.accessToken = 'pk.eyJ1IjoibnlzdXMiLCJhIjoiY21jdWc0M3ZhMDB3ODJqcnoycW1nZXd4cSJ9.76M0v18aAvXk8aEM4scB5w';
+  window.addEventListener('load', async function () {
+    mapboxgl.accessToken = 'pk.eyJ1IjoibnlzdXMiLCJhIjoiY21jdWc0M3ZhMDB3ODJqcnoycW1nZXd4cSJ9.76M0v18aAvXk8aEM4scB5w';
 
-  navigator.geolocation.getCurrentPosition(successLocation, errorLocation, {
-    enableHighAccuracy: true,
-    timeout: 8000,
-    maximumAge: 10000,
-  });
+    const fallbackCoords = [121.0851, 14.6794]; // Default to Tandang Sora
+    const storeAddress = '171-425 Tandang Sora Ave, Quezon City, Metro Manila';
 
-  function successLocation(position) {
-    initMap([position.coords.longitude, position.coords.latitude]);
-  }
+    // Get precise geolocation with timeout fallback
+    const getUserCoords = () =>
+      new Promise((resolve) => {
+        const timeout = setTimeout(() => resolve(fallbackCoords), 8000);
+        navigator.geolocation.getCurrentPosition(
+          (pos) => {
+            clearTimeout(timeout);
+            resolve([pos.coords.longitude, pos.coords.latitude]);
+          },
+          () => {
+            clearTimeout(timeout);
+            resolve(fallbackCoords);
+          },
+          {
+            enableHighAccuracy: true,
+            timeout: 8000,
+            maximumAge: 10000,
+          }
+        );
+      });
 
-  function errorLocation() {
-    initMap([121.0851, 14.6794]); // Fallback to Quezon City
-  }
+    // Geocode the store address into coordinates
+    const getStoreCoords = async (address) => {
+      const res = await fetch(
+        `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(address)}.json?access_token=${mapboxgl.accessToken}`
+      );
+      const data = await res.json();
+      if (data.features && data.features.length > 0) {
+        return data.features[0].center; // [lng, lat]
+      } else {
+        return fallbackCoords;
+      }
+    };
 
-  function initMap(start) {
+    const [userCoords, storeCoords] = await Promise.all([
+      getUserCoords(),
+      getStoreCoords(storeAddress),
+    ]);
+
     const map = new mapboxgl.Map({
       container: 'map',
       style: 'mapbox://styles/mapbox/streets-v11',
-      center: start,
+      center: userCoords,
       zoom: 13,
-      maxZoom: 22, // allow max zoom in
+      maxZoom: 22,
       attributionControl: false,
     });
 
@@ -136,11 +163,20 @@
     });
 
     map.addControl(directions, 'top-left');
-    directions.setOrigin(start);
-    directions.setDestination('171-425 Tandang Sora Ave, Quezon City, Metro Manila');
-  }
-});
+    directions.setOrigin(userCoords);
+    directions.setDestination(storeCoords);
+
+    // Fit map to route bounds when ready
+    directions.on('route', (e) => {
+      if (e.route && e.route[0] && e.route[0].geometry) {
+        const bounds = new mapboxgl.LngLatBounds();
+        e.route[0].geometry.coordinates.forEach((c) => bounds.extend(c));
+        map.fitBounds(bounds, { padding: 50, maxZoom: 18 });
+      }
+    });
+  });
 </script>
+
 
 
         </div>
