@@ -978,3 +978,51 @@
     font-size: 0.8rem;
   }
 }
+
+.DashBtn1, .group2 button:focus, .group2 button:active {
+  outline: none !important;
+  box-shadow: none !important;
+  border: none !important;
+  background: transparent !important;
+}
+
+.group2 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.nav-label {
+  margin: 0;
+  font-family: "Alef", sans-serif;
+  font-weight: 700;
+  color: #1d1b20;
+  font-size: 20px;
+  letter-spacing: 0.25px;
+  line-height: 20px;
+  transition: color 0.3s;
+}
+
+/* Make nav label red on hover if inside a link */
+a:hover .nav-label {
+  color: #b3261e;
+}
+
+.CartBtn2 {
+  margin-top: 8px;
+  background: transparent;
+  border: none;
+  font-family: "Alef", sans-serif;
+  font-weight: 700;
+  color: #1d1b20;
+  font-size: 20px;
+  letter-spacing: 0.25px;
+  line-height: 20px;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.CartBtn2:hover {
+  color: #b3261e;
+}
