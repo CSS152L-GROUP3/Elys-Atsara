@@ -95,6 +95,26 @@ tr:hover {
   font-size: 15px;
 }
 
+.save-btn {
+  background-color: #b3261e;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 7px 20px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(179, 38, 30, 0.08);
+  transition: background 0.2s, transform 0.1s;
+  outline: none;
+  margin-left: 4px;
+}
+.save-btn:hover, .save-btn:focus {
+  background-color: #9e1f19;
+  transform: translateY(-2px) scale(1.04);
+  box-shadow: 0 4px 16px rgba(179, 38, 30, 0.16);
+}
+
 @media (max-width: 768px) {
   th, td {
     padding: 12px 8px;

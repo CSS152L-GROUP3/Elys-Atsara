@@ -25,7 +25,8 @@ html, body {
 }
 
 main {
-  padding: 120px 32px 24px 32px;
+  margin-top: 0;
+  padding: 0 32px 24px 32px;
 }
 
 .order-section h1 {
@@ -409,23 +410,68 @@ main {
   background-color: transparent;
 }
 
-.top-Nav {
+.nav-item {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  padding: 24px 40px 24px 40px;
-  background-color: white;
-  color: white;
-  position: fixed;
-  width: 100%;
-  z-index: 900;
-  border-bottom: 2px solid #b7251d;
+  gap: 8px;
+  cursor: pointer;
 }
 
-.top-Nav .nav-groups {
+.nav-label {
+  font-family: "Alef", sans-serif;
+  font-weight: 700;
+  color: #1d1b20;
+  font-size: 20px;
+  letter-spacing: 0.25px;
+  line-height: 20px;
+}
+
+.top-Nav {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 190px;
+  width: 100%;
+  padding: 40px 20px 40px 115px;
+  background-color: white;
+  border-bottom: 2px solid #b7251d;
+  position: static;
+  left: unset;
+  right: unset;
+  z-index: 1000;
+}
+
+.top-Nav button:focus, .top-Nav button:active, .DashBtn1:focus, .DashBtn1:active {
+  outline: none !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+.top-Nav button, .DashBtn1, .AboutUsBtn1, .MapBtn1, .AccountBtn1 {
+  background: transparent !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  padding: 0;
+  cursor: pointer;
+}
+
+.top-Nav > .About,
+.top-Nav > .Dashboard,
+.top-Nav > .Maps,
+.top-Nav > .Account {
+  position: static !important;
+  width: auto;
+  height: auto;
+  top: auto;
+  left: auto;
+  border-radius: 100px;
   display: flex;
   align-items: center;
-  gap: 60px;
+  flex-direction: row;
+  gap: 0;
 }
 
 #notif-bell {
@@ -571,11 +617,19 @@ body.modal-open {
 }
 
 .NotifBell {
-  position: relative;
+  margin-left: 20px !important;
   display: flex;
   align-items: center;
-  margin-left: auto;
+  position: relative;
   cursor: pointer;
+}
+
+.About, .Dashboard, .Account, .Maps {
+  position: static !important;
+  top: auto !important;
+  left: auto !important;
+  width: auto !important;
+  height: auto !important;
 }
 
 #notif-badge {
