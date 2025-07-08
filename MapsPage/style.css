@@ -4,19 +4,23 @@
 .AboutUs {
   background-color: #ffffff;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: center;
-  width: 100vw;
-  min-height: 80vh;
-  margin-left: 0%;
+  align-items: center;
+  width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  position: relative;
 }
 
 .AboutUs .div {
   background-color: #ffffff;
-  width: 1440px;
-  min-height: 80vh;
+  width: 100%;
+  max-width: 100%;
+  min-height: 100vh;
   position: relative;
-  margin: 0 auto;
   box-sizing: border-box;
 }
 
