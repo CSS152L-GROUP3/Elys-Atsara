@@ -317,6 +317,31 @@
   box-shadow: 0 6px 20px rgba(179, 38, 30, 0.2);
 }
 
+.homepage .AboutUsBtn2:hover,
+.homepage .CartBtn2:hover,
+.homepage .AccountBtn2:hover,
+.homepage .MapBtn2:hover {
+  color: inherit;
+  background: inherit;
+  transform: none;
+  box-shadow: none;
+}
+
+.homepage .AboutUsBtn2:hover::before,
+.homepage .CartBtn2:hover::before,
+.homepage .AccountBtn2:hover::before,
+.homepage .MapBtn2:hover::before {
+  left: -100%;
+}
+
+.homepage .AboutUsBtn2:focus,
+.homepage .CartBtn2:focus,
+.homepage .AccountBtn2:focus,
+.homepage .MapBtn2:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
 .cart-badge {
   position: absolute;
   top: -8px;
@@ -1483,4 +1508,32 @@ select:focus {
 }
 .modal:not(.hidden) {
   display: flex;
+}
+
+.homepage .AboutUsBtn1:hover,
+.homepage .CartBtn1:hover,
+.homepage .AccountBtn1:hover,
+.homepage .MapBtn1:hover {
+  transform: none;
+}
+
+.homepage .AboutUsBtn1:hover svg rect,
+.homepage .CartBtn1:hover svg rect,
+.homepage .AccountBtn1:hover svg rect {
+  fill: #B3261E;
+  filter: none;
+}
+
+.homepage .MapBtn1:hover svg ellipse {
+  fill: #B3261E;
+  filter: none;
+}
+
+.homepage .AboutUsBtn2,
+.homepage .CartBtn2,
+.homepage .AccountBtn2,
+.homepage .MapBtn2 {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
 }
