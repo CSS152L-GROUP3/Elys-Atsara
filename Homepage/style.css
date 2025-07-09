@@ -206,12 +206,12 @@
 
 .homepage .About {
   top: -20%;
-  left: 8%;
+  left: 12%;
 }
 
 .homepage .Cart {
   top: 10px;
-  left: 30%;
+  left: 35%;
 }
 
 .homepage .Dashboard {
@@ -301,7 +301,7 @@
 .homepage .CartBtn2 {
   width: clamp(50px, 6vw, 75px);
   top: -45px;
-  right: 190%;
+  right: 120%;
 }
 
 .homepage .DashBtn2 {
