@@ -1026,3 +1026,16 @@ a:hover .nav-label {
 .CartBtn2:hover {
   color: #b3261e;
 }
+
+#statusLegend, #paymentLegend {
+  font-family: 'Alef', sans-serif;
+  font-size: 1em;
+  font-weight: 400;
+  color: #333;
+}
+#statusLegend span, #paymentLegend span {
+  font-family: 'Alef', sans-serif;
+  font-size: 1em;
+  font-weight: 400;
+  color: #333;
+}

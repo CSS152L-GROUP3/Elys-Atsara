@@ -33,6 +33,17 @@ let avgOrderValue = 0;
 let productTableData = [];
 let customerTableData = [];
 
+// === UTILITY: FORMAT NUMBER WITH COMMAS AND 2 DECIMALS ===
+function formatNumber(num) {
+    if (typeof num !== 'number') return num;
+    return num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+// === UTILITY: FORMAT NUMBER WITH COMMAS, NO DECIMALS ===
+function formatNumberNoDecimals(num) {
+    if (typeof num !== 'number') return num;
+    return num.toLocaleString('en-US', { maximumFractionDigits: 0 });
+}
+
 async function fetchOrderStatusData() {
     const { data, error } = await supabase
         .from('orders')
@@ -192,7 +203,7 @@ async function fetchAverageOrderValue() {
 
 function renderAverageOrderValue(value) {
     const container = document.getElementById('averageOrderValue');
-    container.textContent = `₱${value.toFixed(2)}`;
+    container.textContent = `₱${formatNumber(value)}`;
 }
 
 async function fetchCityDistributionData() {
@@ -337,10 +348,10 @@ async function fetchMostOrderedProducts() {
         row.innerHTML = `
       <td>${product.name}</td>
       <td>${product.description}</td>
-      <td>${product.quantity}</td>
+      <td>${formatNumber(product.quantity)}</td>
     `;
         tbody.appendChild(row);
-        productTableData.push([product.name, product.description, product.quantity]);
+        productTableData.push([product.name, product.description, formatNumber(product.quantity)]);
     });
 }
 
@@ -524,16 +535,36 @@ document.getElementById("exportPDF").addEventListener("click", async () => {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
 
+    // Load logo as base64
+    let logoImgData = null;
+    try {
+        const response = await fetch('Group 7.png');
+        const blob = await response.blob();
+        logoImgData = await new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onloadend = () => resolve(reader.result);
+            reader.onerror = reject;
+            reader.readAsDataURL(blob);
+        });
+    } catch (e) {
+        logoImgData = null;
+    }
+
     function addHeader(doc, pageWidth) {
-        doc.setFillColor(230, 230, 230);
-        doc.rect(14, 8, 24, 24, 'F');
+        // Remove gray rectangle, add logo if available
+        if (logoImgData) {
+            doc.addImage(logoImgData, 'PNG', 14, 8, 24, 24);
+        }
         doc.setFontSize(18);
         doc.setFont('helvetica', 'bold');
         doc.text("Data Analytics Report", pageWidth / 2, 20, { align: 'center' });
         doc.setFontSize(10);
         doc.setFont('helvetica', 'normal');
         doc.text(`Prepared by: Ely's Atsara`, pageWidth - 14, 15, { align: 'right' });
-        doc.text(`Generated: ${new Date().toLocaleDateString()}`, pageWidth - 14, 25, { align: 'right' });
+        // Date and time
+        const now = new Date();
+        const dateTimeStr = now.toLocaleString('en-US', { year: 'numeric', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: true });
+        doc.text(`Generated: ${dateTimeStr}`, pageWidth - 14, 25, { align: 'right' });
         doc.setDrawColor(180);
         doc.line(14, 34, pageWidth - 14, 34);
     }
@@ -590,7 +621,7 @@ document.getElementById("exportPDF").addEventListener("click", async () => {
     doc.text("TOTAL ORDERS:", 20, y);
     doc.setFont('helvetica', 'normal');
     doc.setTextColor(51, 51, 51);
-    doc.text(typeof totalOrders !== 'undefined' ? String(totalOrders) : 'N/A', 70, y);
+    doc.text(typeof totalOrders !== 'undefined' ? formatNumber(totalOrders) : 'N/A', 70, y);
     y += 12;
 
     doc.setFontSize(11);
@@ -599,7 +630,7 @@ document.getElementById("exportPDF").addEventListener("click", async () => {
     doc.text("AVERAGE ORDER VALUE:", 20, y);
     doc.setFont('helvetica', 'normal');
     doc.setTextColor(51, 51, 51);
-    doc.text(typeof avgOrderValue !== 'undefined' ? `₱${avgOrderValue.toFixed(2)}` : 'N/A', 70, y);
+    doc.text(typeof avgOrderValue !== 'undefined' ? `₱${formatNumber(avgOrderValue)}` : 'N/A', 70, y);
     y += 12;
 
     doc.setFontSize(11);
@@ -608,7 +639,7 @@ document.getElementById("exportPDF").addEventListener("click", async () => {
     doc.text("TOTAL REVENUE:", 20, y);
     doc.setFont('helvetica', 'normal');
     doc.setTextColor(51, 51, 51);
-    doc.text(`₱${totalRevenue.toFixed(2)}`, 70, y);
+    doc.text(`₱${formatNumber(totalRevenue)}`, 70, y);
     y += 12;
 
     doc.setFontSize(11);
@@ -627,7 +658,10 @@ document.getElementById("exportPDF").addEventListener("click", async () => {
     // 1. statusChart (canvas)
     const statusChartCanvas = document.getElementById('statusChart');
     if (statusChartCanvas && statusChartCanvas.toDataURL) {
-        if (y > pageHeight - (90 + 50)) {
+        const chartWidth = 85;
+        const chartHeight = 82;
+        const chartX = (pageWidth - chartWidth) / 2;
+        if (y > pageHeight - (chartHeight + 50)) {
             doc.addPage();
             addHeader(doc, pageWidth);
             y = 40;
@@ -637,8 +671,8 @@ document.getElementById("exportPDF").addEventListener("click", async () => {
         doc.text('Order Status Distribution', 14, y);
         y += 8;
         const imgData = statusChartCanvas.toDataURL("image/png", 1.0);
-        doc.addImage(imgData, "PNG", 14, y, 180, 90);
-        y += 90 + 5;
+        doc.addImage(imgData, "PNG", chartX, y, chartWidth, chartHeight); // square and centered
+        y += chartHeight + 5;
         // Dynamic legend from chart instance
         if (statusChartInstance) {
             const chartData = statusChartInstance.data;
@@ -653,7 +687,7 @@ document.getElementById("exportPDF").addEventListener("click", async () => {
                 doc.setFillColor(colors[i]);
                 doc.rect(legendX, legendY, 8, 8, 'F');
                 doc.setTextColor(51, 51, 51);
-                doc.text(`${labels[i]}: ${data[i]}`, legendX + 12, legendY + 7);
+                doc.text(`${labels[i]}: ${formatNumberNoDecimals(data[i])}`, legendX + 12, legendY + 7);
                 legendX += 60;
                 if (legendX > pageWidth - 60) {
                     legendX = 20;
@@ -667,7 +701,10 @@ document.getElementById("exportPDF").addEventListener("click", async () => {
     // 2. paymentChart (canvas)
     const paymentChartCanvas = document.getElementById('paymentChart');
     if (paymentChartCanvas && paymentChartCanvas.toDataURL) {
-        if (y > pageHeight - (90 + 50)) {
+        const chartWidth = 85;
+        const chartHeight = 82;
+        const chartX = (pageWidth - chartWidth) / 2;
+        if (y > pageHeight - (chartHeight + 50)) {
             doc.addPage();
             addHeader(doc, pageWidth);
             y = 40;
@@ -677,8 +714,8 @@ document.getElementById("exportPDF").addEventListener("click", async () => {
         doc.text('Payment Method Preference', 14, y);
         y += 8;
         const imgData = paymentChartCanvas.toDataURL("image/png", 1.0);
-        doc.addImage(imgData, "PNG", 14, y, 180, 90);
-        y += 90 + 5;
+        doc.addImage(imgData, "PNG", chartX, y, chartWidth, chartHeight); // square and centered
+        y += chartHeight + 5;
         // Dynamic legend from chart instance
         if (paymentChartInstance) {
             const chartData = paymentChartInstance.data;
@@ -693,7 +730,7 @@ document.getElementById("exportPDF").addEventListener("click", async () => {
                 doc.setFillColor(colors[i]);
                 doc.rect(legendX, legendY, 8, 8, 'F');
                 doc.setTextColor(51, 51, 51);
-                doc.text(`${labels[i]}: ${data[i]}`, legendX + 12, legendY + 7);
+                doc.text(`${labels[i]}: ${formatNumberNoDecimals(data[i])}`, legendX + 12, legendY + 7);
                 legendX += 60;
                 if (legendX > pageWidth - 60) {
                     legendX = 20;
@@ -837,10 +874,10 @@ async function fetchTopCustomersByOrders() {
         const row = document.createElement('tr');
         row.innerHTML = `
       <td>${name}</td>
-      <td>${stats.orders}</td>
-      <td>₱${stats.totalSpent.toFixed(2)}</td>
+      <td>${formatNumber(stats.orders)}</td>
+      <td>₱${formatNumber(stats.totalSpent)}</td>
     `;
         tbody.appendChild(row);
-        customerTableData.push([name, stats.orders, `₱${stats.totalSpent.toFixed(2)}`]);
+        customerTableData.push([name, formatNumber(stats.orders), `₱${formatNumber(stats.totalSpent)}`]);
     });
 }

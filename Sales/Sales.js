@@ -52,9 +52,9 @@ const currentMonth = formatYearMonth(today);
         totalOrders = orders.length;
         avgOrderValue = totalSales / totalOrders;
 
-        document.getElementById("totalSalesValue").textContent = `₱${totalSales.toFixed(2)}`;
-        document.getElementById("totalOrdersValue").textContent = totalOrders;
-        document.getElementById("averageOrderValue").textContent = `₱${avgOrderValue.toFixed(2)}`;
+        document.getElementById("totalSalesValue").textContent = `₱${totalSales.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        document.getElementById("totalOrdersValue").textContent = totalOrders.toLocaleString();
+        document.getElementById("averageOrderValue").textContent = `₱${avgOrderValue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 
         // === AOV TREND VS LAST MONTH ===
         let lastAvg;
@@ -280,7 +280,7 @@ const currentMonth = formatYearMonth(today);
         if (aovElem) {
             aovElem.innerHTML = `<span style='font-size:2.5rem; color:#B3261E; display:flex; align-items:center; justify-content:center; gap:10px;'>
                 <svg width='32' height='32' fill='none' viewBox='0 0 24 24' style='vertical-align:middle;'><circle cx='12' cy='12' r='12' fill='#fd7e14'/><text x='12' y='17' text-anchor='middle' font-size='14' fill='white' font-family='Arial' font-weight='bold'>₱</text></svg>
-                ${avgOrderValue.toFixed(2)}
+                ${avgOrderValue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
             </span>
             <span style='font-size:1rem; color:#555; font-weight:500;'>Avg. Order Value</span>`;
         }
@@ -330,17 +330,17 @@ const currentMonth = formatYearMonth(today);
         
         // === REPORT HEADER ===
         csvContent += "ELY'S ATSARA - SALES REPORT\n";
-        csvContent += `Generated: ${new Date().toLocaleDateString()}\n`;
+        csvContent += `Generated: ${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}\n`;
         csvContent += `Reporting Period: ${document.getElementById("monthSelector")?.value || "Current Month"}\n\n`;
 
         // === SUMMARY METRICS ===
         csvContent += "SUMMARY METRICS\n";
         csvContent += "Metric,Value\n";
-        csvContent += `Total Sales,₱${totalSales.toFixed(2)}\n`;
-        csvContent += `Total Orders,${totalOrders}\n`;
-        csvContent += `Average Order Value,₱${avgOrderValue.toFixed(2)}\n`;
-        csvContent += `Last Month AOV,₱${lastAvg.toFixed(2)}\n`;
-        csvContent += `AOV Change,${((avgOrderValue - lastAvg) / lastAvg * 100).toFixed(1)}%\n\n`;
+        csvContent += `Total Sales,₱${totalSales.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}\n`;
+        csvContent += `Total Orders,${totalOrders.toLocaleString()}\n`;
+        csvContent += `Average Order Value,₱${avgOrderValue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}\n`;
+        csvContent += `Last Month AOV,₱${lastAvg.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}\n`;
+        csvContent += `AOV Change,${((avgOrderValue - lastAvg) / lastAvg * 100).toLocaleString(undefined, { maximumFractionDigits: 1 })}%\n\n`;
 
         // === DAILY SALES BREAKDOWN ===
         if (typeof salesPerDay !== 'undefined') {
@@ -348,8 +348,8 @@ const currentMonth = formatYearMonth(today);
             csvContent += "Date,Sales (₱),Orders,Average Daily Order Value\n";
             Object.keys(salesPerDay).sort().forEach(date => {
                 const dailyOrders = ordersPerDay[date] || 0;
-                const dailyAvg = dailyOrders > 0 ? (salesPerDay[date] / dailyOrders).toFixed(2) : '0.00';
-                csvContent += `${date},${salesPerDay[date].toFixed(2)},${dailyOrders},₱${dailyAvg}\n`;
+                const dailyAvg = dailyOrders > 0 ? (salesPerDay[date] / dailyOrders).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '0.00';
+                csvContent += `${date},${salesPerDay[date].toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })},${dailyOrders.toLocaleString()},₱${dailyAvg}\n`;
             });
             csvContent += "\n";
         }
@@ -360,8 +360,8 @@ const currentMonth = formatYearMonth(today);
             csvContent += "Payment Method,Orders,Percentage of Total Orders\n";
             const totalOrderCount = Object.values(methodCounts).reduce((sum, count) => sum + count, 0);
             Object.entries(methodCounts).forEach(([method, count]) => {
-                const percentage = ((count / totalOrderCount) * 100).toFixed(1);
-                csvContent += `${method},${count},${percentage}%\n`;
+                const percentage = ((count / totalOrderCount) * 100).toLocaleString(undefined, { maximumFractionDigits: 1 });
+                csvContent += `${method},${count.toLocaleString()},${percentage}%\n`;
             });
             csvContent += "\n";
         }
@@ -374,9 +374,9 @@ const currentMonth = formatYearMonth(today);
                 const totalCityOrders = Object.values(methods).reduce((sum, count) => sum + count, 0);
                 const methodBreakdown = Object.entries(methods)
                     .filter(([method, count]) => count > 0)
-                    .map(([method, count]) => `${method}:${count}`)
+                    .map(([method, count]) => `${method}:${count.toLocaleString()}`)
                     .join('; ');
-                csvContent += `${city},${totalCityOrders},"${methodBreakdown}"\n`;
+                csvContent += `${city},${totalCityOrders.toLocaleString()},"${methodBreakdown}"\n`;
             });
             csvContent += "\n";
         }
@@ -393,7 +393,7 @@ const currentMonth = formatYearMonth(today);
                 const description = idToDescription && idToDescription[productId]
                     ? idToDescription[productId].replace(/"/g, '""') // Escape quotes for CSV
                     : 'N/A';
-                csvContent += `${rank},${productId},${unitsSold},"${description}"\n`;
+                csvContent += `${rank},${productId},${unitsSold.toLocaleString()},"${description}"\n`;
             });
             csvContent += "\n";
         }
@@ -401,11 +401,12 @@ const currentMonth = formatYearMonth(today);
         // === ORDER DETAILS (if orders data is available) ===
         if (typeof orders !== 'undefined' && orders.length > 0) {
             csvContent += "DETAILED ORDER DATA\n";
-            csvContent += "Order ID,Date,Total Price (₱),Payment Method,Address ID,Items Count\n";
+            csvContent += "Order ID,Date,Time,Total Price (₱),Payment Method,Address ID,Items Count\n";
             orders.forEach(order => {
                 const orderDate = new Date(order.created_at).toISOString().slice(0, 10);
+                const orderTime = new Date(order.created_at).toLocaleTimeString();
                 const itemsCount = Array.isArray(order.orders) ? order.orders.length : 0;
-                csvContent += `${order.id},${orderDate},${order.total_price.toFixed(2)},${order.payment_method},${order.address_id || 'N/A'},${itemsCount}\n`;
+                csvContent += `${order.id},${orderDate},${orderTime},${order.total_price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })},${order.payment_method},${order.address_id || 'N/A'},${itemsCount.toLocaleString()}\n`;
             });
         }
 
@@ -423,19 +424,26 @@ const currentMonth = formatYearMonth(today);
 
         // --- HEADER TEMPLATE ---
         function addHeader(doc, pageWidth) {
-            // Placeholder for logo (replace with your logo image)
-            // Example: doc.addImage(logoImg, 'PNG', 14, 8, 24, 24);
-            doc.setFillColor(230, 230, 230);
-            doc.rect(14, 8, 24, 24, 'F'); // Placeholder rectangle for logo
+            // Add logo image
+            try {
+                const logoImg = new Image();
+                logoImg.src = 'Group 7.png';
+                doc.addImage(logoImg, 'PNG', 14, 8, 30, 30);
+            } catch (error) {
+                // Fallback to placeholder if logo fails to load
+                doc.setFillColor(230, 230, 230);
+                doc.rect(14, 8, 30, 30, 'F');
+            }
+            
             doc.setFontSize(18);
             doc.setFont('helvetica', 'bold');
-            doc.text("Sales Report", pageWidth / 2, 20, { align: 'center' });
+            doc.text("Sales Report", pageWidth / 2, 25, { align: 'center' });
             doc.setFontSize(10);
             doc.setFont('helvetica', 'normal');
             doc.text(`Prepared by: Ely's Atsara`, pageWidth - 14, 15, { align: 'right' });
-            doc.text(`Generated: ${new Date().toLocaleDateString()}`, pageWidth - 14, 25, { align: 'right' });
+            doc.text(`Generated: ${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`, pageWidth - 14, 25, { align: 'right' });
             doc.setDrawColor(180);
-            doc.line(14, 34, pageWidth - 14, 34); // horizontal line
+            doc.line(14, 40, pageWidth - 14, 40); // horizontal line
         }
 
         // --- FOOTER TEMPLATE (pagination) ---
@@ -449,7 +457,7 @@ const currentMonth = formatYearMonth(today);
         const pageWidth = doc.internal.pageSize.getWidth();
         const pageHeight = doc.internal.pageSize.getHeight();
         addHeader(doc, pageWidth);
-        let y = 40;
+        let y = 50;
 
         // --- STYLISH SUMMARY METRICS SECTION ---
         doc.setFontSize(16);
@@ -487,7 +495,7 @@ const currentMonth = formatYearMonth(today);
         doc.text("TOTAL SALES:", 20, y);
         doc.setFont('helvetica', 'normal');
         doc.setTextColor(51, 51, 51);
-        doc.text(`₱${totalSales.toFixed(2)}`, 70, y);
+        doc.text(`₱${totalSales.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`, 70, y);
         y += 12;
 
         // Total Orders
@@ -497,7 +505,7 @@ const currentMonth = formatYearMonth(today);
         doc.text("TOTAL ORDERS:", 20, y);
         doc.setFont('helvetica', 'normal');
         doc.setTextColor(51, 51, 51);
-        doc.text(`${totalOrders}`, 70, y);
+        doc.text(`${totalOrders.toLocaleString()}`, 70, y);
         y += 12;
 
         // Average Order Value
@@ -507,17 +515,17 @@ const currentMonth = formatYearMonth(today);
         doc.text("AVERAGE ORDER VALUE:", 20, y);
         doc.setFont('helvetica', 'normal');
         doc.setTextColor(51, 51, 51);
-        doc.text(`₱${avgOrderValue.toFixed(2)}`, 70, y);
+        doc.text(`₱${avgOrderValue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`, 70, y);
 
         y = metricsBoxY + metricsBoxHeight + 20;
 
         // --- CHARTS AS IMAGES WITH HEADERS ---
         const chartConfigs = [
-            { id: "salesTrendChart", title: "Daily Sales Trend", height: 90 },
-            { id: "ordersBarChart", title: "Daily Orders Count", height: 90 },
-            { id: "paymentChart", title: "Payment Method Distribution", height: 140 },
-            { id: "cityStackedBarChart", title: "Orders by City and Payment Method", height: 110 },
-            { id: "topProductsChart", title: "Top Products Sold", height: 120 }
+            { id: "salesTrendChart", title: "Daily Sales Trend", height: 70, width: 160 },
+            { id: "ordersBarChart", title: "Daily Orders Count", height: 70, width: 160 },
+            { id: "paymentChart", title: "Payment Method Distribution", height: 95, width: 120 },
+            { id: "cityStackedBarChart", title: "Orders by City and Payment Method", height: 75, width: 130 },
+            { id: "topProductsChart", title: "Top Products Sold", height: 85, width: 130 }
         ];
 
         for (const config of chartConfigs) {
@@ -527,7 +535,7 @@ const currentMonth = formatYearMonth(today);
                 if (y > pageHeight - (config.height + 30)) {
                     doc.addPage();
                     addHeader(doc, pageWidth);
-                    y = 40;
+                    y = 50;
                 }
 
                 // Add chart title
@@ -536,10 +544,17 @@ const currentMonth = formatYearMonth(today);
                 doc.text(config.title, 14, y);
                 y += 8;
 
-                // Add chart image
+                // Add chart image with aspect ratio preserved
                 const imgData = canvas.toDataURL("image/png", 1.0);
-                doc.addImage(imgData, "PNG", 14, y, 180, config.height);
-                y += config.height + 15;
+                const canvasWidth = canvas.width;
+                const canvasHeight = canvas.height;
+                const maxWidth = config.width; // Use the config width as the max width
+                const scale = maxWidth / canvasWidth;
+                const pdfWidth = canvasWidth * scale;
+                const pdfHeight = canvasHeight * scale;
+                const chartX = (pageWidth - pdfWidth) / 2; // Center the chart
+                doc.addImage(imgData, "PNG", chartX, y, pdfWidth, pdfHeight);
+                y += pdfHeight + 12;
             }
         }
 
