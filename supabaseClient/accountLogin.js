@@ -26,7 +26,7 @@
 //       // Wait for user to confirm before redirecting
 //       const confirmBtn = document.getElementById('alertConfirmBtn');
 //       const handler = () => {
-//         window.location.href = '../homepage/index.html';
+//         window.location.href = '../index.html';
 //         confirmBtn.removeEventListener('click', handler);
 //       };
 //       confirmBtn.addEventListener('click', handler);
@@ -88,7 +88,7 @@
 //       showAlert('Success', 'Login successful as Admin!');
 //       localStorage.setItem('currentUser', JSON.stringify(adminData));
 //       sessionStorage.setItem('userType', 'admin');
-//       window.location.href = '../homepage/index.html';
+//       window.location.href = '../index.html';
 //       return;
 //     }
 
@@ -106,7 +106,7 @@
 //       showAlert('Success', 'Login successful as Customer!');
 //       localStorage.setItem('currentUser', JSON.stringify(customerData));
 //       sessionStorage.setItem('userType', 'customer');
-//       window.location.href = '../homepage/index.html';
+//       window.location.href = '../index.html';
 //       return;
 //     }
 
@@ -172,7 +172,7 @@ document.addEventListener('DOMContentLoaded', () => {
       showAlert('Guest Account', 'You are using a guest account.');
       const confirmBtn = document.getElementById('alertConfirmBtn');
       const handler = () => {
-        window.location.href = '../homepage/index.html';
+        window.location.href = '../index.html';
         confirmBtn.removeEventListener('click', handler);
       };
       confirmBtn.addEventListener('click', handler);
@@ -243,7 +243,7 @@ async function handleLogin() {
         window.location.href = '../AdminDashboard/Dashboard.html';
         //  window.location.href = '../adminManagement/adminManagement.html';
       } else {
-        window.location.href = '../homepage/index.html';
+        window.location.href = '../index.html';
       }
 
       return;
@@ -264,7 +264,7 @@ async function handleLogin() {
       showAlert('Success', 'Login successful as Customer!');
       localStorage.setItem('currentUser', JSON.stringify(customerData));
       sessionStorage.setItem('userType', 'customer');
-      window.location.href = '../homepage/index.html';
+      window.location.href = '../index.html';
       return;
     }
 

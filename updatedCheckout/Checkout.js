@@ -983,7 +983,7 @@ document.getElementById('place-order').addEventListener('click', async () => {
     okBtn.onclick = () => {
         modal.classList.add('hidden');
         document.body.classList.remove('modal-open');
-        window.location.href = '../Homepage/index.html';
+        window.location.href = '../index.html';
     };
 }); // ← only one closing brace here
 
