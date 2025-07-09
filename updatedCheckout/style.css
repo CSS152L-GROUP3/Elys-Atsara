@@ -334,6 +334,14 @@
   left: -100%;
 }
 
+.homepage .AboutUsBtn2:focus,
+.homepage .CartBtn2:focus,
+.homepage .AccountBtn2:focus,
+.homepage .MapBtn2:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
 .cart-badge {
   position: absolute;
   top: -8px;
@@ -1519,4 +1527,13 @@ select:focus {
 .homepage .MapBtn1:hover svg ellipse {
   fill: #B3261E;
   filter: none;
+}
+
+.homepage .AboutUsBtn2,
+.homepage .CartBtn2,
+.homepage .AccountBtn2,
+.homepage .MapBtn2 {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
 }
