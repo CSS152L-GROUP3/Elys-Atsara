@@ -112,7 +112,7 @@ document.getElementById('go-back-btn').addEventListener('click', function() {
             if (window.history.length > 1) {
                 window.history.back();
             } else {
-                 window.location.href = '../Homepage/Homepage.html';
+                 window.location.href = '../Homepage/index.html';
             }
         });
 

@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
 const goBackBtn = document.getElementById('go-back-btn');
 if (goBackBtn) {
   goBackBtn.addEventListener('click', () => {
-    window.location.href = '../homepage/homepage.html';
+    window.location.href = '../homepage/index.html';
   });
 }
 
@@ -73,7 +73,7 @@ if (logoutOkBtn) {
     await supabase.auth.signOut();
     localStorage.removeItem('currentUser');
     sessionStorage.removeItem('userType');
-    window.location.href = '../Homepage/Homepage.html';
+    window.location.href = '../Homepage/index.html';
   });
 }
 
