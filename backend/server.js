@@ -47,8 +47,8 @@ app.post("/create-paymongo-checkout", async (req, res) => {
                             quantity: item.quantity,
                             description: item.description || item.name // optional fallback
                         })),
-                        success_url: "http://127.0.0.1:5501/updatedCheckout/Checkout.html?status=success",
-                        cancel_url: "http://127.0.0.1:5501/updatedCheckout/Checkout.html?status=cancel"
+                        success_url: "https://elysatsara.netlify.app/updatedcheckout/checkout.html?status=success",
+                        cancel_url: "https://elysatsara.netlify.app/updatedcheckout/checkout.html?status=cancel"
                     }
                 }
             })
